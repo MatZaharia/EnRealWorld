@@ -1,0 +1,39 @@
+name: Package smoke test
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  wheel:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.14']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build and install wheel
+        run: |
+          python -m pip wheel --no-deps --wheel-dir dist .
+          python -m pip install dist/enrealworld-*.whl
+      - name: Check installed entry points and resources
+        run: |
+          enrealworld --help
+          python -m enrealworld.team --help
+          python - <<'PY'
+          import json
+          from importlib.resources import files
+
+          from enrealworld import CollaborationGraph
+
+          package = files('enrealworld')
+          assert package.joinpath('skills/enrealworld/SKILL.md').is_file()
+          for role in ('manager', 'engineer', 'researcher'):
+              assert package.joinpath(f'skills/team/{role}/SKILL.md').is_file()
+          schema = package.joinpath('skills/team/researcher/scripts/collaboration-graph.schema.json')
+          assert json.loads(schema.read_text(encoding='utf-8')) == CollaborationGraph.model_json_schema()
+          PY

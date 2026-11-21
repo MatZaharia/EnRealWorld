@@ -1,0 +1,310 @@
+{
+  "$defs": {
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "statement": {
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "observation",
+            "requirement",
+            "assumption"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "phases": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Phases",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "implementation_refs": {
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+            "type": "string"
+          },
+          "title": "Implementation Refs",
+          "type": "array"
+        },
+        "test_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Test Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "statement",
+        "kind",
+        "phases",
+        "source_refs"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "Entity": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "physical_kind": {
+          "default": "unknown",
+          "enum": [
+            "rigid",
+            "soft",
+            "fluid",
+            "granular",
+            "mixed",
+            "unknown"
+          ],
+          "title": "Physical Kind",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Requirements",
+          "type": "array"
+        },
+        "implementation_refs": {
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+            "type": "string"
+          },
+          "title": "Implementation Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "role"
+      ],
+      "title": "Entity",
+      "type": "object"
+    },
+    "ImplementationUnit": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "file": {
+          "minLength": 1,
+          "title": "File",
+          "type": "string"
+        },
+        "symbol": {
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "purpose": {
+          "default": "construction",
+          "enum": [
+            "geometry",
+            "physics",
+            "control",
+            "construction",
+            "other"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "file",
+        "symbol"
+      ],
+      "title": "ImplementationUnit",
+      "type": "object"
+    },
+    "Relation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "statement": {
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "observation",
+            "requirement",
+            "assumption"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "phases": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Phases",
+          "type": "array"
+        },
+        "source_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Refs",
+          "type": "array"
+        },
+        "implementation_refs": {
+          "items": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+            "type": "string"
+          },
+          "title": "Implementation Refs",
+          "type": "array"
+        },
+        "test_refs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Test Refs",
+          "type": "array"
+        },
+        "subject": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Subject",
+          "type": "string"
+        },
+        "target": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+          "title": "Target",
+          "type": "string"
+        },
+        "relation": {
+          "description": "Recommended vocabulary with subject A / target B direction: supported_by: B supports A; connected_to: A and B are connected (symmetric); inside: A is inside B; contact: A and B are in contact (symmetric); grasped_by: B grasps A; attached_to: A is attached to anchor B. Custom relations are allowed; explain their meaning and A/B direction in statement.",
+          "examples": [
+            "supported_by",
+            "connected_to",
+            "inside",
+            "contact",
+            "grasped_by",
+            "attached_to"
+          ],
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Relation",
+          "type": "string",
+          "x-recommended-relations": {
+            "attached_to": "A is attached to anchor B",
+            "connected_to": "A and B are connected (symmetric)",
+            "contact": "A and B are in contact (symmetric)",
+            "grasped_by": "B grasps A",
+            "inside": "A is inside B",
+            "supported_by": "B supports A"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "statement",
+        "kind",
+        "phases",
+        "source_refs",
+        "subject",
+        "target",
+        "relation"
+      ],
+      "title": "Relation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1",
+      "default": "1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scene_id": {
+      "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "revision": {
+      "default": 1,
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "entities": {
+      "items": {
+        "$ref": "#/$defs/Entity"
+      },
+      "minItems": 1,
+      "title": "Entities",
+      "type": "array"
+    },
+    "relations": {
+      "items": {
+        "$ref": "#/$defs/Relation"
+      },
+      "title": "Relations",
+      "type": "array"
+    },
+    "implementation_units": {
+      "items": {
+        "$ref": "#/$defs/ImplementationUnit"
+      },
+      "title": "Implementation Units",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scene_id",
+    "entities"
+  ],
+  "title": "CollaborationGraph",
+  "type": "object"
+}

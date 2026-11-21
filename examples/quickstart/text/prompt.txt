@@ -1,0 +1,1 @@
+Based on the specifications in `src/enrealworld/skills/enrealworld/SKILL.md`, please construct three separate, editable Blender scenes for a materials laboratory, a factory, and a home.

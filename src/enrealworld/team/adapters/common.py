@@ -1,4 +1,4 @@
-"""Provider-neutral helpers shared by native agent adapters (Codex, Claude Code)."""
+"""Provider-neutral helpers shared by native agent adapters (Codex, Claude Code, Antigravity)."""
 import json
 from pathlib import Path
 import shutil

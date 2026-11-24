@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EnRealWorld builds executable, interactive 4D worlds from text, images, and videos.">
+  <meta name="theme-color" content="#101c27">
+  <title>EnRealWorld | 4D World Creation as Agentic Engineering</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #101c27;
+      --text: #f5f2eb;
+      --muted: #bfccd4;
+      --grid: #618292;
+      --accent: #f3bf89;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      display: grid;
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: clamp(1.5rem, 6vw, 5rem);
+      place-items: center;
+      background: var(--background);
+      color: var(--text);
+      font: 1rem/1.55 system-ui, sans-serif;
+    }
+
+    main {
+      width: min(100%, 61rem);
+    }
+
+    .world {
+      position: relative;
+      width: clamp(7rem, 22vw, 13rem);
+      height: clamp(2.5rem, 8vw, 4.75rem);
+      margin: 0 0 clamp(2rem, 6vw, 4rem) 0.45rem;
+      transform: skewX(-23deg);
+      border: 1px solid var(--grid);
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-position: -1px -1px;
+      background-size: 20% 33.333%;
+    }
+
+    .world::after {
+      position: absolute;
+      inset: 0 20% 33.333% 60%;
+      border: 1px solid var(--accent);
+      background: #f3bf8929;
+      content: "";
+    }
+
+    h1 {
+      margin: 0;
+      font: 400 clamp(2.5rem, 11vw, 8.25rem)/0.98 Georgia, serif;
+      letter-spacing: -0.065em;
+    }
+
+    .subtitle {
+      margin: 1.15rem 0 0;
+      font-size: clamp(1.02rem, 2.5vw, 1.55rem);
+      font-weight: 550;
+      letter-spacing: -0.02em;
+    }
+
+    .description {
+      max-width: 47ch;
+      margin: 0.85rem 0 2.1rem;
+      color: var(--muted);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.8rem 1.2rem;
+    }
+
+    a {
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--accent);
+      border-radius: 0.2rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    a:hover {
+      background: var(--accent);
+      color: var(--background);
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="world" aria-hidden="true"></div>
+    <h1>EnRealWorld</h1>
+    <p class="subtitle">4D World Creation as Agentic Engineering</p>
+    <p class="description">EnRealWorld builds executable, interactive worlds from text, images, and videos.</p>
+    <div class="links">
+      <a href="https://github.com/MatZaharia/EnRealWorld">View on GitHub</a>
+      <p class="status">Project demos coming soon.</p>
+    </div>
+  </main>
+</body>
+</html>

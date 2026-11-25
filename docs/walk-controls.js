@@ -1,14 +1,17 @@
 import * as THREE from 'three';
 
 export class WalkControls {
-  constructor(camera, canvas) {
+  constructor(camera, canvas, onZoom=null) {
     this.camera=camera;
     this.canvas=canvas;
+    this.onZoom=onZoom;
     this.enabled=false;
     this.speed=1;
     this.multiplier=1;
     this.keys=new Set();
     this.buttons=new Set();
+    this.pointers=new Map();
+    this.pinch=0;
     this.euler=new THREE.Euler(0,0,0,'YXZ');
     this.listeners=new AbortController();
     const on=(target,event,fn)=>target.addEventListener(event,fn,{signal:this.listeners.signal});
@@ -25,28 +28,42 @@ export class WalkControls {
     on(window,'blur',()=>this.clear());
     on(document,'visibilitychange',()=>{if(document.hidden)this.clear();});
     on(canvas,'pointerdown',e=>{
-      if(!this.enabled||e.button!==0||this.pointer!=null)return;
+      if(!this.enabled||e.button!==0)return;
       e.preventDefault();canvas.focus({preventScroll:true});
-      this.pointer=e.pointerId;this.x=e.clientX;this.y=e.clientY;
+      this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
       canvas.setPointerCapture(e.pointerId);
+      this.pinch=this.pointers.size===2?this.spread():0;
     });
     on(canvas,'pointermove',e=>{
-      if(!this.enabled||e.pointerId!==this.pointer)return;
-      this.euler.setFromQuaternion(camera.quaternion,'YXZ');
-      this.euler.y-=(e.clientX-this.x)*.003;
-      this.euler.x=THREE.MathUtils.clamp(this.euler.x-(e.clientY-this.y)*.003,-1.5,1.5);
+      if(!this.enabled||!this.pointers.has(e.pointerId))return;
+      const previous=this.pointers.get(e.pointerId);
+      this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(this.pointers.size>=2){
+        const spread=this.spread();
+        if(this.pinch&&spread)this.onZoom?.(-(spread-this.pinch)*.45);
+        this.pinch=spread;
+        return;
+      }
+      this.euler.setFromQuaternion(this.camera.quaternion,'YXZ');
+      this.euler.y-=(e.clientX-previous.x)*.003;
+      this.euler.x=THREE.MathUtils.clamp(this.euler.x-(e.clientY-previous.y)*.003,-1.5,1.5);
       this.euler.z=0;
-      camera.quaternion.setFromEuler(this.euler);
-      this.x=e.clientX;this.y=e.clientY;this.changed=true;
+      this.camera.quaternion.setFromEuler(this.euler);
+      this.changed=true;
     });
     const release=e=>{
-      if(e.pointerId!==this.pointer)return;
-      this.pointer=null;
+      if(!this.pointers.has(e.pointerId))return;
+      this.pointers.delete(e.pointerId);
       if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);
+      this.pinch=this.pointers.size===2?this.spread():0;
     };
     on(canvas,'pointerup',release);on(canvas,'pointercancel',release);on(canvas,'lostpointercapture',release);
   }
-  clear(){this.keys.clear();this.buttons.clear();this.pointer=null;}
+  spread(){
+    const points=[...this.pointers.values()];
+    return points.length<2?0:Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);
+  }
+  clear(){this.keys.clear();this.buttons.clear();this.pointers.clear();this.pinch=0;}
   update(dt){
     if(!this.enabled)return false;
     const held=key=>this.keys.has(key)||this.buttons.has(key);

@@ -1,14 +1,14 @@
-import {worldCases,walkthroughs,agents,phases,evidence,modelNames} from './data-light.js?v=20261125-ui3';
-import {initCharts} from './charts-light.js?v=20261125-ui3';
-import {initSelectControls} from './select-controls.js?v=20261125-ui3';
+import {worldCases,walkthroughs,agents,phases,evidence,modelNames} from './data-light.js?v=20261125-ui4';
+import {initCharts} from './charts-light.js?v=20261125-ui4';
+import {initSelectControls} from './select-controls.js?v=20261125-ui4';
 import {loadingLabel} from './loading-progress.js';
-import {initRailroadGallery} from './railroad-gallery.js?v=20261125-ui3';
+import {initRailroadGallery} from './railroad-gallery.js?v=20261125-ui4';
 const $=id=>document.getElementById(id);
 const motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pressed=(group,selected)=>group.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===selected)));
 let viewerModule;
-const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261125-ui3');
+const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261125-ui4');
 let heroViewer,worldViewer,category='blueprint',selectedCase=worldCases.blueprint[0],method='ours',worldEntered=false,loadVersion=0;
 let cases=[],model='gpt',dataset='all',query='',page=0,activeCase,playing=false,v2wReady=false;
 const PAGE_SIZE=12;
@@ -110,7 +110,7 @@ function renderWorldCase() {
     $('render-base').src=`assets/figimg/${pair[0]}/${pair[1]}.jpg`;
     $('render-ours').src=`assets/figimg/${pair[0]}/${pair[2]}.jpg`;
   }
-  $('walk-help').hidden=!walkthroughs[selectedCase.id];
+  $('walk-help').hidden=false;
   if(worldEntered)loadWorld();
 }
 async function loadWorld() {
@@ -123,7 +123,7 @@ async function loadWorld() {
       if(start){start.disabled=true;start.textContent='Opening viewer…';}
       const {WorldViewer}=await getViewer();
       if(version!==loadVersion)return;
-      worldViewer=new WorldViewer($('world-canvas'));
+      worldViewer=new WorldViewer($('world-canvas'),{freeWalk:true});
     }
     if(version!==loadVersion)return;
     showWorldMessage('Loading real scene geometry…');
@@ -143,24 +143,14 @@ async function loadWorld() {
   }
 }
 function updateNavigation(){
-  const walking=worldViewer?.mode==='walk';
-  $('world-orbit').setAttribute('aria-pressed',String(!walking));
-  $('world-walk').setAttribute('aria-pressed',String(walking));
-  $('walk-help').hidden=!walking;
-  $('world-auto').disabled=walking;
-  $('world-auto').setAttribute('aria-pressed',String(worldViewer?.auto||false));
-  if(worldViewer?.stats)$('world-status').textContent=`${method==='ours'?'EnRealWorld':'Base Agent'} · ${worldViewer.stats.triangles.toLocaleString()} preview triangles · ${walking?'WASD move / drag to look / Q E height':'drag orbit / right-drag pan / scroll zoom'}`;
+  $('walk-help').hidden=false;
+  if(worldViewer?.stats)$('world-status').textContent=`${method==='ours'?'EnRealWorld':'Base Agent'} · ${worldViewer.stats.triangles.toLocaleString()} preview triangles · drag to look / WASD move / scroll or pinch to zoom`;
 }
 function initWorlds() {
   $('start-world').addEventListener('click',loadWorld);
-  for(const mode of ['orbit','walk'])$('world-'+mode).addEventListener('click',()=>{
-    if(!worldViewer?.root)return;
-    worldViewer.setMode(mode);updateNavigation();
-    if(mode==='walk'){
-      $('world-cut').value=100;$('cut-value').textContent='Full';worldViewer.setCut(100);
-      worldViewer.renderer.domElement.focus({preventScroll:true});
-    }
-  });
+  const zoom=delta=>{if(!worldViewer?.root)return;worldViewer.zoomBy(delta);};
+  $('world-zoom-in').addEventListener('click',()=>zoom(-8));
+  $('world-zoom-out').addEventListener('click',()=>zoom(8));
   $('walk-speed').addEventListener('change',e=>{if(worldViewer)worldViewer.walk.multiplier=Number(e.target.value);});
   document.querySelectorAll('[data-walk-key]').forEach(button=>{
     button.addEventListener('pointerdown',e=>{
@@ -189,10 +179,6 @@ function initWorlds() {
     if(worldEntered)loadWorld();
   });
   $('world-reset').addEventListener('click',()=>worldViewer?.reset());
-  $('world-auto').addEventListener('click',e=>{
-    if(!worldViewer)return;
-    worldViewer.auto=!worldViewer.auto;e.currentTarget.setAttribute('aria-pressed',String(worldViewer.auto));
-  });
   $('world-wire').addEventListener('click',e=>{
     if(!worldViewer)return;
     worldViewer.setWire(!worldViewer.wire);e.currentTarget.setAttribute('aria-pressed',String(worldViewer.wire));

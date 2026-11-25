@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { WalkControls } from './walk-controls.js';
+import { WalkControls } from './walk-controls.js?v=20261125-ui4';
 import { normalizedProgress } from './loading-progress.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,9 +22,10 @@ function release(root) {
 }
 
 export class WorldViewer {
-  constructor(element, {hero = false} = {}) {
+  constructor(element, {hero = false, freeWalk = false} = {}) {
     this.element = element;
     this.hero = hero;
+    this.freeWalk = freeWalk;
     this.version = 0;
     this.visible = false;
     this.auto = hero && !reducedMotion;
@@ -39,13 +40,18 @@ export class WorldViewer {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.element.replaceChildren(this.renderer.domElement);
-    this.renderer.domElement.setAttribute('aria-label','Interactive world geometry: drag to orbit, pinch or scroll to zoom');
+    this.renderer.domElement.setAttribute('aria-label','Interactive world geometry: drag to look, WASD to move, scroll to zoom');
     this.renderer.domElement.setAttribute('role','img');
     this.renderer.domElement.tabIndex = 0;
+    if (freeWalk) this.renderer.domElement.addEventListener('wheel', e => {
+      if (!this.root || this.mode !== 'walk') return;
+      e.preventDefault();
+      this.zoomBy(Math.sign(e.deltaY) * 4);
+    }, {passive:false});
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(38, 1, 0.01, 250);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.walk=new WalkControls(this.camera,this.renderer.domElement);
+    this.walk=new WalkControls(this.camera,this.renderer.domElement,delta=>this.zoomBy(delta));
     this.mode='orbit';
     this.needsRender = true;
     this.controls.addEventListener('change',()=>{this.needsRender=true;});
@@ -107,7 +113,10 @@ export class WorldViewer {
       if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','Home'].includes(e.key)) return;
       e.preventDefault();
       if (e.key==='Home') {this.reset();return;}
-      if(this.mode==='walk')return;
+      if(this.mode==='walk'){
+        if(e.key==='+'||e.key==='-')this.zoomBy(e.key==='+'?-4:4);
+        return;
+      }
       const offset=this.camera.position.clone().sub(this.controls.target);
       const s=new THREE.Spherical().setFromVector3(offset);
       if (e.key==='ArrowLeft') s.theta-=.12;
@@ -150,6 +159,7 @@ export class WorldViewer {
     });
     if (version!==this.version) {release(gltf.scene);return false;}
     if (this.root) {this.scene.remove(this.root);release(this.root);}
+    const useWalk=this.freeWalk||!!walk;
     const raw=gltf.scene;
     raw.updateMatrixWorld(true);
     const box=new THREE.Box3(),focusBox=new THREE.Box3();
@@ -159,7 +169,7 @@ export class WorldViewer {
       const s=b.getSize(new THREE.Vector3());
       const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.2;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
-      const terrain=!walk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
+      const terrain=!useWalk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
       const sky=/sky|horizon|background/i.test(o.name);
       const detachedTie=url.includes('railroad-ours-claude-fable-5-2') && /^Loose_SpareTie_\d+$/.test(o.name);
       if (broad || terrain || sky || detachedTie) {o.visible=false;return;}
@@ -185,7 +195,8 @@ export class WorldViewer {
     this.scene.add(this.root);
     this.height=size.y*scale;
     this.sourceScale=scale;
-    this.walkHome={position:walk?.position?new THREE.Vector3(...walk.position).add(raw.position).multiplyScalar(scale):new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0),forward:new THREE.Vector3(...(walk?.forward||[0,0,-1])).normalize()};
+    const spawn=this.freeWalk?null:walk?.position;
+    this.walkHome={position:spawn?new THREE.Vector3(...spawn).add(raw.position).multiplyScalar(scale):new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0),forward:new THREE.Vector3(...(walk?.forward||[0,0,-1])).normalize()};
     this.walk.speed=(walk?.speed||1.8)*scale;
     this.walk.enabled=false;
     this.walk.clear();
@@ -199,7 +210,7 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.controls.update();
     this.controls.saveState();
-    this.setMode(walk?'walk':'orbit');
+    this.setMode(useWalk?'walk':'orbit');
     this.setCut(this.cut);
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
@@ -228,7 +239,14 @@ export class WorldViewer {
     if(this.mode==='walk'&&this.walkHome){
       this.camera.position.copy(this.walkHome.position);
       this.camera.lookAt(this.walkHome.position.clone().add(this.walkHome.forward));
+      this.camera.fov=68;this.camera.updateProjectionMatrix();
     }else this.controls.reset();
+    this.needsRender=true;
+  }
+  zoomBy(delta) {
+    if(!this.root||this.mode!=='walk')return;
+    this.camera.fov=THREE.MathUtils.clamp(this.camera.fov+delta,24,82);
+    this.camera.updateProjectionMatrix();
     this.needsRender=true;
   }
   setWire(value) {

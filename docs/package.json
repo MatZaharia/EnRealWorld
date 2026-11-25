@@ -1,0 +1,10 @@
+{
+  "name": "enrealworld-project-page",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 4173 --bind 127.0.0.1",
+    "check": "node --check app.js && node --check charts.js && node --check data.js && node --check viewer.js"
+  }
+}

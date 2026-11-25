@@ -1,0 +1,7 @@
+bpy==4.5.17
+mujoco==4.0.1
+trimesh==5.2.2
+pymupdf==2.1
+pillow==13.0.0
+numpy==1.26.4
+scipy==1.17.1

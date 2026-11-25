@@ -1,0 +1,33 @@
+{
+  "source": "factory.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 14500,
+  "mesh_objects": 3473,
+  "triangles": 676713,
+  "materials": 3616,
+  "camera": {
+    "position": [
+      -24.0,
+      3.5,
+      21.0
+    ],
+    "forward": [
+      0.7266,
+      -0.12975,
+      -0.6747
+    ],
+    "up": [
+      0.09508,
+      0.99155,
+      -0.08829
+    ],
+    "fov_deg": 52.129,
+    "aspect": 1.6,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    1800,
+    1125
+  ]
+}

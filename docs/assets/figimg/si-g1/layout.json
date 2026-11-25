@@ -1,0 +1,307 @@
+{
+ "page": [
+  556.676025390625,
+  673.0
+ ],
+ "items": [
+  {
+   "i": 0,
+   "file": "assets/figimg/si-g1/000.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.1346,
+    0.0431,
+    0.3456,
+    0.1308
+   ],
+   "flip": false
+  },
+  {
+   "i": 1,
+   "file": "assets/figimg/si-g1/001.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.3512,
+    0.0431,
+    0.5623,
+    0.1308
+   ],
+   "flip": false
+  },
+  {
+   "i": 2,
+   "file": "assets/figimg/si-g1/002.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.5677,
+    0.0431,
+    0.7787,
+    0.1308
+   ],
+   "flip": false
+  },
+  {
+   "i": 3,
+   "file": "assets/figimg/si-g1/003.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.7841,
+    0.0431,
+    0.9951,
+    0.1308
+   ],
+   "flip": false
+  },
+  {
+   "i": 4,
+   "file": "assets/figimg/si-g1/004.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.1346,
+    0.1383,
+    0.3456,
+    0.226
+   ],
+   "flip": false
+  },
+  {
+   "i": 5,
+   "file": "assets/figimg/si-g1/005.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.3512,
+    0.1383,
+    0.5623,
+    0.226
+   ],
+   "flip": false
+  },
+  {
+   "i": 6,
+   "file": "assets/figimg/si-g1/006.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.5677,
+    0.1383,
+    0.7787,
+    0.226
+   ],
+   "flip": false
+  },
+  {
+   "i": 7,
+   "file": "assets/figimg/si-g1/007.jpg",
+   "w": 1040,
+   "h": 522,
+   "bbox": [
+    0.7841,
+    0.1383,
+    0.9951,
+    0.226
+   ],
+   "flip": false
+  },
+  {
+   "i": 8,
+   "file": "assets/figimg/si-g1/008.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.0035,
+    0.3168,
+    0.1639,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 9,
+   "file": "assets/figimg/si-g1/009.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.1676,
+    0.3168,
+    0.328,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 10,
+   "file": "assets/figimg/si-g1/010.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.337,
+    0.3168,
+    0.4974,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 11,
+   "file": "assets/figimg/si-g1/011.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.5011,
+    0.3168,
+    0.6614,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 12,
+   "file": "assets/figimg/si-g1/012.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.6705,
+    0.3168,
+    0.8309,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 13,
+   "file": "assets/figimg/si-g1/013.jpg",
+   "w": 1080,
+   "h": 714,
+   "bbox": [
+    0.8348,
+    0.3168,
+    0.9951,
+    0.4045
+   ],
+   "flip": false
+  },
+  {
+   "i": 14,
+   "file": "assets/figimg/si-g1/014.jpg",
+   "w": 800,
+   "h": 334,
+   "bbox": [
+    0.0035,
+    0.4621,
+    0.2999,
+    0.5646
+   ],
+   "flip": false
+  },
+  {
+   "i": 15,
+   "file": "assets/figimg/si-g1/015.jpg",
+   "w": 1124,
+   "h": 720,
+   "bbox": [
+    0.0035,
+    0.641,
+    0.2473,
+    0.7702
+   ],
+   "flip": false
+  },
+  {
+   "i": 16,
+   "file": "assets/figimg/si-g1/016.jpg",
+   "w": 1124,
+   "h": 720,
+   "bbox": [
+    0.2527,
+    0.641,
+    0.4965,
+    0.7702
+   ],
+   "flip": false
+  },
+  {
+   "i": 17,
+   "file": "assets/figimg/si-g1/017.jpg",
+   "w": 1124,
+   "h": 720,
+   "bbox": [
+    0.5021,
+    0.641,
+    0.7459,
+    0.7702
+   ],
+   "flip": false
+  },
+  {
+   "i": 18,
+   "file": "assets/figimg/si-g1/018.jpg",
+   "w": 1124,
+   "h": 720,
+   "bbox": [
+    0.7513,
+    0.641,
+    0.9951,
+    0.7702
+   ],
+   "flip": false
+  },
+  {
+   "i": 19,
+   "file": "assets/figimg/si-g1/019.jpg",
+   "w": 994,
+   "h": 637,
+   "bbox": [
+    0.0035,
+    0.8487,
+    0.2473,
+    0.9779
+   ],
+   "flip": false
+  },
+  {
+   "i": 20,
+   "file": "assets/figimg/si-g1/020.jpg",
+   "w": 994,
+   "h": 637,
+   "bbox": [
+    0.2527,
+    0.8487,
+    0.4965,
+    0.9779
+   ],
+   "flip": false
+  },
+  {
+   "i": 21,
+   "file": "assets/figimg/si-g1/021.jpg",
+   "w": 994,
+   "h": 637,
+   "bbox": [
+    0.5021,
+    0.8487,
+    0.7459,
+    0.9779
+   ],
+   "flip": false
+  },
+  {
+   "i": 22,
+   "file": "assets/figimg/si-g1/022.jpg",
+   "w": 994,
+   "h": 637,
+   "bbox": [
+    0.7513,
+    0.8487,
+    0.9951,
+    0.9779
+   ],
+   "flip": false
+  }
+ ]
+}

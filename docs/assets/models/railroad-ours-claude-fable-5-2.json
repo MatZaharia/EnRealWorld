@@ -1,0 +1,33 @@
+{
+  "source": "Claude-Fable-5.2.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 63,
+  "mesh_objects": 54,
+  "triangles": 250324,
+  "materials": 32,
+  "camera": {
+    "position": [
+      24.658,
+      1.93,
+      25.796
+    ],
+    "forward": [
+      -0.70143,
+      0.0,
+      -0.71274
+    ],
+    "up": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "fov_deg": 32.276,
+    "aspect": 1.21139,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    2000,
+    1651
+  ]
+}

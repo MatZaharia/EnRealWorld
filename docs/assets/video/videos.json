@@ -1,0 +1,218 @@
+[
+ {
+  "name": "three-worlds-assembly",
+  "w": 1600,
+  "h": 900,
+  "fps": 30.0,
+  "duration": 12.0,
+  "bytes": 2598346
+ },
+ {
+  "name": "laboratory-robots",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 8.8,
+  "bytes": 2049832
+ },
+ {
+  "name": "warehouse",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 17.0,
+  "bytes": 8076724
+ },
+ {
+  "name": "home",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 23.0,
+  "bytes": 3421431
+ },
+ {
+  "name": "three-buildings-assembly",
+  "w": 1600,
+  "h": 900,
+  "fps": 30.0,
+  "duration": 14.633333,
+  "bytes": 3698237
+ },
+ {
+  "name": "drawings-floor-by-floor",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 18.0,
+  "bytes": 2875455
+ },
+ {
+  "name": "yates-walkthrough",
+  "w": 960,
+  "h": 540,
+  "fps": 24.0,
+  "duration": 8.0,
+  "bytes": 424652
+ },
+ {
+  "name": "studio-daylight",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 35.0,
+  "bytes": 2882681
+ },
+ {
+  "name": "railroad-two-reviews",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 59.5,
+  "bytes": 9783272
+ },
+ {
+  "name": "railroad-component-flight",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 22.0,
+  "bytes": 2302849
+ },
+ {
+  "name": "railroad-porch-review",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 59.5,
+  "bytes": 8108367
+ },
+ {
+  "name": "factory-rack-domino",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 76.2,
+  "bytes": 18619819
+ },
+ {
+  "name": "factory-rack-spill",
+  "w": 864,
+  "h": 486,
+  "fps": 15.0,
+  "duration": 6.6,
+  "bytes": 970975
+ },
+ {
+  "name": "home-pillow-release",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 48.0,
+  "bytes": 11080393
+ },
+ {
+  "name": "laboratory-unseen-force",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 36.0,
+  "bytes": 9502999
+ },
+ {
+  "name": "laboratory-interior",
+  "w": 1280,
+  "h": 720,
+  "fps": 30.0,
+  "duration": 61.0,
+  "bytes": 13838531
+ },
+ {
+  "name": "lemon-reference",
+  "w": 640,
+  "h": 360,
+  "fps": 30.0,
+  "duration": 8.0,
+  "bytes": 92532
+ },
+ {
+  "name": "lemon-base",
+  "w": 640,
+  "h": 360,
+  "fps": 30.0,
+  "duration": 8.0,
+  "bytes": 189873
+ },
+ {
+  "name": "lemon-ours",
+  "w": 640,
+  "h": 360,
+  "fps": 30.0,
+  "duration": 8.0,
+  "bytes": 55627
+ },
+ {
+  "name": "yates-barrier-on",
+  "w": 1000,
+  "h": 650,
+  "fps": 5.0,
+  "duration": 1.9,
+  "bytes": 57417
+ },
+ {
+  "name": "yates-barrier-off",
+  "w": 1000,
+  "h": 650,
+  "fps": 5.0,
+  "duration": 1.9,
+  "bytes": 59403
+ },
+ {
+  "name": "v2w-wall",
+  "w": 1920,
+  "h": 1080,
+  "fps": 30.0,
+  "duration": 6.4,
+  "bytes": 1569489
+ },
+ {
+  "name": "dexycb-pilot-ref",
+  "w": 640,
+  "h": 480,
+  "fps": 30.0,
+  "duration": 2.4,
+  "bytes": 116070
+ },
+ {
+  "name": "dexycb-pilot-base",
+  "w": 1280,
+  "h": 480,
+  "fps": 30.0,
+  "duration": 5.7,
+  "bytes": 76157
+ },
+ {
+  "name": "dexycb-pilot-ours",
+  "w": 1280,
+  "h": 480,
+  "fps": 30.0,
+  "duration": 4.166667,
+  "bytes": 66952
+ },
+ {
+  "name": "pusht-ref",
+  "w": 240,
+  "h": 240,
+  "fps": 5.0,
+  "duration": 23.2,
+  "bytes": 103815
+ },
+ {
+  "name": "pusht-ours",
+  "w": 1280,
+  "h": 720,
+  "fps": 5.0,
+  "duration": 30.2,
+  "bytes": 114657
+ }
+]

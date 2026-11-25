@@ -2,122 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="EnRealWorld builds executable, interactive 4D worlds from text, images, and videos.">
-  <meta name="theme-color" content="#101c27">
-  <title>EnRealWorld | 4D World Creation as Agentic Engineering</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --background: #101c27;
-      --text: #f5f2eb;
-      --muted: #bfccd4;
-      --grid: #618292;
-      --accent: #f3bf89;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      display: grid;
-      min-height: 100vh;
-      min-height: 100svh;
-      margin: 0;
-      padding: clamp(1.5rem, 6vw, 5rem);
-      place-items: center;
-      background: var(--background);
-      color: var(--text);
-      font: 1rem/1.55 system-ui, sans-serif;
-    }
-
-    main {
-      width: min(100%, 61rem);
-    }
-
-    .world {
-      position: relative;
-      width: clamp(7rem, 22vw, 13rem);
-      height: clamp(2.5rem, 8vw, 4.75rem);
-      margin: 0 0 clamp(2rem, 6vw, 4rem) 0.45rem;
-      transform: skewX(-23deg);
-      border: 1px solid var(--grid);
-      background-image:
-        linear-gradient(to right, var(--grid) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-      background-position: -1px -1px;
-      background-size: 20% 33.333%;
-    }
-
-    .world::after {
-      position: absolute;
-      inset: 0 20% 33.333% 60%;
-      border: 1px solid var(--accent);
-      background: #f3bf8929;
-      content: "";
-    }
-
-    h1 {
-      margin: 0;
-      font: 400 clamp(2.5rem, 11vw, 8.25rem)/0.98 Georgia, serif;
-      letter-spacing: -0.065em;
-    }
-
-    .subtitle {
-      margin: 1.15rem 0 0;
-      font-size: clamp(1.02rem, 2.5vw, 1.55rem);
-      font-weight: 550;
-      letter-spacing: -0.02em;
-    }
-
-    .description {
-      max-width: 47ch;
-      margin: 0.85rem 0 2.1rem;
-      color: var(--muted);
-    }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.8rem 1.2rem;
-    }
-
-    a {
-      padding: 0.45rem 0.75rem;
-      border: 1px solid var(--accent);
-      border-radius: 0.2rem;
-      color: var(--accent);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    a:hover {
-      background: var(--accent);
-      color: var(--background);
-    }
-
-    a:focus-visible {
-      outline: 2px solid var(--text);
-      outline-offset: 4px;
-    }
-
-    .status {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="EnRealWorld: 4D World Creation as Agentic Engineering. Explore executable, interactive worlds built from text, images, and videos.">
+  <meta name="theme-color" content="#080c12">
+  <title>EnRealWorld — 4D World Creation as Agentic Engineering</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.min.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
+  <script type="module" src="app.js"></script>
 </head>
-<body>
-  <main>
-    <div class="world" aria-hidden="true"></div>
-    <h1>EnRealWorld</h1>
-    <p class="subtitle">4D World Creation as Agentic Engineering</p>
-    <p class="description">EnRealWorld builds executable, interactive worlds from text, images, and videos.</p>
-    <div class="links">
-      <a href="https://github.com/MatZaharia/EnRealWorld">View on GitHub</a>
-      <p class="status">Project demos coming soon.</p>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#top"><span class="brand-icon" aria-hidden="true">◈</span> EnRealWorld<span class="brand-tag">RESEARCH</span></a>
+    <div class="nav-links"><a href="#worlds">Worlds</a><a href="#video2world">Video2World</a><a href="#method">Method</a><a href="#evidence">Evidence</a><a href="#benchmarks">Results</a></div>
+    <a class="nav-code" href="https://github.com/MatZaharia/EnRealWorld" target="_blank" rel="noopener">Code <span>↗</span></a>
+  </nav>
+  <main id="main">
+    <header class="hero">
+      <div class="hero-orb" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> BEYOND VISUAL GENERATION</div>
+        <h1>En<span>RealWorld</span><span class="title-period">.</span></h1>
+        <h2>4D World Creation<br>as <span class="gradient-text">Agentic Engineering</span></h2>
+        <p>EnRealWorld builds executable, interactive worlds<br class="desktop-br"> from text, images, and videos.</p>
+        <div class="hero-actions"><a class="button primary" href="#worlds">Explore the worlds <span>↗</span></a><a class="button" href="https://github.com/MatZaharia/EnRealWorld" target="_blank" rel="noopener">Get the code <span>↗</span></a></div>
+        <div class="hero-attributes"><span>Geometry</span><i>×</i><span>Physics</span><i>×</i><span>Control</span></div>
+      </div>
+      <div class="hero-world">
+        <div id="hero-canvas" class="hero-canvas" aria-label="Interactive 3D preview of a generated house"></div>
+        <div class="hero-hud hud-top"><span class="status-dot"></span> WORLD / 001 <span>REAL SCENE GEOMETRY</span></div>
+        <div class="hero-hud hud-bottom"><span>DRAG TO ORBIT · LIVE 3D PREVIEW</span><button id="hero-motion" aria-pressed="true">Pause rotation</button></div>
+        <div class="floating-tag tag-a"><span>01</span> Agent-built geometry</div><div class="floating-tag tag-b"><span>02</span> Executable world source</div>
+      </div>
+      <div class="hero-footer"><span>NOT JUST A SCENE.<br><strong>A world you can put to the test.</strong></span><a href="#worlds">SCROLL TO EXPLORE <span>↓</span></a><span class="coordinate">X / GEOMETRY<br>Y / PHYSICS &nbsp; Z / CONTROL</span></div>
+    </header>
+
+    <div class="stat-strip wrap">
+      <div><strong data-count="3">3</strong><span>specialized agents</span></div><div><strong data-count="39">39</strong><span>Video2World tasks</span></div><div><strong data-count="43">43</strong><span>counterfactual tasks</span></div><div><strong>+<span data-count="14" data-decimals="2">14.00</span></strong><span>DeepSeek overall score gain</span></div>
     </div>
+
+    <section id="worlds" class="section wrap">
+      <div class="section-heading"><div><div class="eyebrow">01 / WORLD EXPLORER</div><h2>From a reference.<br><span class="muted">To a world you can explore.</span></h2></div><p>One sentence. A painting. A measured drawing.<br>Different inputs, the same ambition: coherent worlds with geometry, physics, and control.</p></div>
+      <div class="tabs" id="world-tabs" role="group" aria-label="World input type"><button data-category="blueprint" aria-pressed="true">01 <span>Blueprint → World</span></button><button data-category="painting" aria-pressed="false">02 <span>Painting → World</span></button><button data-category="text" aria-pressed="false">03 <span>Text → World</span></button></div>
+      <div class="explorer">
+        <aside class="reference-panel"><div class="micro">INPUT / REFERENCE</div><div id="world-reference"></div><h3 id="world-title"></h3><p id="world-description"></p><div class="reference-meta" id="world-meta"></div><a class="text-link" id="source-link" href="https://github.com/MatZaharia/EnRealWorld/tree/main/examples/quickstart" target="_blank" rel="noopener">Source & credits ↗</a></aside>
+        <div class="world-panel"><div class="viewer-header"><span class="micro"><span class="status-dot"></span> INTERACTIVE 3D PREVIEW</span><div class="segmented" id="world-method"><button data-method="ours" aria-pressed="true">EnRealWorld</button><button data-method="base" aria-pressed="false">Base Agent</button></div></div>
+          <div id="world-canvas" class="world-canvas" aria-label="Generated world 3D viewer"><div class="viewer-start"><button class="button primary" id="start-world">Enter the 3D world ↗</button><span>Real scene geometry · not a live physics simulator</span></div></div>
+          <div class="viewer-toolbar"><div><button id="world-reset">Reset view</button><button id="world-auto" aria-pressed="false">Auto orbit</button><button id="world-wire" aria-pressed="false">Wireframe</button><button id="world-full">Fullscreen ↗</button></div><label id="cut-control">Cutaway <input id="world-cut" type="range" min="0" max="100" value="100" aria-label="Building cutaway height"><output id="cut-value">Full</output></label></div>
+          <div class="viewer-bottom"><span id="world-status" role="status" aria-live="polite">Select a case, then enter the 3D world.</span><a id="world-download" href="assets/models/lighthouse-ours.glb" download>Download preview GLB ↓</a></div>
+        </div>
+      </div>
+      <div class="case-grid" id="world-cases" role="group" aria-label="World cases"></div>
+      <div class="render-comparison"><div class="render-comparison-copy"><span class="micro">MANUSCRIPT / RENDER COMPARISON</span><h3>See what changes.</h3><p>Drag the divider to inspect Base Agent and EnRealWorld renders from the manuscript. This render comparison is separate from the interactive GLB preview above.</p><label>Compare <input id="render-slider" type="range" min="0" max="100" value="50" aria-label="Reveal Base Agent versus EnRealWorld render"></label></div><div class="render-reveal" id="render-reveal"><img id="render-ours" alt="EnRealWorld manuscript render"><div class="render-base-layer" id="render-base-layer"><img id="render-base" alt="Base Agent manuscript render"></div><span class="render-divider" id="render-divider"></span><span class="render-label label-base">BASE AGENT</span><span class="render-label label-ours">ENREALWORLD</span></div></div>
+      <p class="footnote">GLB previews expose scene geometry, not the source simulator's solver, actuators, or evaluation. Text-world previews are simplified and load on request. Procedural materials are approximated; large background surfaces are omitted to keep the scene inspectable. Base/Ours views are fitted independently; preview size is not a metric comparison.</p>
+      <div class="film-card"><div><span class="micro">WATCH / WORLD CREATION</span><h3>One sentence. Three worlds.</h3><p>“Construct a factory, a home, and a laboratory.”</p><span class="pill">Recorded scene assembly</span></div><video controls muted loop playsinline preload="none" poster="assets/video/three-worlds-assembly.jpg" src="assets/video/three-worlds-assembly.mp4" aria-label="Assembly of the three generated worlds"></video></div>
+    </section>
+
+    <section id="video2world" class="section section-tint"><div class="wrap">
+      <div class="section-heading"><div><div class="eyebrow">02 / VIDEO TO EXECUTION</div><h2>Observe the action.<br><span class="muted">Rebuild the executable world.</span></h2></div><p>Browse 51 curated accepted outputs across three models. Inspect reference and generated execution together.</p></div>
+      <div class="v2w-toolbar"><div class="segmented" id="v2w-model" role="group" aria-label="Video2World model"><button data-model="gpt" aria-pressed="true">GPT-6.1 Sol</button><button data-model="deepseek" aria-pressed="false">DeepSeek V4.1</button><button data-model="kimi" aria-pressed="false">Kimi-3.1 Pro</button></div><label>Dataset <select id="v2w-dataset"><option value="all">All datasets</option></select></label><label class="search-label"><input id="v2w-search" type="search" placeholder="Search an action…" aria-label="Search Video2World cases"></label></div>
+      <div class="comparison-player"><div class="video-pair"><figure><figcaption><span class="micro">OBSERVED</span> Reference video</figcaption><video id="v2w-src" muted playsinline preload="metadata" aria-label="Reference video"></video></figure><figure><figcaption><span class="micro accent">GENERATED</span> EnRealWorld execution</figcaption><video id="v2w-ours" muted playsinline preload="metadata" aria-label="Generated execution"></video></figure></div><div class="transport"><button id="v2w-play" aria-label="Play synchronized videos">Play ↗</button><button id="v2w-restart" aria-label="Restart synchronized videos">↺</button><input id="v2w-seek" type="range" min="0" max="1000" value="0" aria-label="Synchronized video progress"><output id="v2w-time">0%</output><label>Speed <select id="v2w-speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div><div class="video-caption"><h3 id="v2w-title">Loading curated cases…</h3><span id="v2w-case-meta" class="micro"></span></div></div>
+      <div id="v2w-cases" class="case-grid video-cases" role="group" aria-label="Video2World cases"></div><div class="pager"><button id="v2w-prev">← Previous</button><span id="v2w-count" role="status" aria-live="polite"></span><button id="v2w-next">Next →</button></div>
+      <p class="footnote">Shared progress maps each clip to its own normalized timeline; clip lengths and display alignment may differ. These 51 accepted examples are a curated gallery, not the full benchmark or a success-rate estimate. Editable sources for these exact accepted runs are not present in the handoff.</p>
+      <details class="detail-panel"><summary>Inspect a three-way pilot comparison <span>Reference / Base Agent / EnRealWorld</span></summary><div class="pilot-grid"><figure><figcaption>Reference</figcaption><video controls muted playsinline preload="none" src="assets/video/dexycb-pilot-ref.mp4" poster="assets/video/dexycb-pilot-ref.jpg"></video></figure><figure><figcaption>Base Agent</figcaption><video controls muted playsinline preload="none" src="assets/video/dexycb-pilot-base.mp4" poster="assets/video/dexycb-pilot-base.jpg"></video></figure><figure><figcaption>EnRealWorld</figcaption><video controls muted playsinline preload="none" src="assets/video/dexycb-pilot-ours.mp4" poster="assets/video/dexycb-pilot-ours.jpg"></video></figure></div><p class="footnote">DexYCB pilot demonstration, separate from the 51 accepted-run gallery. Each clip can be inspected independently.</p></details>
+    </div></section>
+
+    <section id="method" class="section wrap">
+      <div class="section-heading"><div><div class="eyebrow">03 / AGENTIC ENGINEERING</div><h2>Three minds.<br><span class="muted">One accountable world.</span></h2></div><p>Construction is only half the problem. Independent evidence decides what needs repair and what is ready to deliver.</p></div>
+      <div class="method-board"><div class="phase-selector" role="group" aria-label="Engineering phase"><button data-phase="0" aria-pressed="true"><span>01</span> Co-Design</button><span class="phase-arrow">→</span><button data-phase="1" aria-pressed="false"><span>02</span> Cross-check</button><span class="phase-arrow">→</span><button data-phase="2" aria-pressed="false"><span>03</span> Deliberate</button></div><div class="agent-grid" id="agent-grid"></div><div class="method-routing"><span id="phase-routing"></span><strong id="phase-outcome"></strong></div></div>
+      <div class="method-principles"><article><span class="micro">01 / TESTABLE SPECIFICATION</span><h3>Requirements, not assumptions.</h3><p>Must: explicit acceptance requirements. Can: supported inferences. May: hypotheses to investigate. The specification stays independent of implementation.</p></article><article><span class="micro">02 / INDEPENDENT EVIDENCE</span><h3>A clean exit is not a physics test.</h3><p>The Researcher builds probes from the original input, rather than trusting the Engineer's self-tests. Intervention and observation reveal hidden failures.</p></article><article><span class="micro">03 / DELIBERATE REPAIR</span><h3>Evidence closes the loop.</h3><p>The Manager decides whether to clarify, investigate, revise, or deliver. Failed probes become actionable repairs, not invisible exceptions.</p></article></div>
+      <details class="detail-panel"><summary>Information boundaries <span>Who sees what, and when</span></summary><div class="table-scroll"><table><thead><tr><th>Phase</th><th>Manager</th><th>Engineer</th><th>Researcher</th></tr></thead><tbody><tr><th>Co-Design</th><td>Private specification draft</td><td>Private build & self-tests</td><td>Independent scene graph & probes</td></tr><tr><th>Cross-check</th><td>Reviews frozen candidate</td><td>Accepted specification; repairs a copy</td><td>Read-only candidate & accepted specification</td></tr><tr><th>Deliberate</th><td>Updates specification; decides next action</td><td>Read-only evidence; accepted specification</td><td>Read-only evidence; updated draft hidden</td></tr></tbody></table></div></details>
+    </section>
+
+    <section id="evidence" class="section section-tint"><div class="wrap">
+      <div class="section-heading"><div><div class="eyebrow">04 / PUT THE WORLD TO THE TEST</div><h2>Looks real?<br><span class="muted">Now ask it to respond.</span></h2></div><p>Release. Push. Remove support. Change collision.<br>Interventions distinguish a convincing image from an executable world.</p></div>
+      <div id="evidence-tabs" class="chips" role="group" aria-label="Intervention demonstrations"></div><div class="evidence-layout"><div class="evidence-media"><video id="evidence-video" muted controls playsinline preload="none" aria-label="Recorded scene intervention"></video></div><aside><span id="evidence-type" class="pill"></span><h3 id="evidence-title"></h3><p id="evidence-description"></p><div id="evidence-measurement" class="evidence-measurement"></div><button class="text-link" id="evidence-figure">Inspect supporting figure ↗</button></aside></div>
+      <div class="probe-heading"><h3>Seven ways to challenge a world.</h3><p>Choose a probe to inspect its intervention and readout.</p></div><div id="probe-tabs" class="chips" role="group" aria-label="Physical probe categories"></div><div id="probe-detail" class="probe-detail" aria-live="polite"></div>
+      <button class="figure-preview" data-figure="fig4" data-caption="Bowl release, door operation and collision tests · paper Figure 4"><img src="assets/fig/fig4.webp" loading="lazy" alt="Paper evidence showing bowl release and door collision tests"><span>INSPECT THE EVIDENCE <b>Expand Figure 4 ↗</b></span></button>
+    </div></section>
+
+    <section id="benchmarks" class="section wrap">
+      <div class="section-heading"><div><div class="eyebrow">05 / QUANTITATIVE RESULTS</div><h2>Beyond the showcase.<br><span class="muted">The numbers, in context.</span></h2></div><p>Explore task families, score components, and trade-offs. Improvements and regressions are both visible.</p></div>
+      <div class="tabs benchmark-tabs" id="benchmark-tabs" role="group" aria-label="Benchmark"><button data-benchmark="video" aria-pressed="true">Video2World</button><button data-benchmark="ablation" aria-pressed="false">Ablations</button><button data-benchmark="physics" aria-pressed="false">PhysCodeGym</button><button data-benchmark="cost" aria-pressed="false">Cost & trade-offs</button></div>
+      <div class="benchmark-panel"><div class="chart-controls" id="chart-controls"><label>Model <select id="chart-model"><option value="gpt">GPT-6.1 Sol</option><option value="deepseek">DeepSeek-V4.1-Flash-1017</option><option value="kimi">Kimi-3.1 Pro</option></select></label><label>Metric <select id="chart-metric"><option value="0">Overall score S</option><option value="1">Functionality F</option><option value="2">Geometry G</option><option value="3">Dynamics D</option></select></label><button class="button small" id="download-chart">Download chart data ↓</button></div><div class="chart-context"><h3 id="chart-title"></h3><p id="chart-description"></p></div><div id="chart-legend" class="chart-legend"></div><div id="benchmark-chart" class="benchmark-chart"></div><div id="chart-note" class="footnote"></div><details class="detail-panel"><summary>Full result table <span>Exact manuscript values</span></summary><div id="benchmark-table" class="table-scroll"></div></details></div>
+      <div class="delta-panel"><div><span class="micro">CROSS-MODEL VIEW / SCORE Δ</span><h3>Where does the gain come from?</h3><p>Hover or focus any cell. Cyan: improvement.<br>Coral: regression. Δ = EnRealWorld − Base.</p></div><div id="delta-matrix"></div></div>
+    </section>
+
+    <section id="experience" class="section section-tint"><div class="wrap">
+      <div class="section-heading"><div><div class="eyebrow">06 / EXPERIENCE THAT CARRIES FORWARD</div><h2>Fresh sessions.<br><span class="muted">Persistent engineering experience.</span></h2></div><p>Ten task rounds. Fixed model parameters. Each round starts with an empty project; only role-specific experience persists.</p></div>
+      <div class="experience-layout"><div class="experience-card"><span class="micro">EXECUTION SCORE / REPORTED SNAPSHOTS</span><div id="experience-chart"></div><div class="round-controls" role="group" aria-label="Reported task round"><button data-round="1" aria-pressed="true">Round 1</button><button data-round="8" aria-pressed="false">Round 8</button><button data-round="10" aria-pressed="false">Round 10</button></div><p id="round-detail" aria-live="polite"></p></div><div class="experience-copy"><strong>80.26<span>mean execution score over ten rounds</span></strong><h3>More experience does not mean a monotonic curve.</h3><p>Round 8 scores 71.81. Evidence, counterexamples, and repairs accumulate across separate Manager, Engineer, and Researcher libraries.</p><div class="library-labels"><span>Decision rules</span><span>Build & repair tools</span><span>Probe cases</span></div><button class="text-link" data-figure="fig7" data-caption="Execution score and role-specific experience-library growth over ten rounds · Figure 7">Inspect complete published curve ↗</button></div></div>
+      <details class="detail-panel"><summary>Frozen-library transfer <span>New square-table & round-table tasks</span></summary><p>After round 10, the libraries are frozen and transferred to another square-table instance and a structurally different round-table task. The manuscript reports improved means for both EnRealWorld and a general coding agent, with three independent runs per task and condition. This page does not invent missing numerical values.</p><button class="figure-wide" data-figure="fig8" data-caption="Frozen-experience transfer: EnRealWorld and a general coding agent · Figure 8"><img src="assets/fig/fig8.webp" loading="lazy" alt="Frozen-experience transfer figure with individual runs and means"></button></details>
+    </div></section>
+
+    <section id="resources" class="section wrap">
+      <div class="section-heading"><div><div class="eyebrow">07 / OPEN THE PROJECT</div><h2>The world is an artifact.<br><span class="muted">Not just a video.</span></h2></div><p>Explore geometry here. Open the project repository for executable world creation, quickstart references, and source credits.</p></div>
+      <div class="resource-grid"><a href="https://github.com/MatZaharia/EnRealWorld" target="_blank" rel="noopener"><span class="micro">SOURCE CODE</span><h3>EnRealWorld ↗</h3><p>Agent orchestration, tools, and the engineering workflow.</p></a><a href="https://github.com/MatZaharia/EnRealWorld/tree/main/examples/quickstart" target="_blank" rel="noopener"><span class="micro">GET STARTED</span><h3>Quickstart inputs ↗</h3><p>Text prompts, paintings, measured drawings, and attribution.</p></a><a href="assets/v2w/cases.json" download><span class="micro">CURATED MEDIA</span><h3>51-case index ↓</h3><p>Model, dataset, action, alignment, and gallery media paths.</p></a><a href="assets/benchmarks.csv" download><span class="micro">RESULT DATA</span><h3>Benchmark CSV ↓</h3><p>Video2World scores and Base/Ours comparisons.</p></a></div>
+      <div class="citation"><div><span class="micro">REFERENCE / PROJECT METADATA</span><h3>Cite the project.</h3><p>Author and publication metadata will be updated when finalized. No unconfirmed venue or acceptance claim is shown.</p><button class="button small" id="copy-citation">Copy BibTeX</button><span id="copy-status" role="status" aria-live="polite"></span></div><pre><code id="citation">@misc{enrealworld,
+  title = {EnRealWorld: 4D World Creation
+           as Agentic Engineering},
+  author = {{EnRealWorld contributors}},
+  url = {https://github.com/MatZaharia/EnRealWorld},
+  note = {Project repository; metadata provisional}
+}</code></pre></div>
+    </section>
   </main>
+  <footer class="wrap"><a class="brand" href="#top"><span class="brand-icon">◈</span> EnRealWorld</a><p>Executable. Interactive. Engineered.</p><a href="#top">BACK TO TOP ↑</a></footer>
+  <dialog id="figure-dialog"><div class="dialog-bar"><span id="figure-caption"></span><button id="close-figure" aria-label="Close expanded figure">Close ×</button></div><div class="figure-scroll"><img id="figure-image" alt="Expanded research figure"></div><p>Scroll to inspect. Click the image to toggle native-resolution zoom.</p></dialog>
+  <div id="chart-tooltip" class="chart-tooltip" role="status"></div>
+  <noscript><div class="noscript-note">Enable JavaScript for the interactive 3D viewers and data charts. Videos, project resources, and figure previews remain available.</div></noscript>
 </body>
 </html>

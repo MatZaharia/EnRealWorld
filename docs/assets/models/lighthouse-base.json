@@ -1,0 +1,28 @@
+{
+  "source": "scene.xml",
+  "bodies": 1,
+  "geoms": 1499,
+  "visible_geoms": 1498,
+  "joints": 0,
+  "actuators": 0,
+  "meshes": 708,
+  "materials": 11,
+  "triangles": 30820,
+  "extent_m": [
+    7.83,
+    15.76,
+    7.85
+  ],
+  "bounds": [
+    [
+      -4.575,
+      0.0,
+      -3.25
+    ],
+    [
+      3.25,
+      15.76,
+      4.595
+    ]
+  ]
+}

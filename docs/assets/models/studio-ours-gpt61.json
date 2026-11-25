@@ -1,0 +1,33 @@
+{
+  "source": "GPT-6.1-Sol.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 330,
+  "mesh_objects": 317,
+  "triangles": 66566,
+  "materials": 22,
+  "camera": {
+    "position": [
+      0.0,
+      1.18,
+      6.0
+    ],
+    "forward": [
+      -0.0,
+      0.0,
+      -1.0
+    ],
+    "up": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "fov_deg": 30.914,
+    "aspect": 0.82023,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    2400,
+    2926
+  ]
+}

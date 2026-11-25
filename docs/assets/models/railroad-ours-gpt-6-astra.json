@@ -1,0 +1,33 @@
+{
+  "source": "GPT-6-Astra.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 1452,
+  "mesh_objects": 1448,
+  "triangles": 51286,
+  "materials": 8,
+  "camera": {
+    "position": [
+      17.0,
+      2.2,
+      32.0
+    ],
+    "forward": [
+      -0.46632,
+      0.10972,
+      -0.87778
+    ],
+    "up": [
+      0.05148,
+      0.99396,
+      0.0969
+    ],
+    "fov_deg": 28.739,
+    "aspect": 1.21139,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    2000,
+    1651
+  ]
+}

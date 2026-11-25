@@ -1,0 +1,33 @@
+{
+  "source": "laboratory.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 144,
+  "mesh_objects": 0,
+  "triangles": 0,
+  "materials": 736,
+  "camera": {
+    "position": [
+      -23.8,
+      33.6,
+      25.0
+    ],
+    "forward": [
+      0.49839,
+      -0.69104,
+      -0.52352
+    ],
+    "up": [
+      0.47648,
+      0.72281,
+      -0.50051
+    ],
+    "fov_deg": null,
+    "aspect": 1.6,
+    "type": "ORTHO",
+    "ortho_scale": 44.8
+  },
+  "render": [
+    2560,
+    1600
+  ]
+}

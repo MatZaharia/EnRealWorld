@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="EnRealWorld: 4D World Creation as Agentic Engineering. Explore executable, interactive worlds built from text, images, and videos.">
-  <meta name="theme-color" content="#080c12">
+  <meta name="theme-color" content="#f5f7f4">
   <title>EnRealWorld — 4D World Creation as Agentic Engineering</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles-light.css">
   <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.min.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="app-light.js"></script>
 </head>
 <body id="top">
   <a class="skip" href="#main">Skip to content</a>
@@ -20,6 +20,7 @@
   <nav class="nav" aria-label="Main navigation">
     <a class="brand" href="#top"><span class="brand-icon" aria-hidden="true">◈</span> EnRealWorld<span class="brand-tag">RESEARCH</span></a>
     <div class="nav-links"><a href="#worlds">Worlds</a><a href="#video2world">Video2World</a><a href="#method">Method</a><a href="#evidence">Evidence</a><a href="#benchmarks">Results</a></div>
+    <a class="version-link" href="index-dark.html">Dark edition ↗</a>
     <a class="nav-code" href="https://github.com/MatZaharia/EnRealWorld" target="_blank" rel="noopener">Code <span>↗</span></a>
   </nav>
   <main id="main">
@@ -34,10 +35,12 @@
         <div class="hero-attributes"><span>Geometry</span><i>×</i><span>Physics</span><i>×</i><span>Control</span></div>
       </div>
       <div class="hero-world">
+        <div class="exhibit-ring" aria-hidden="true"></div>
         <div id="hero-canvas" class="hero-canvas" aria-label="Interactive 3D preview of a generated house"></div>
-        <div class="hero-hud hud-top"><span class="status-dot"></span> WORLD / 001 <span>REAL SCENE GEOMETRY</span></div>
-        <div class="hero-hud hud-bottom"><span>DRAG TO ORBIT · LIVE 3D PREVIEW</span><button id="hero-motion" aria-pressed="true">Pause rotation</button></div>
-        <div class="floating-tag tag-a"><span>01</span> Agent-built geometry</div><div class="floating-tag tag-b"><span>02</span> Executable world source</div>
+        <div class="hero-hud hud-top"><span class="status-dot"></span> THE WORLD COLLECTION <span>LIVE 3D / DRAG TO EXPLORE</span></div>
+        <div class="hero-hud hud-bottom"><span id="hero-scene-name">HOUSE BY THE RAILROAD</span><button id="hero-motion" aria-pressed="true">Pause rotation</button></div>
+        <div class="floating-tag tag-a"><span>01 / INPUT</span><b>A painted reference</b></div><div class="floating-tag tag-b"><span>02 / OUTPUT</span><b>A world beyond the frame</b></div>
+        <div class="hero-scene-picker" role="group" aria-label="Featured 3D world"><button data-hero-scene="railroad" aria-pressed="true">Railroad house</button><button data-hero-scene="lighthouse" aria-pressed="false">Lighthouse</button><button data-hero-scene="ranch" aria-pressed="false">Ranch house</button></div>
       </div>
       <div class="hero-footer"><span>NOT JUST A SCENE.<br><strong>A world you can put to the test.</strong></span><a href="#worlds">SCROLL TO EXPLORE <span>↓</span></a><span class="coordinate">X / GEOMETRY<br>Y / PHYSICS &nbsp; Z / CONTROL</span></div>
     </header>

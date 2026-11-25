@@ -5,6 +5,6 @@
   "type": "module",
   "scripts": {
     "start": "python3 -m http.server 4173 --bind 127.0.0.1",
-    "check": "node --check app.js && node --check charts.js && node --check data.js && node --check viewer.js"
+    "check": "node --check app.js && node --check charts.js && node --check data.js && node --check viewer.js && node --check app-light.js && node --check charts-light.js && node --check data-light.js && node --check viewer-light.js && node --check app-dark.js && node --check charts-dark.js && node --check data-dark.js && node --check viewer-dark.js"
   }
 }

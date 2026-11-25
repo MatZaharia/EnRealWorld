@@ -1,0 +1,33 @@
+{
+  "source": "Laboratory.blend",
+  "blender": "4.5.17 LTS",
+  "objects": 7025,
+  "mesh_objects": 6874,
+  "triangles": 4830204,
+  "materials": 738,
+  "camera": {
+    "position": [
+      -16.9027,
+      1.5759,
+      -0.21
+    ],
+    "forward": [
+      -0.19871,
+      -0.37405,
+      -0.90587
+    ],
+    "up": [
+      -0.08051,
+      0.92741,
+      -0.36528
+    ],
+    "fov_deg": 45.747,
+    "aspect": 1.77778,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    1920,
+    1080
+  ]
+}

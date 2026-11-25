@@ -3,6 +3,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { WalkControls } from './walk-controls.js';
+import { normalizedProgress } from './loading-progress.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -43,6 +45,8 @@ export class WorldViewer {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(38, 1, 0.01, 250);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.walk=new WalkControls(this.camera,this.renderer.domElement);
+    this.mode='orbit';
     this.needsRender = true;
     this.controls.addEventListener('change',()=>{this.needsRender=true;});
     this.controls.enableDamping = true;
@@ -103,6 +107,7 @@ export class WorldViewer {
       if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','Home'].includes(e.key)) return;
       e.preventDefault();
       if (e.key==='Home') {this.reset();return;}
+      if(this.mode==='walk')return;
       const offset=this.camera.position.clone().sub(this.controls.target);
       const s=new THREE.Spherical().setFromVector3(offset);
       if (e.key==='ArrowLeft') s.theta-=.12;
@@ -118,9 +123,11 @@ export class WorldViewer {
     this.tick = time => {
       this.frame=requestAnimationFrame(this.tick);
       if (!this.visible || document.hidden || time-this.last<33) return;
+      const dt=Math.min((time-this.last)/1000,.05);
       this.last=time;
-      this.controls.autoRotate=this.auto;
-      this.controls.update();
+      this.controls.autoRotate=this.auto&&this.mode==='orbit';
+      if(this.mode==='orbit')this.controls.update();
+      else if(this.walk.update(dt))this.needsRender=true;
       if(this.needsRender || this.auto){
         this.renderer.render(this.scene,this.camera);
         this.needsRender=false;
@@ -136,10 +143,10 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.needsRender=true;
   }
-  async load(url, onProgress) {
+  async load(url, onProgress, {walk=null}={}) {
     const version=++this.version;
     const gltf=await this.loader.loadAsync(url, event => {
-      if (version===this.version) onProgress?.(event.lengthComputable ? event.loaded/event.total : null);
+      if (version===this.version) onProgress?.(event.lengthComputable ? normalizedProgress(event.loaded,event.total) : null);
     });
     if (version!==this.version) {release(gltf.scene);return false;}
     if (this.root) {this.scene.remove(this.root);release(this.root);}
@@ -150,11 +157,12 @@ export class WorldViewer {
       if (!o.isMesh) return;
       const b=new THREE.Box3().setFromObject(o);
       const s=b.getSize(new THREE.Vector3());
-      const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.15;
+      const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.2;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
-      const terrain=triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
+      const terrain=!walk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
       const sky=/sky|horizon|background/i.test(o.name);
-      if (broad || terrain || sky) {o.visible=false;return;}
+      const detachedTie=url.includes('railroad-ours-claude-fable-5-2') && /^Loose_SpareTie_\d+$/.test(o.name);
+      if (broad || terrain || sky || detachedTie) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;
       box.union(b);
@@ -176,6 +184,14 @@ export class WorldViewer {
     this.root.scale.setScalar(scale);
     this.scene.add(this.root);
     this.height=size.y*scale;
+    this.sourceScale=scale;
+    this.walkHome={position:walk?.position?new THREE.Vector3(...walk.position).add(raw.position).multiplyScalar(scale):new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0),forward:new THREE.Vector3(...(walk?.forward||[0,0,-1])).normalize()};
+    this.walk.speed=(walk?.speed||1.8)*scale;
+    this.walk.enabled=false;
+    this.walk.clear();
+    this.controls.enabled=true;
+    this.controls.autoRotate=false;
+    this.mode='orbit';
     this.target=new THREE.Vector3(0,this.height*.43,0);
     this.camera.fov=38;
     this.camera.position.set(5.2,this.height*.55+3.4,6.6);
@@ -183,13 +199,38 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.controls.update();
     this.controls.saveState();
+    this.setMode(walk?'walk':'orbit');
     this.setCut(this.cut);
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
     this.stats={triangles:Math.round(triangles),meshes};
     return true;
   }
-  reset() {this.controls.reset();}
+  setMode(mode) {
+    if(!this.root)return;
+    this.mode=mode;
+    const walking=mode==='walk';
+    this.walk.clear();
+    this.walk.enabled=walking;
+    this.controls.enabled=!walking;
+    this.stage.visible=!walking;
+    this.grid.visible=!walking;
+    if(walking){this.auto=false;this.controls.autoRotate=false;}
+    this.camera.fov=walking?68:38;
+    this.camera.near=walking?Math.max(.0001,this.sourceScale*.015):.01;
+    this.camera.updateProjectionMatrix();
+    this.renderer.domElement.dataset.navigation=mode;
+    this.renderer.domElement.setAttribute('aria-label',walking?'First-person world viewer. Click to focus; WASD move, drag to look, Q and E down and up, Shift faster, Home reset.':'World overview. Drag to orbit, right-drag to pan, scroll to zoom.');
+    this.reset();
+  }
+  reset() {
+    this.walk.clear();
+    if(this.mode==='walk'&&this.walkHome){
+      this.camera.position.copy(this.walkHome.position);
+      this.camera.lookAt(this.walkHome.position.clone().add(this.walkHome.forward));
+    }else this.controls.reset();
+    this.needsRender=true;
+  }
   setWire(value) {
     this.needsRender=true;
     this.wire=value;
@@ -208,7 +249,7 @@ export class WorldViewer {
   dispose() {
     ++this.version;
     cancelAnimationFrame(this.frame);
-    this.resizeObserver.disconnect();this.intersection.disconnect();this.controls.dispose();
+    this.resizeObserver.disconnect();this.intersection.disconnect();this.controls.dispose();this.walk.dispose();
     if(this.root) release(this.root);
     release(this.stage);
     this.environment.dispose();this.grid.geometry.dispose();this.grid.material.dispose();this.renderer.dispose();

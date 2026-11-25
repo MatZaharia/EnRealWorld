@@ -1,4 +1,4 @@
-import {families,modelNames,scores,ablations} from './data-light.js';
+import {families,modelNames,scores,ablations} from './data-light.js?v=20261125-ui3';
 const $=id=>document.getElementById(id);
 const COLORS={base:'#9eabb9',ours:'#15776b',coral:'#c85e4d',cyan:'#426bce'};
 const metricNames=['Score S','Functionality F','Geometry G','Dynamics D'];
@@ -36,9 +36,9 @@ export function allBenchmarkCSV() {
   const rows=[['model','family','method','S','F','G','D','source_note']];
   Object.keys(scores).forEach(model=>families.forEach((family,i)=>['base','ours'].forEach(method=>rows.push([
     modelNames[model],family,method==='base'?'Base Agent':'EnRealWorld',...scores[model][method][i],
-    model==='kimi'&&family==='HOT3D'&&method==='ours'?'Reported S and components inconsistent; confirm with authors':'Manuscript reported values'
+    'Manuscript reported values; checked against current main.tex and sec/X_suppl.tex'
   ]))));
-  return csv(rows)+'\r\n';
+  return csv(rows).replace(/\r\n/g,'\n')+'\n';
 }
 function legend(items) {
   $('chart-legend').innerHTML=items.map(([title,color])=>`<span><i style="--swatch:${color}"></i>${title}</span>`).join('');
@@ -71,7 +71,7 @@ function renderVideo() {
   $('chart-description').textContent='39 tasks · 100-point scale · higher is better. Overall is the reported task-level aggregate, not the unweighted average of the seven family bars.';
   legend([['Base Agent',COLORS.base],['EnRealWorld',COLORS.ours]]);
   $('benchmark-chart').innerHTML=groupedBars(families,[{name:'Base Agent',color:COLORS.base,values:data.base.map(v=>v[m])},{name:'EnRealWorld',color:COLORS.ours,values:data.ours.map(v=>v[m])}],{decimals:metricDecimals[m]});
-  $('chart-note').textContent='Bars start at zero. S and F/G/D retain the manuscript’s reported precision; S is not recomputed from rounded components.'+(model==='kimi'?' Data caution: Kimi HOT3D EnRealWorld reports S = 32.48 with F/G/D = 18.8/78.4/43.6, which are internally inconsistent. Values are preserved, not silently corrected.':'');
+  $('chart-note').textContent='Bars start at zero. Values were checked against the current main.tex and sec/X_suppl.tex. S and F/G/D retain the manuscript’s reported precision; S is not recomputed from rounded components.';
   const rows=families.flatMap((f,i)=>['base','ours'].map(method=>[f,method==='base'?'Base Agent':'EnRealWorld',...data[method][i].map((v,k)=>fmt(v,metricDecimals[k]))]));
   $('benchmark-table').innerHTML=table(['Family','Method','S','F','G','D'],rows);
   rowsForDownload=[['Family','Method','S','F','G','D'],...rows];
@@ -104,8 +104,8 @@ function renderCost() {
   $('chart-description').textContent='Reported extra time per task relative to the strongest comparison method. These are approximate overheads, not absolute runtimes or a cross-model efficiency ranking.';
   legend([['Extra time / approximate minutes',COLORS.cyan]]);
   $('benchmark-chart').innerHTML=groupedBars(['GPT-6.1 Sol','DeepSeek V4.1','Kimi-3.1 Pro'],[{name:'Extra time (minutes)',color:COLORS.cyan,values:[25,75,76],note:'Approximate per-task overhead'}],{max:100,decimals:0,height:300})+`<div class="metric-cards"><div class="metric-card"><h4>COMPUTE / PER TASK</h4><strong style="font-size:24px">RTX 4090</strong><p>16 CPU cores · 128 GB RAM</p></div><div class="metric-card"><h4>CACHED INPUT TOKEN SHARE</h4><strong>97.4–98.6%</strong><p>Reported range across models; not assigned per model.</p></div><div class="metric-card"><h4>NEW INPUT TOKEN SHARE</h4><strong>1.4–2.6%</strong><p>No absolute token counts or dollar cost inferred.</p></div></div>`;
-  $('chart-note').textContent='GPT compares 53.55 vs VIGA 51.21. DeepSeek reports +13.72 and Kimi +8.63 vs strongest comparisons. Cache statistics cover 38 GPT tasks and 39 tasks for each other model. Missing absolute runtimes, token totals, and dollar costs are not estimated.';
-  const rows=[['GPT-6.1 Sol','~25','53.55 vs 51.21'],['DeepSeek-V4.1-Flash-1017','~75','+13.72'],['Kimi-3.1 Pro','~76','+8.63']];
+  $('chart-note').textContent='GPT compares 53.55 vs VIGA 51.21. DeepSeek reports +13.72 and Kimi +9.16 vs strongest comparisons. Cache statistics cover 38 GPT tasks and 39 tasks for each other model. Missing absolute runtimes, token totals, and dollar costs are not estimated.';
+  const rows=[['GPT-6.1 Sol','~25','53.55 vs 51.21'],['DeepSeek-V4.1-Flash-1017','~75','+13.72'],['Kimi-3.1 Pro','~76','+9.16']];
   $('benchmark-table').innerHTML=table(['Model','Extra min/task','Score vs strongest comparison'],rows);
   rowsForDownload=[['Model','Approx extra minutes/task','Score comparison'],...rows];
 }
@@ -123,7 +123,7 @@ function delta() {
     families.forEach((family,i)=>{
       const d=scores[model].ours[i][0]-scores[model].base[i][0],positive=d>=0,color=positive?'21,119,107':'200,94,77';
       const alpha=.045+Math.min(Math.abs(d)/35,1)*.16;
-      const label=`${modelNames[model]} · ${family}\nBase ${fmt(scores[model].base[i][0])} → EnRealWorld ${fmt(scores[model].ours[i][0])}\nΔ S ${d>=0?'+':''}${fmt(d)}`+(model==='kimi'&&family==='HOT3D'?'\nReported S/component inconsistency; see data caution.':'');
+      const label=`${modelNames[model]} · ${family}\nBase ${fmt(scores[model].base[i][0])} → EnRealWorld ${fmt(scores[model].ours[i][0])}\nΔ S ${d>=0?'+':''}${fmt(d)}`;
       html+=`<span class="heat-cell" role="img" tabindex="0" aria-label="${escape(label)}" data-tip="${escape(label)}" style="background:rgba(${color},${alpha});color:${positive?COLORS.ours:COLORS.coral}">${d>=0?'+':''}${fmt(d)}</span>`;
     });
   });

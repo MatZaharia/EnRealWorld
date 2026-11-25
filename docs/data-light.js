@@ -11,11 +11,11 @@ export const scores = {
   },
   kimi: {
     base:[[37.98,18.2,61.8,33.9],[37.8,0,77.6,35.8],[44.05,31.6,62.2,38.4],[17.94,0,53.8,0],[19.7,0,55.5,3.7],[29.5,1.1,59.7,27.7],[52.19,25,66,65.6],[83.29,100,69.8,80.1]],
-    ours:[[46.61,43.2,57.5,43],[36.83,8.4,65.4,36.8],[42.72,42.6,52.8,37.2],[45.39,37.5,67.8,30.9],[32.48,18.8,78.4,43.6],[48.77,48.9,56.1,41.3],[44.69,12.5,52.9,68.8],[84.76,100,66,88.4]]
+    ours:[[47.14,43.2,57.5,40.8],[36.83,8.4,65.4,36.8],[44.18,42.6,52.8,37.2],[45.39,37.5,67.8,30.9],[32.48,18.8,78.4,0.4],[48.77,48.9,56.1,41.3],[44.69,12.5,52.9,68.8],[84.76,100,66,88.4]]
   }
 };
 export const ablations = [
-  ['Base Agent',46,26.8,64.5,46.7],['ERW-Prompts',51.46,39.7,67.6,47],['ERW-Utils',46.75,31.8,64.5,46.8],['ERW-NoCoord',50.67,38.8,65.8,47.4],['EnRealWorld',53.55,53.2,60.1,47.3]
+  ['Base Agent',46,26.8,64.5,46.7],['ERW-Prompts',51.46,39.7,67.6,47],['ERW-Utils',46.75,31.8,62.8,45.6],['ERW-NoCoord',50.67,38.8,65.8,47.4],['EnRealWorld',53.55,53.2,60.1,47.3]
 ];
 export const worldCases = {
   blueprint:[
@@ -26,13 +26,18 @@ export const worldCases = {
   painting:[
     {id:'railroad',title:'House by the Railroad',sub:'Painting → Blender · Claude Fable 5.2',ref:'assets/img/painting-railroad.jpg',thumb:'assets/video/railroad-component-flight.jpg',description:'A single painted view becomes a complete house. Orbit beyond the reference to inspect dormers, windows, roof, and porch.',model:'railroad',base:'railroad-base-claude-fable-5-2',ours:'railroad-ours-claude-fable-5-2',meta:'MODEL / Claude Fable 5.2\nPREVIEW / Blender scene geometry'},
     {id:'studio',title:"Interior with the Artist’s Easel",sub:'Painting → Blender · GPT-6.1 Sol',ref:'assets/img/painting-studio.jpg',thumb:'assets/video/studio-daylight.jpg',description:'A quiet painted interior becomes a three-dimensional room with an easel, doorway, table, and bowl.',base:'studio-base-gpt61',ours:'studio-ours-gpt61',meta:'MODEL / GPT-6.1 Sol\nPREVIEW / Blender scene geometry'},
-    {id:'railroad-astra',title:'Railroad House / Astra',sub:'Painting → Blender · GPT-6 Astra',ref:'assets/img/painting-railroad.jpg',thumb:'assets/img/painting-railroad.jpg',description:'Compare Base Agent and EnRealWorld scene geometry using another model. Render appearance may differ from the original simulator.',base:'railroad-base-gpt-6-astra',ours:'railroad-ours-gpt-6-astra',meta:'MODEL / GPT-6 Astra\nPREVIEW / Blender scene geometry'}
   ],
   text:[
     {id:'factory',title:'Factory',sub:'One sentence → an industrial world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/warehouse.jpg',description:'Production space, loaded racks, workstations, and pathways. This detailed frozen scene loads only when you enter the 3D view.',base:'world-base-factory',ours:'world-ours-factory',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~12 MB'},
     {id:'home',title:'Home',sub:'One sentence → a domestic world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/home.jpg',description:'A living space with rooms, furniture, and everyday objects. Browser geometry is simplified; see recordings for scene interventions.',base:'world-base-home',ours:'world-ours-home',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~26 MB'},
-    {id:'laboratory',title:'Laboratory',sub:'One sentence → a research world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/laboratory-robots.jpg',description:'A laboratory with benches, equipment, and robot workspaces. The preview shows geometry; recorded robot actions appear in the evidence gallery.',base:'world-base-laboratory',ours:'world-ours-laboratory',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~11 MB'}
+    {id:'warehouse',title:'WareHouse',sub:'Updated scene · first-person exploration',prompt:'Explore the updated WareHouse scene.',thumb:'assets/img/warehouse-preview.jpg',description:'Walk through the updated scene and inspect the equipment, shelving, and interior layout at eye level. This is the newly supplied Laboratory.blend, not the earlier manuscript scene.',ours:'world-ours-warehouse',compare:false,meta:'SOURCE / updated Laboratory.blend\nPREVIEW / simplified scene · ~9 MB\nNo matched Base Agent supplied'}
   ]
+};
+export const walkthroughs = {
+  studio:{ours:{position:[0,1.6,3],forward:[0,-.05,-1]},base:{position:[0,1.65,3.5],forward:[0,-.05,-1]}},
+  factory:{ours:{position:[-6,1.7,0],forward:[0,0,-1],speed:2.4},base:{position:[0,1.65,3],forward:[0,0,-1]}},
+  home:{ours:{position:[0,1.7,9],forward:[0,0,-1]},base:{position:[0,1.65,2.8],forward:[0,0,-1]}},
+  warehouse:{ours:{position:[-12,1.6,0],forward:[0,0,-1],speed:1.6}}
 };
 export const phases = [
   {routing:'Original input → parallel, isolated role contexts',outcome:'Independent specifications, construction, and probes',tasks:['Draft Must / Can / May requirements. Keep the draft private.','Build geometry, physics, and control. Run private self-tests.','Build an independent scene graph and intervention probes.']},
@@ -45,12 +50,10 @@ export const agents = [
   {name:'Researcher',icon:'R',color:'#8864ad',description:'Independently probes scene behavior. Challenges assumptions using intervention and observation.'}
 ];
 export const evidence = [
-  {title:'One push. Seven loaded racks.',label:'Rack domino',video:'factory-rack-domino',type:'Staged interaction · recorded',description:'A push propagates through the loaded factory racks. This showcase uses a staged cargo-proxy solver, not a browser-side physics test.',measurement:'480 Hz cargo-proxy solver\nRow 1 moves at 44.77 s\nRow 7 moves at 47.20 s',figure:'si-g1'},
-  {title:'An unexpected force.',label:'Unseen force',video:'laboratory-unseen-force',type:'Recorded scene intervention',description:'Inspect the laboratory response when a scene intervention is applied. The recording is evidence from the source environment; the webpage does not rerun its solver.',measurement:'Observe support, motion, and interaction\nInspect the video timeline',figure:'si-f3'},
-  {title:'Release the cushion.',label:'Cushion release',video:'home-pillow-release',type:'Staged interaction · recorded',description:'The cushion is released beside the sofa with prescribed velocity and settles on a fixed support plane. The staged interaction is labeled explicitly.',measurement:'Release at 40.55 s\nPrescribed initial velocity\nFixed support plane',figure:'si-g1'},
-  {title:'Keep the barrier.',label:'Collision on',video:'yates-barrier-on',type:'Native collision test · recorded',description:'Inspect the recorded door/barrier test in the Yates House. Compare with collision off to see the effect of changing the collision condition.',measurement:'Paired condition / collision enabled\nNative simulation recording',figure:'fig4'},
-  {title:'Remove the barrier.',label:'Collision off',video:'yates-barrier-off',type:'Native collision test · recorded',description:'The paired collision-off condition changes the barrier interaction. Open the supporting figure for operation and collision sequences.',measurement:'Paired condition / collision disabled\nNative simulation recording',figure:'fig4'},
-  {title:'Robot pick and place.',label:'Robot execution',video:'laboratory-robots',type:'Recorded robot execution',description:'Robot workspaces and actions in the generated laboratory. A world contains both geometry and executable behavior; GLB exports show only the former.',measurement:'Laboratory / action execution\nRecorded, not a live browser controller',figure:'fig3'}
+  {title:'Collision enabled.',label:'01 · Collision on',video:'yates-barrier-on',type:'Native collision test · paired condition',description:'In Jack Yates House, the obstacle blocks the door when collision is enabled. Compare the adjacent collision-off condition in the same scene.',measurement:'Condition A / collision enabled\nNative simulation recording\nPaper Figure 4',figure:'fig4'},
+  {title:'Collision disabled.',label:'02 · Collision off',video:'yates-barrier-off',type:'Native collision test · paired condition',description:'With obstacle collision disabled, the door is no longer blocked. This is the paired condition of the same Yates test, not a separate scene.',measurement:'Condition B / collision disabled\nNative simulation recording\nPaper Figure 4',figure:'fig4'},
+  {title:'One push. Seven loaded racks.',label:'03 · Rack domino',video:'factory-rack-domino',type:'Staged interaction · recorded',description:'A push propagates through the loaded factory racks. This showcase uses a staged cargo-proxy solver, not a browser-side physics test.',measurement:'480 Hz cargo-proxy solver\nRow 1 moves at 44.77 s\nRow 7 moves at 47.20 s',figure:'si-g1'},
+  {title:'Release the cushion.',label:'04 · Cushion release',video:'home-pillow-release',type:'Staged interaction · recorded',description:'The cushion is released beside the sofa with prescribed velocity and settles on a fixed support plane. The staged interaction is labeled explicitly.',measurement:'Release at 40.55 s\nSettles at 42.30 s\nPrescribed velocity / fixed support plane',figure:'si-g1'}
 ];
 export const probes = [
   ['Gravity','Hold / release an unconstrained object','Displacement and velocity trajectory','Does the object move as expected when the constraint is removed?'],

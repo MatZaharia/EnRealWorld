@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { WalkControls } from './walk-controls.js?v=20261125-ui4';
+import { WalkControls } from './walk-controls.js?v=20261126-ui7';
 import { normalizedProgress } from './loading-progress.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -58,8 +58,8 @@ export class WorldViewer {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = .075;
     this.controls.autoRotateSpeed = .6;
-    this.controls.minDistance = .7;
-    this.controls.maxDistance = 18;
+    this.controls.minDistance = freeWalk ? .25 : .7;
+    this.controls.maxDistance = freeWalk ? 36 : 18;
     this.controls.maxPolarAngle = Math.PI * .87;
     this.controls.enablePan = !hero;
     this.controls.enableZoom = !hero;
@@ -123,8 +123,8 @@ export class WorldViewer {
       if (e.key==='ArrowRight') s.theta+=.12;
       if (e.key==='ArrowUp') s.phi=Math.max(.15,s.phi-.1);
       if (e.key==='ArrowDown') s.phi=Math.min(2.7,s.phi+.1);
-      if (e.key==='+') s.radius=Math.max(.7,s.radius*.9);
-      if (e.key==='-') s.radius=Math.min(18,s.radius*1.1);
+      if (e.key==='+') s.radius=Math.max(this.controls.minDistance,s.radius*.9);
+      if (e.key==='-') s.radius=Math.min(this.controls.maxDistance,s.radius*1.1);
       this.camera.position.copy(this.controls.target).add(new THREE.Vector3().setFromSpherical(s));
       this.controls.update();
     });
@@ -135,8 +135,8 @@ export class WorldViewer {
       const dt=Math.min((time-this.last)/1000,.05);
       this.last=time;
       this.controls.autoRotate=this.auto&&this.mode==='orbit';
+      if(this.walk.update(dt))this.needsRender=true;
       if(this.mode==='orbit')this.controls.update();
-      else if(this.walk.update(dt))this.needsRender=true;
       if(this.needsRender || this.auto){
         this.renderer.render(this.scene,this.camera);
         this.needsRender=false;
@@ -152,14 +152,13 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.needsRender=true;
   }
-  async load(url, onProgress, {walk=null}={}) {
+  async load(url, onProgress, {walk=null, initialMode=walk?'walk':'orbit'}={}) {
     const version=++this.version;
     const gltf=await this.loader.loadAsync(url, event => {
       if (version===this.version) onProgress?.(event.lengthComputable ? normalizedProgress(event.loaded,event.total) : null);
     });
     if (version!==this.version) {release(gltf.scene);return false;}
     if (this.root) {this.scene.remove(this.root);release(this.root);}
-    const useWalk=this.freeWalk||!!walk;
     const raw=gltf.scene;
     raw.updateMatrixWorld(true);
     const box=new THREE.Box3(),focusBox=new THREE.Box3();
@@ -169,10 +168,11 @@ export class WorldViewer {
       const s=b.getSize(new THREE.Vector3());
       const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.2;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
-      const terrain=!useWalk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
+      const terrain=!walk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
       const sky=/sky|horizon|background/i.test(o.name);
       const detachedTie=url.includes('railroad-ours-claude-fable-5-2') && /^Loose_SpareTie_\d+$/.test(o.name);
-      if (broad || terrain || sky || detachedTie) {o.visible=false;return;}
+      const astraTerrain=url.includes('railroad-ours-gpt-6-astra.glb') && o.name==='mesh_65' && o.material?.name==='Dry ochre ballast';
+      if (broad || terrain || sky || detachedTie || astraTerrain) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;
       box.union(b);
@@ -195,22 +195,17 @@ export class WorldViewer {
     this.scene.add(this.root);
     this.height=size.y*scale;
     this.sourceScale=scale;
-    const spawn=this.freeWalk?null:walk?.position;
-    this.walkHome={position:spawn?new THREE.Vector3(...spawn).add(raw.position).multiplyScalar(scale):new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0),forward:new THREE.Vector3(...(walk?.forward||[0,0,-1])).normalize()};
+    const overviewTarget=new THREE.Vector3(0,this.height*.43,0);
+    const overviewPosition=new THREE.Vector3(5.2,this.height*.55+3.4,6.6);
+    const insidePosition=walk?.position
+      ? new THREE.Vector3(...walk.position).add(raw.position).multiplyScalar(scale)
+      : new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0);
+    this.walkHome={position:insidePosition,lookAt:insidePosition.clone().add(new THREE.Vector3(...(walk?.forward||[0,0,-1])))};
     this.walk.speed=(walk?.speed||1.8)*scale;
-    this.walk.enabled=false;
-    this.walk.clear();
-    this.controls.enabled=true;
-    this.controls.autoRotate=false;
-    this.mode='orbit';
-    this.target=new THREE.Vector3(0,this.height*.43,0);
-    this.camera.fov=38;
-    this.camera.position.set(5.2,this.height*.55+3.4,6.6);
-    this.controls.target.copy(this.target);
-    this.camera.updateProjectionMatrix();
-    this.controls.update();
+    this.camera.position.copy(overviewPosition);
+    this.controls.target.copy(overviewTarget);
     this.controls.saveState();
-    this.setMode(useWalk?'walk':'orbit');
+    this.setMode(initialMode);
     this.setCut(this.cut);
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
@@ -222,14 +217,17 @@ export class WorldViewer {
     this.mode=mode;
     const walking=mode==='walk';
     this.walk.clear();
-    this.walk.enabled=walking;
+    this.walk.enabled=walking||this.freeWalk;
+    this.walk.orbitTarget=walking?null:this.controls.target;
     this.controls.enabled=!walking;
     this.stage.visible=!walking;
     this.grid.visible=!walking;
     if(walking){this.auto=false;this.controls.autoRotate=false;}
-    this.camera.fov=walking?68:38;
     this.camera.near=walking?Math.max(.0001,this.sourceScale*.015):.01;
-    this.camera.updateProjectionMatrix();
+    if(!walking){
+      this.camera.fov=38;
+      this.camera.updateProjectionMatrix();
+    }
     this.renderer.domElement.dataset.navigation=mode;
     this.renderer.domElement.setAttribute('aria-label',walking?'First-person world viewer. Click to focus; WASD move, drag to look, Q and E down and up, Shift faster, Home reset.':'World overview. Drag to orbit, right-drag to pan, scroll to zoom.');
     this.reset();
@@ -238,15 +236,30 @@ export class WorldViewer {
     this.walk.clear();
     if(this.mode==='walk'&&this.walkHome){
       this.camera.position.copy(this.walkHome.position);
-      this.camera.lookAt(this.walkHome.position.clone().add(this.walkHome.forward));
-      this.camera.fov=68;this.camera.updateProjectionMatrix();
-    }else this.controls.reset();
+      this.camera.lookAt(this.walkHome.lookAt);
+      this.camera.fov=68;
+      this.camera.updateProjectionMatrix();
+    }else if(this.root){
+      const {enableDamping,autoRotate}=this.controls;
+      this.controls.enableDamping=false;
+      this.controls.autoRotate=false;
+      this.controls.update();
+      this.controls.reset();
+      Object.assign(this.controls,{enableDamping,autoRotate});
+    }
     this.needsRender=true;
   }
   zoomBy(delta) {
-    if(!this.root||this.mode!=='walk')return;
-    this.camera.fov=THREE.MathUtils.clamp(this.camera.fov+delta,24,82);
-    this.camera.updateProjectionMatrix();
+    if(!this.root)return;
+    if(this.mode==='walk'){
+      this.camera.fov=THREE.MathUtils.clamp(this.camera.fov+delta,12,105);
+      this.camera.updateProjectionMatrix();
+    }else{
+      const offset=this.camera.position.clone().sub(this.controls.target);
+      const radius=THREE.MathUtils.clamp(offset.length()*Math.exp(delta/40),this.controls.minDistance,this.controls.maxDistance);
+      this.camera.position.copy(this.controls.target).add(offset.setLength(radius));
+      this.controls.update();
+    }
     this.needsRender=true;
   }
   setWire(value) {

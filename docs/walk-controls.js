@@ -6,6 +6,7 @@ export class WalkControls {
     this.canvas=canvas;
     this.onZoom=onZoom;
     this.enabled=false;
+    this.orbitTarget=null;
     this.speed=1;
     this.multiplier=1;
     this.keys=new Set();
@@ -29,7 +30,9 @@ export class WalkControls {
     on(document,'visibilitychange',()=>{if(document.hidden)this.clear();});
     on(canvas,'pointerdown',e=>{
       if(!this.enabled||e.button!==0)return;
-      e.preventDefault();canvas.focus({preventScroll:true});
+      canvas.focus({preventScroll:true});
+      if(this.orbitTarget)return;
+      e.preventDefault();
       this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
       canvas.setPointerCapture(e.pointerId);
       this.pinch=this.pointers.size===2?this.spread():0;
@@ -73,7 +76,9 @@ export class WalkControls {
       const yaw=new THREE.Euler().setFromQuaternion(this.camera.quaternion,'YXZ').y;
       move.applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
       const boost=held('ShiftLeft')||held('ShiftRight')?3:1;
-      this.camera.position.addScaledVector(move,this.speed*this.multiplier*boost*Math.min(dt,.05));
+      const distance=this.speed*this.multiplier*boost*Math.min(dt,.05);
+      this.camera.position.addScaledVector(move,distance);
+      this.orbitTarget?.addScaledVector(move,distance);
       this.changed=true;
     }
     const changed=this.changed;this.changed=false;return changed;

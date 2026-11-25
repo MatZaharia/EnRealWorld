@@ -1,4 +1,4 @@
-import {worldCases,walkthroughs,agents,phases,evidence,modelNames} from './data-light.js?v=20261125-ui4';
+import {worldCases,walkthroughs,agents,phases,evidence,modelNames} from './data-light.js?v=20261126-ui7';
 import {initCharts} from './charts-light.js?v=20261125-ui4';
 import {initSelectControls} from './select-controls.js?v=20261125-ui4';
 import {loadingLabel} from './loading-progress.js';
@@ -8,7 +8,7 @@ const motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pressed=(group,selected)=>group.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===selected)));
 let viewerModule;
-const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261125-ui4');
+const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261126-ui9');
 let heroViewer,worldViewer,category='blueprint',selectedCase=worldCases.blueprint[0],method='ours',worldEntered=false,loadVersion=0;
 let cases=[],model='gpt',dataset='all',query='',page=0,activeCase,playing=false,v2wReady=false;
 const PAGE_SIZE=12;
@@ -90,7 +90,8 @@ function renderWorldCase() {
   pressed($('world-method'),$('world-method').querySelector(`[data-method="${method}"]`));
   $('world-title').textContent=selectedCase.title;
   $('world-description').textContent=selectedCase.description;
-  $('world-meta').textContent=selectedCase.meta;
+  $('world-meta').textContent=selectedCase.meta??'';
+  $('world-meta').hidden=!selectedCase.meta;
   const ref=$('world-reference');ref.replaceChildren();
   if(selectedCase.ref){
     const img=document.createElement('img');img.src=selectedCase.ref;img.alt=`Input reference for ${selectedCase.title}`;
@@ -110,12 +111,14 @@ function renderWorldCase() {
     $('render-base').src=`assets/figimg/${pair[0]}/${pair[1]}.jpg`;
     $('render-ours').src=`assets/figimg/${pair[0]}/${pair[2]}.jpg`;
   }
-  $('walk-help').hidden=false;
   if(worldEntered)loadWorld();
 }
 async function loadWorld() {
   worldEntered=true;
   const version=++loadVersion,path=modelPath();
+  const walk=walkthroughs[selectedCase.id]?.[method];
+  const initialMode=category==='text'||selectedCase.id==='studio'?'walk':'orbit';
+  updateNavigation(initialMode,false);
   $('world-status').textContent=`Loading ${selectedCase.title} / ${method==='ours'?'EnRealWorld':'Base Agent'}…`;
   try {
     if(!worldViewer){
@@ -130,7 +133,7 @@ async function loadWorld() {
     const complete=await worldViewer.load(path,progress=>{
       const label=$('world-canvas').querySelector('.message-label');
       if(label&&version===loadVersion)label.textContent=loadingLabel(progress);
-    },{walk:walkthroughs[selectedCase.id]?.[method]});
+    },{walk,initialMode});
     if(!complete||version!==loadVersion)return;
     $('world-canvas').querySelector('.viewer-message')?.remove();
     updateNavigation();
@@ -142,12 +145,24 @@ async function loadWorld() {
     console.warn('World preview unavailable:',err.message);
   }
 }
-function updateNavigation(){
-  $('walk-help').hidden=false;
-  if(worldViewer?.stats)$('world-status').textContent=`${method==='ours'?'EnRealWorld':'Base Agent'} · ${worldViewer.stats.triangles.toLocaleString()} preview triangles · drag to look / WASD move / scroll or pinch to zoom`;
+function updateNavigation(mode=worldViewer.mode, ready=true){
+  for(const name of ['orbit','walk']){
+    const button=$(`world-${name}`);
+    button.disabled=!ready;
+    button.setAttribute('aria-pressed',String(mode===name));
+  }
+  $('walk-help').hidden=!ready||mode!=='walk';
+  if(!ready)return;
+  const hint=mode==='orbit'?' · Drag to orbit · WASD to move · Scroll or pinch to zoom':'';
+  $('world-status').textContent=`${method==='ours'?'EnRealWorld':'Base Agent'} · ${worldViewer.stats.triangles.toLocaleString()} preview triangles${hint}`;
 }
 function initWorlds() {
   $('start-world').addEventListener('click',loadWorld);
+  for(const mode of ['orbit','walk'])$('world-'+mode).addEventListener('click',()=>{
+    if(worldViewer.mode!==mode)worldViewer.setMode(mode);
+    updateNavigation();
+    worldViewer.renderer.domElement.focus({preventScroll:true});
+  });
   const zoom=delta=>{if(!worldViewer?.root)return;worldViewer.zoomBy(delta);};
   $('world-zoom-in').addEventListener('click',()=>zoom(-8));
   $('world-zoom-out').addEventListener('click',()=>zoom(8));
@@ -390,7 +405,7 @@ addEventListener('pagehide',e=>{
 addEventListener('pageshow',e=>{
   if(e.persisted){
     if(heroViewer)heroViewer.needsRender=true;
-    if(worldViewer)worldViewer.needsRender=true;
+    worldViewer?.reset();
     railroadGallery.resume();
   }
 });

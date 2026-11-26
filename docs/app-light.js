@@ -1,14 +1,14 @@
-import {worldCases,walkthroughs,agents,phases,evidence,modelNames} from './data-light.js?v=20261126-ui7';
+import {worldCases,walkthroughs,modelNames} from './data-light.js?v=20261126-lab';
 import {initCharts} from './charts-light.js?v=20261125-ui4';
 import {initSelectControls} from './select-controls.js?v=20261125-ui4';
 import {loadingLabel} from './loading-progress.js';
-import {initRailroadGallery} from './railroad-gallery.js?v=20261125-ui4';
+import {initRailroadGallery} from './railroad-gallery.js?v=20261126-gallery2';
 const $=id=>document.getElementById(id);
 const motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pressed=(group,selected)=>group.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===selected)));
 let viewerModule;
-const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261126-ui9');
+const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261126-walk3');
 let heroViewer,worldViewer,category='blueprint',selectedCase=worldCases.blueprint[0],method='ours',worldEntered=false,loadVersion=0;
 let cases=[],model='gpt',dataset='all',query='',page=0,activeCase,playing=false,v2wReady=false;
 const PAGE_SIZE=12;
@@ -39,28 +39,25 @@ function showWorldMessage(text,loading=true) {
 async function initHero() {
   const picker=document.querySelector('.hero-scene-picker');
   const featured={
-    railroad:{file:'railroad-ours-claude-fable-5-2',name:'HOUSE BY THE RAILROAD',input:'A painted reference',output:'A world beyond the frame'},
-    lighthouse:{file:'lighthouse-ours',name:'LIGHTHOUSE / MEASURED DRAWINGS',input:'A measured drawing',output:'A tower with interior structure'},
-    ranch:{file:'ranch-ours',name:'GOODNIGHT RANCH HOUSE',input:'A measured floor plan',output:'A house you can explore'}
+    railroad:'railroad-ours-claude-fable-5-2',
+    lighthouse:'lighthouse-ours',
+    ranch:'ranch-ours'
   };
   let version=0;
   const load=async key=>{
-    const request=++version,item=featured[key];
-    $('hero-scene-name').textContent='LOADING THE NEXT WORLD…';
+    const request=++version,file=featured[key];
+    $('hero-load-status').textContent='LOADING THE NEXT WORLD…';
     pressed(picker,picker.querySelector(`[data-hero-scene="${key}"]`));
     try{
-      const complete=await heroViewer.load(`assets/models/${item.file}.glb`);
+      const complete=await heroViewer.load(`assets/models/${file}.glb`);
       if(!complete||request!==version)return;
-      $('hero-scene-name').textContent=item.name;
-      document.querySelector('.tag-a b').textContent=item.input;
-      document.querySelector('.tag-b b').textContent=item.output;
+      $('hero-load-status').textContent='';
     }catch(err){
-      if(request===version)$('hero-scene-name').textContent='PREVIEW UNAVAILABLE / TRY ANOTHER WORLD';
+      if(request===version)$('hero-load-status').textContent='PREVIEW UNAVAILABLE / TRY ANOTHER WORLD';
       console.warn('Featured world unavailable:',err.message);
     }
   };
   picker.querySelectorAll('button').forEach(b=>{b.disabled=true;});
-  $('hero-scene-name').setAttribute('role','status');
   try {
     const {WorldViewer}=await getViewer();
     heroViewer=new WorldViewer($('hero-canvas'),{hero:true});
@@ -73,7 +70,7 @@ async function initHero() {
     heroViewer?.dispose();heroViewer=null;
     $('hero-canvas').innerHTML='<img src="assets/figimg/fig5/014.jpg" alt="Generated house preview" style="height:100%;width:100%;object-fit:contain;border-radius:16px">';
     $('hero-motion').hidden=true;
-    $('hero-scene-name').textContent='STATIC PREVIEW / WEBGL UNAVAILABLE';
+    $('hero-load-status').textContent='STATIC PREVIEW / WEBGL UNAVAILABLE';
     picker.querySelectorAll('button').forEach(b=>{b.disabled=true;});
     console.warn('3D hero unavailable:',err.message);
   }
@@ -104,7 +101,7 @@ function renderWorldCase() {
   $('cut-control').hidden=category==='painting';
   $('world-cases').innerHTML=worldCases[category].map(c=>`<button class="case-card" data-case="${c.id}" aria-pressed="${c.id===selectedCase.id}"><img src="${c.thumb}" alt="" loading="lazy"><div><strong>${esc(c.title)}</strong><small>${esc(c.sub)}</small></div></button>`).join('');
   $('world-cases').classList.toggle('two-cases',category==='painting');
-  const pairs={lighthouse:['fig3','037','048'],yates:['fig3','061','062'],ranch:['fig3','060','049'],railroad:['fig5','013','014'],studio:['fig3','025','026'],factory:['fig3','000','001'],home:['fig3','004','005']};
+  const pairs={lighthouse:['fig3','037','048'],yates:['fig3','061','062'],ranch:['fig3','060','049'],railroad:['fig5','013','014'],studio:['fig3','025','026']};
   const pair=pairs[selectedCase.id];
   document.querySelector('.render-comparison').hidden=!pair;
   if(pair){
@@ -244,34 +241,6 @@ function initWorlds() {
   comparison.addEventListener('lostpointercapture',()=>{pointer=null;});
   renderWorldCase();initHero();
 }
-function renderPhase(index) {
-  const phase=phases[index];
-  $('agent-grid').innerHTML=agents.map((agent,i)=>`<article class="agent-card" style="--agent:${agent.color}"><div class="agent-icon">${agent.icon}</div><h3>${agent.name}</h3><p>${agent.description}</p><div class="agent-task">${phase.tasks[i]}</div></article>`).join('');
-  $('phase-routing').textContent=phase.routing;$('phase-outcome').textContent=phase.outcome;
-}
-function initMethod() {
-  document.querySelector('.phase-selector').addEventListener('click',e=>{
-    const b=e.target.closest('[data-phase]');if(!b)return;
-    pressed(b.parentElement,b);renderPhase(Number(b.dataset.phase));
-  });
-  renderPhase(0);
-}
-function renderEvidence(index) {
-  const item=evidence[index],video=$('evidence-video');
-  video.pause();video.loop=item.video.startsWith('yates-barrier');video.src=`assets/video/${item.video}.mp4`;video.poster=`assets/video/${item.video}.jpg`;video.load();
-  $('evidence-type').textContent=item.type;$('evidence-title').textContent=item.title;
-  $('evidence-description').textContent=item.description;$('evidence-measurement').textContent=item.measurement;
-  $('evidence-measurement').style.whiteSpace='pre-line';
-  $('evidence-figure').hidden=!item.figure;
-  $('evidence-figure').onclick=item.figure?()=>openFigure(item.figure,`${item.title} · supporting research figure`):null;
-}
-function initEvidence() {
-  $('evidence-tabs').innerHTML=evidence.map((item,i)=>`<button data-evidence="${i}" aria-pressed="${i===0}">${item.label}</button>`).join('');
-  $('evidence-tabs').addEventListener('click',e=>{
-    const b=e.target.closest('[data-evidence]');if(!b)return;pressed($('evidence-tabs'),b);renderEvidence(Number(b.dataset.evidence));
-  });
-  renderEvidence(0);
-}
 function filteredCases() {
   return cases.filter(c=>c.modelKey===model&&(dataset==='all'||c.source===dataset)&&`${c.task} ${c.action} ${c.episode}`.toLowerCase().includes(query));
 }
@@ -362,7 +331,7 @@ function initMotion() {
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
     if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}
   }),{threshold:.08});
-  document.querySelectorAll('.section-heading,.method-principles,.resource-grid').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
+  document.querySelectorAll('.section-heading,.method-principles').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
   const navLinks=[...document.querySelectorAll('.nav-links a')];
   const activeObserver=new IntersectionObserver(entries=>{
     for(const entry of entries)if(entry.isIntersecting){navLinks.forEach(a=>{const active=a.hash===`#${entry.target.id}`;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
@@ -395,7 +364,7 @@ function initCitation() {
     catch{$('copy-status').textContent='Select the citation text to copy manually.';}
   });
 }
-initFigures();initWorlds();initMethod();initEvidence();initCharts();initVideo();initMotion();initCitation();
+initFigures();initWorlds();initCharts();initVideo();initMotion();initCitation();
 const railroadGallery=initRailroadGallery(getViewer);
 initSelectControls();
 addEventListener('pagehide',e=>{

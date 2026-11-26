@@ -1,4 +1,4 @@
-import {worldCases,agents,phases,evidence,probes,modelNames} from './data-dark.js';
+import {worldCases,probes,modelNames} from './data-dark.js';
 import {initCharts} from './charts-dark.js';
 const $=id=>document.getElementById(id);
 const motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -65,10 +65,13 @@ function renderWorldCase() {
   $('world-download').setAttribute('download',modelPath().split('/').pop());
   $('cut-control').hidden=category==='painting';
   $('world-cases').innerHTML=worldCases[category].map(c=>`<button class="case-card" data-case="${c.id}" aria-pressed="${c.id===selectedCase.id}"><img src="${c.thumb}" alt="" loading="lazy"><div><strong>${esc(c.title)}</strong><small>${esc(c.sub)}</small></div></button>`).join('');
-  const pairs={lighthouse:['fig3','037','048'],yates:['fig3','061','062'],ranch:['fig3','060','049'],railroad:['fig5','013','014'],studio:['fig3','025','026'],'railroad-astra':['fig5','038','039'],factory:['fig3','000','001'],home:['fig3','004','005'],laboratory:['fig3','008','009']};
+  const pairs={lighthouse:['fig3','037','048'],yates:['fig3','061','062'],ranch:['fig3','060','049'],railroad:['fig5','013','014'],studio:['fig3','025','026'],'railroad-astra':['fig5','038','039']};
   const pair=pairs[selectedCase.id];
-  $('render-base').src=`assets/figimg/${pair[0]}/${pair[1]}.jpg`;
-  $('render-ours').src=`assets/figimg/${pair[0]}/${pair[2]}.jpg`;
+  document.querySelector('.render-comparison').hidden=!pair;
+  if(pair){
+    $('render-base').src=`assets/figimg/${pair[0]}/${pair[1]}.jpg`;
+    $('render-ours').src=`assets/figimg/${pair[0]}/${pair[2]}.jpg`;
+  }
   if(worldEntered)loadWorld();
 }
 async function loadWorld() {
@@ -153,40 +156,16 @@ function initWorlds() {
   $('render-reveal').addEventListener('pointercancel',()=>{dragging=false;});
   renderWorldCase();initHero();
 }
-function renderPhase(index) {
-  const phase=phases[index];
-  $('agent-grid').innerHTML=agents.map((agent,i)=>`<article class="agent-card" style="--agent:${agent.color}"><div class="agent-icon">${agent.icon}</div><h3>${agent.name}</h3><p>${agent.description}</p><div class="agent-task">${phase.tasks[i]}</div></article>`).join('');
-  $('phase-routing').textContent=phase.routing;$('phase-outcome').textContent=phase.outcome;
-}
-function initMethod() {
-  document.querySelector('.phase-selector').addEventListener('click',e=>{
-    const b=e.target.closest('[data-phase]');if(!b)return;
-    pressed(b.parentElement,b);renderPhase(Number(b.dataset.phase));
-  });
-  renderPhase(0);
-}
-function renderEvidence(index) {
-  const item=evidence[index],video=$('evidence-video');
-  video.pause();video.src=`assets/video/${item.video}.mp4`;video.poster=`assets/video/${item.video}.jpg`;video.load();
-  $('evidence-type').textContent=item.type;$('evidence-title').textContent=item.title;
-  $('evidence-description').textContent=item.description;$('evidence-measurement').textContent=item.measurement;
-  $('evidence-measurement').style.whiteSpace='pre-line';
-  $('evidence-figure').onclick=()=>openFigure(item.figure,`${item.title} · supporting research figure`);
-}
 function renderProbe(index) {
   const p=probes[index];
   $('probe-detail').innerHTML=`<div><span>QUESTION</span><p>${p[3]}</p></div><div><span>PAIRED INTERVENTION</span><p>${p[1]}</p></div><div><span>OBSERVABLE READOUT</span><p>${p[2]}</p></div>`;
 }
-function initEvidence() {
-  $('evidence-tabs').innerHTML=evidence.map((item,i)=>`<button data-evidence="${i}" aria-pressed="${i===0}">${item.label}</button>`).join('');
-  $('evidence-tabs').addEventListener('click',e=>{
-    const b=e.target.closest('[data-evidence]');if(!b)return;pressed($('evidence-tabs'),b);renderEvidence(Number(b.dataset.evidence));
-  });
+function initProbes() {
   $('probe-tabs').innerHTML=probes.map((p,i)=>`<button data-probe="${i}" aria-pressed="${i===0}">${p[0]}</button>`).join('');
   $('probe-tabs').addEventListener('click',e=>{
     const b=e.target.closest('[data-probe]');if(!b)return;pressed($('probe-tabs'),b);renderProbe(Number(b.dataset.probe));
   });
-  renderEvidence(0);renderProbe(0);
+  renderProbe(0);
 }
 function filteredCases() {
   return cases.filter(c=>c.modelKey===model&&(dataset==='all'||c.source===dataset)&&`${c.task} ${c.action} ${c.episode}`.toLowerCase().includes(query));
@@ -278,7 +257,7 @@ function initMotion() {
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
     if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}
   }),{threshold:.08});
-  document.querySelectorAll('.section-heading,.method-principles,.resource-grid').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
+  document.querySelectorAll('.section-heading,.method-principles').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
   const navLinks=[...document.querySelectorAll('.nav-links a')];
   const activeObserver=new IntersectionObserver(entries=>{
     for(const entry of entries)if(entry.isIntersecting){navLinks.forEach(a=>{const active=a.hash===`#${entry.target.id}`;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
@@ -311,5 +290,5 @@ function initCitation() {
     catch{$('copy-status').textContent='Select the citation text to copy manually.';}
   });
 }
-initFigures();initWorlds();initMethod();initEvidence();initCharts();initVideo();initMotion();initCitation();
+initFigures();initWorlds();initProbes();initCharts();initVideo();initMotion();initCitation();
 addEventListener('pagehide',()=>{heroViewer?.dispose();worldViewer?.dispose();stopPair();});

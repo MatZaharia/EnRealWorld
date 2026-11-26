@@ -30,7 +30,7 @@ export const worldCases = {
   text:[
     {id:'factory',title:'Factory',sub:'One sentence → an industrial world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/warehouse.jpg',description:'Production space, loaded racks, workstations, and pathways. This detailed frozen scene loads only when you enter the 3D view.',base:'world-base-factory',ours:'world-ours-factory',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~12 MB'},
     {id:'home',title:'Home',sub:'One sentence → a domestic world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/home.jpg',description:'A living space with rooms, furniture, and everyday objects. Browser geometry is simplified; see recordings for scene interventions.',base:'world-base-home',ours:'world-ours-home',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~26 MB'},
-    {id:'warehouse',title:'WareHouse',sub:'Updated scene · first-person exploration',prompt:'Explore the updated WareHouse scene.',thumb:'assets/img/warehouse-preview.jpg',description:'Walk through the updated scene and inspect the equipment, shelving, and interior layout at eye level. This is the newly supplied Laboratory.blend, not the earlier manuscript scene.',ours:'world-ours-warehouse',compare:false}
+    {id:'warehouse',title:'WareHouse',sub:'One sentence → a laboratory world',prompt:'Construct a factory, a home, and a laboratory.',thumb:'assets/img/warehouse-preview.jpg',description:'Walk through the warehouse and inspect the equipment, shelving, and interior layout at eye level.',ours:'world-ours-warehouse',compare:false}
   ]
 };
 export const walkthroughs = {

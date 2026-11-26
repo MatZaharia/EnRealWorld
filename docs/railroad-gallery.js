@@ -1,11 +1,10 @@
 import {loadingLabel} from './loading-progress.js';
 
 export const railroadModels=[
-  {id:'claude-fable-5-2',name:'Claude Fable 5.2',paired:true},
-  {id:'gpt-6-1-sol',name:'GPT-6.1 Sol',paired:true},
-  {id:'gpt-6-astra',name:'GPT-6 Astra',paired:true},
-  {id:'gemini-4-neon',name:'Gemini 4 Neon',paired:true},
-  {id:'gpt-6-2-astra',name:'GPT-6.2 Astra',paired:false}
+  {id:'claude-fable-5-2',name:'Claude Fable 5.2'},
+  {id:'gemini-4-neon',name:'Gemini 4 Neon',nativeScene:true},
+  {id:'gpt-6-2-astra',name:'GPT-6.2 Astra',nativeScene:true},
+  {id:'gpt-6-1-sol',name:'GPT-6.1 Sol',oursSourceCamera:true}
 ];
 
 export function initRailroadGallery(getViewer) {
@@ -19,12 +18,16 @@ export function initRailroadGallery(getViewer) {
   }));
   const path=()=>`assets/models/railroad-${method}-${selected.id}.glb`;
   const sync=()=>{
-    if(!selected.paired)method='base';
     $('railroad-models').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.railModel===selected.id)));
-    buttons.forEach(b=>{b.disabled=b.dataset.railMethod==='ours'&&!selected.paired;b.setAttribute('aria-pressed',String(b.dataset.railMethod===method));});
+    buttons.forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.railMethod===method));});
     $('railroad-title').textContent=selected.name;
-    $('railroad-note').textContent=selected.paired?'Matched Base Agent / EnRealWorld scene exports. Switch methods and inspect the geometry.':'Base Agent only: the EnRealWorld run was interrupted and no executable scene was supplied. No substitute model is used.';
-    $('railroad-download').href=path()+'?v=20261125-materials';$('railroad-download').download=path().split('/').pop();
+    const render=$('railroad-render');
+    const src=`assets/img/railroad-${method}-${selected.id}-preview.jpg`;
+    render.href=src;
+    const img=render.querySelector('img');
+    img.src=src;
+    img.alt=`${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'} original render`;
+    $('railroad-download').href=path()+'?v=20261126-gallery2';$('railroad-download').download=path().split('/').pop();
     if(!entered)$('railroad-status').textContent='Choose a model, then enter the 3D comparison.';
   };
   const overlay=(message,retry=false)=>{
@@ -44,9 +47,16 @@ export function initRailroadGallery(getViewer) {
         viewer=new WorldViewer($('railroad-canvas'));
       }
       overlay('Loading geometry…');
-      const complete=await viewer.load(url+'?v=20261125-materials',progress=>{
+      let sceneMetadata=null;
+      if(selected.nativeScene || (selected.oursSourceCamera && method==='ours')){
+        const response=await fetch(url.replace(/\.glb$/,'.json')+'?v=20261126-gallery2');
+        if(!response.ok)throw new Error('Scene metadata unavailable');
+        sceneMetadata=await response.json();
+        if(request!==version)return;
+      }
+      const complete=await viewer.load(url+'?v=20261126-gallery2',progress=>{
         if(request===version){const label=$('railroad-canvas').querySelector('.message-label');if(label)label.textContent=loadingLabel(progress);}
-      });
+      },{sceneMetadata});
       if(!complete||request!==version)return;
       $('railroad-canvas').querySelector('.viewer-message')?.remove();
       $('railroad-status').textContent=`${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'} · ${viewer.stats.triangles.toLocaleString()} preview triangles · drag to orbit`;

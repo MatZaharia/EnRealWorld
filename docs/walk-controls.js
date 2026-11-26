@@ -9,6 +9,7 @@ export class WalkControls {
     this.orbitTarget=null;
     this.speed=1;
     this.multiplier=1;
+    this.move=new THREE.Vector3();
     this.keys=new Set();
     this.buttons=new Set();
     this.pointers=new Map();
@@ -70,11 +71,15 @@ export class WalkControls {
   update(dt){
     if(!this.enabled)return false;
     const held=key=>this.keys.has(key)||this.buttons.has(key);
-    const move=new THREE.Vector3(Number(held('KeyD'))-Number(held('KeyA')),Number(held('KeyE'))-Number(held('KeyQ')),Number(held('KeyS'))-Number(held('KeyW')));
-    if(move.lengthSq()){
-      move.normalize();
-      const yaw=new THREE.Euler().setFromQuaternion(this.camera.quaternion,'YXZ').y;
-      move.applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
+    const move=this.move.set(
+      Number(held('KeyD'))-Number(held('KeyA')),
+      0,
+      Number(held('KeyS'))-Number(held('KeyW'))
+    );
+    move.y=Number(held('KeyE'))-Number(held('KeyQ'));
+    if(move.lengthSq()>1e-12){
+      this.euler.setFromQuaternion(this.camera.quaternion,'YXZ');
+      move.applyAxisAngle(this.camera.up,this.euler.y).normalize();
       const boost=held('ShiftLeft')||held('ShiftRight')?3:1;
       const distance=this.speed*this.multiplier*boost*Math.min(dt,.05);
       this.camera.position.addScaledVector(move,distance);

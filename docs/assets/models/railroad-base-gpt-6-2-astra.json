@@ -1,6 +1,6 @@
 {
-  "source": "GPT-6.2-Astra.blend",
-  "blender": "4.5.17 LTS",
+  "source": "Railway House.blend",
+  "blender": "5.2.2 LTS",
   "objects": 1120,
   "mesh_objects": 1118,
   "triangles": 176462,
@@ -24,10 +24,31 @@
     "fov_deg": 27.375,
     "aspect": 1.21163,
     "type": "PERSP",
-    "ortho_scale": null
+    "ortho_scale": null,
+    "shift": [
+      0.034,
+      0.0
+    ],
+    "center_ray": [
+      0.5759574,
+      0.1099222,
+      -0.8100557
+    ]
   },
   "render": [
     1500,
     1238
+  ],
+  "architecture_bounds": [
+    [
+      -4.36,
+      0.0,
+      -4.46
+    ],
+    [
+      6.035,
+      12.98,
+      7.38
+    ]
   ]
 }

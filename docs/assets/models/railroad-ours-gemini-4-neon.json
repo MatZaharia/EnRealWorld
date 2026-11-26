@@ -1,6 +1,6 @@
 {
-  "source": "Gemini-4-Neon.blend",
-  "blender": "4.5.17 LTS",
+  "source": "scene.blend",
+  "blender": "5.2.2 LTS",
   "objects": 280,
   "mesh_objects": 271,
   "triangles": 89488,
@@ -24,10 +24,27 @@
     "fov_deg": 30.759,
     "aspect": 1.21183,
     "type": "PERSP",
-    "ortho_scale": null
+    "ortho_scale": null,
+    "center_ray": [
+      0.7398776,
+      0.1986667,
+      -0.6427385
+    ]
   },
   "render": [
     1024,
     845
+  ],
+  "architecture_bounds": [
+    [
+      -0.68,
+      -0.6,
+      -9.35
+    ],
+    [
+      10.4,
+      14.49,
+      4.86
+    ]
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "source": "Gemini-4-Neon.blend",
-  "blender": "4.5.17 LTS",
+  "source": "house_by_railroad.blend",
+  "blender": "5.2.2 LTS",
   "objects": 204,
   "mesh_objects": 172,
   "triangles": 47020,
@@ -24,10 +24,27 @@
     "fov_deg": 39.82,
     "aspect": 1.21212,
     "type": "PERSP",
-    "ortho_scale": null
+    "ortho_scale": null,
+    "center_ray": [
+      0.6394187,
+      0.2137872,
+      -0.7385383
+    ]
   },
   "render": [
     1280,
     1056
+  ],
+  "architecture_bounds": [
+    [
+      -4.08,
+      0.0,
+      -6.2
+    ],
+    [
+      6.92,
+      14.69,
+      8.79
+    ]
   ]
 }

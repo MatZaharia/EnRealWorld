@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { WalkControls } from './walk-controls.js?v=20261126-ui7';
+import { WalkControls } from './walk-controls.js?v=20261126-walk3';
 import { normalizedProgress } from './loading-progress.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -152,13 +152,14 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.needsRender=true;
   }
-  async load(url, onProgress, {walk=null, initialMode=walk?'walk':'orbit'}={}) {
+  async load(url, onProgress, {walk=null, initialMode=walk?'walk':'orbit', sceneMetadata=null}={}) {
     const version=++this.version;
     const gltf=await this.loader.loadAsync(url, event => {
       if (version===this.version) onProgress?.(event.lengthComputable ? normalizedProgress(event.loaded,event.total) : null);
     });
     if (version!==this.version) {release(gltf.scene);return false;}
     if (this.root) {this.scene.remove(this.root);release(this.root);}
+    const sourceCamera=sceneMetadata?.camera;
     const raw=gltf.scene;
     raw.updateMatrixWorld(true);
     const box=new THREE.Box3(),focusBox=new THREE.Box3();
@@ -172,7 +173,7 @@ export class WorldViewer {
       const sky=/sky|horizon|background/i.test(o.name);
       const detachedTie=url.includes('railroad-ours-claude-fable-5-2') && /^Loose_SpareTie_\d+$/.test(o.name);
       const astraTerrain=url.includes('railroad-ours-gpt-6-astra.glb') && o.name==='mesh_65' && o.material?.name==='Dry ochre ballast';
-      if (broad || terrain || sky || detachedTie || astraTerrain) {o.visible=false;return;}
+      if (!sourceCamera && (broad || terrain || sky || detachedTie || astraTerrain)) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;
       box.union(b);
@@ -185,7 +186,11 @@ export class WorldViewer {
       }
     });
     if (box.isEmpty()) throw new Error('No visible geometry in this preview.');
-    if(!focusBox.isEmpty()) box.copy(focusBox);
+    if(sceneMetadata?.architecture_bounds){
+      const [min,max]=sceneMetadata.architecture_bounds;
+      box.min.fromArray(min);
+      box.max.fromArray(max);
+    }else if(!focusBox.isEmpty()) box.copy(focusBox);
     const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
     const scale=5/Math.max(size.x,size.y,size.z);
     this.root=new THREE.Group();
@@ -202,6 +207,13 @@ export class WorldViewer {
       : new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0);
     this.walkHome={position:insidePosition,lookAt:insidePosition.clone().add(new THREE.Vector3(...(walk?.forward||[0,0,-1])))};
     this.walk.speed=(walk?.speed||1.8)*scale;
+    this.sourceCamera=sourceCamera;
+    if(sourceCamera){
+      overviewPosition.fromArray(sourceCamera.position).add(raw.position).multiplyScalar(scale);
+      const forward=new THREE.Vector3(...(sourceCamera.center_ray ?? sourceCamera.forward)).normalize();
+      const distance=Math.max(.5,overviewTarget.clone().sub(overviewPosition).dot(forward));
+      overviewTarget.copy(overviewPosition).addScaledVector(forward,distance);
+    }
     this.camera.position.copy(overviewPosition);
     this.controls.target.copy(overviewTarget);
     this.controls.saveState();
@@ -220,12 +232,12 @@ export class WorldViewer {
     this.walk.enabled=walking||this.freeWalk;
     this.walk.orbitTarget=walking?null:this.controls.target;
     this.controls.enabled=!walking;
-    this.stage.visible=!walking;
-    this.grid.visible=!walking;
+    this.stage.visible=!walking && !this.sourceCamera;
+    this.grid.visible=!walking && !this.sourceCamera;
     if(walking){this.auto=false;this.controls.autoRotate=false;}
     this.camera.near=walking?Math.max(.0001,this.sourceScale*.015):.01;
     if(!walking){
-      this.camera.fov=38;
+      this.camera.fov=this.sourceCamera?.fov_deg ?? 38;
       this.camera.updateProjectionMatrix();
     }
     this.renderer.domElement.dataset.navigation=mode;

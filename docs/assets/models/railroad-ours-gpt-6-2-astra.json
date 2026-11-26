@@ -1,0 +1,54 @@
+{
+  "source": "House by the Railway.blend",
+  "blender": "5.2.2 LTS",
+  "objects": 854,
+  "mesh_objects": 852,
+  "triangles": 160500,
+  "materials": 34,
+  "camera": {
+    "position": [
+      22.0,
+      0.75,
+      23.0
+    ],
+    "forward": [
+      -0.6459,
+      0.15364,
+      -0.7478
+    ],
+    "up": [
+      0.10043,
+      0.98813,
+      0.11627
+    ],
+    "fov_deg": 28.272,
+    "aspect": 1.21139,
+    "type": "PERSP",
+    "ortho_scale": null,
+    "shift": [
+      0.021,
+      0.031
+    ],
+    "center_ray": [
+      -0.6341383,
+      0.1722823,
+      -0.753782
+    ]
+  },
+  "render": [
+    2000,
+    1651
+  ],
+  "architecture_bounds": [
+    [
+      -5.45,
+      -0.45,
+      -7.23
+    ],
+    [
+      6.65,
+      12.36,
+      3.45
+    ]
+  ]
+}

@@ -22,7 +22,7 @@ Start with one of the [Quickstart inputs](examples/quickstart/README.md). The co
 Open the repository root in your coding agent and send the prompt below. Replace the bracketed fields and attach any reference files.
 
 ```text
-Read `src/enrealworld/skills/enrealworld/SKILL.md` and follow it to launch the EnRealWorld team.
+Follow `src/enrealworld/skills/enrealworld/SKILL.md` to set up the run. Use the EnRealWorld team runner (`enrealworld`) to execute the full workflow in independent agent sessions. Use the framework as provided, without modifying it.
 
 Build [describe the scene and the intended interactions] in [target simulator].
 Use [attached images, videos, drawings, or local file paths] as references.

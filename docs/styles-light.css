@@ -386,7 +386,7 @@ dialog > p { font: 9px var(--mono); color: var(--muted); padding: 13px 21px; }
   .railroad-explorer .world-canvas { height: 320px; }
   .railroad-start .button { padding: 12px; font-size: 10px; }
 }
-.render-reveal { position: relative; aspect-ratio: 1.25; max-height: 330px; overflow: hidden; border-radius: 8px; touch-action: none; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.render-reveal { position: relative; justify-self: end; width: min(100%, 412.5px); aspect-ratio: 1.25; max-height: 330px; overflow: hidden; border-radius: 8px; touch-action: none; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
 .render-reveal > img, .render-base-layer > img { position: absolute; width: 100%; height: 100%; object-fit: cover; inset: 0; pointer-events: none; -webkit-user-drag: none; }
 .render-base-layer { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); }
 .render-divider { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: var(--accent); pointer-events: none; }
@@ -575,7 +575,7 @@ dialog > p { font: 9px var(--mono); color: var(--muted); padding: 13px 21px; }
   .render-comparison { grid-template-columns: 1fr; gap: 23px; padding: 21px; }
   .render-comparison-copy h3 { font-size: 23px; margin: 13px 0; }
   .render-comparison-copy p { font-size: 10px; }
-  .render-reveal { max-height: 290px; }
+  .render-reveal { max-width: 362.5px; max-height: 290px; }
   .desktop-br { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="133" height="28" viewBox="0 0 133 28" role="img" aria-label="Project Website">
+  <rect width="133" height="28" rx="5" fill="#126c64"/>
+  <g transform="translate(9 5) scale(.9)" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m10 1 8 4.5v9L10 19l-8-4.5v-9L10 1Zm0 9 8-4.5M10 10 2 5.5M10 10v9"/></g>
+  <text x="34" y="19" fill="white" font-family="Verdana,DejaVu Sans,sans-serif" font-size="12">Project Website</text>
+</svg>

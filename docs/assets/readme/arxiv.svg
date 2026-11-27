@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="73" height="28" viewBox="0 0 73 28" role="img" aria-label="arXiv">
+  <rect width="73" height="28" rx="5" fill="#565e67"/>
+  <g transform="translate(9 5) scale(.9)" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 1h8l4 4v14H4zM12 1v5h4M7 10h6M7 14h6"/></g>
+  <text x="34" y="19" fill="white" font-family="Verdana,DejaVu Sans,sans-serif" font-size="12">arXiv</text>
+</svg>

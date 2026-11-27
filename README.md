@@ -1,18 +1,37 @@
+<div align="center">
+
 # EnRealWorld
 
 **4D World Creation as Agentic Engineering**
 
-[<img src="docs/assets/favicon.svg" alt="" width="18" height="18"> Project Website](https://zihanguo1024.github.io/EnRealWorld/) · [Project Video (2:53)](https://zihanguo1024.github.io/EnRealWorld/#project-preview-video) · ArXiv · [Quickstart](#quickstart)
+<a href="https://zihanguo1024.github.io/EnRealWorld/"><img src="docs/assets/readme/website.svg" alt="Project Website"></a>
+<a href="https://zihanguo1024.github.io/EnRealWorld/#project-preview-video"><img src="docs/assets/readme/video.svg" alt="Play the full project video (2:53)"></a>
+<img src="docs/assets/readme/arxiv.svg" alt="arXiv (forthcoming)">
+<a href="#quickstart"><img src="docs/assets/readme/quickstart.svg" alt="Quickstart"></a>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) ![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#install)
+
+</div>
 
 EnRealWorld builds executable, interactive worlds from inputs such as task descriptions, images, and videos. The Manager turns the input into testable requirements, the Engineer builds and revises the world, and the Researcher independently probes how it responds to interventions. The team uses the diagnostic findings to decide what needs repair and what is ready to deliver.
 
 > **Out-of-the-box with your coding agent:** EnRealWorld requires no extra video generation models, 3D Gaussian Splatting optimization, or external 3D generative checkpoints. Install the lightweight Python package and run directly with your coding agent (Codex, Claude Code, Antigravity) and standard physics simulators.
 
-[![Play the EnRealWorld project video](docs/assets/video/enrealworld-full-preview-v41-title.jpg)](https://zihanguo1024.github.io/EnRealWorld/#project-preview-video)
+## 🎬 Project video
 
-## Reproduce Physical Interventions (No API Key Required)
+| One prompt, three worlds | Warehouse rack domino |
+| :---: | :---: |
+| [![A laboratory, warehouse and home assemble from a single prompt](docs/assets/readme/world-assembly.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=4,12) | [![One rack tips into the next and the loaded rows fall in sequence](docs/assets/readme/rack-domino.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=32,39) |
+| **Measured drawings to 3D buildings** | **Video2World manipulation tasks** |
+| [![Floor plans and elevations become three assembled buildings](docs/assets/readme/blueprints.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=136,147) | [![Reference videos and simulated manipulation sequences play side by side](docs/assets/readme/video2world.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=163,169) |
+
+**Handheld phone footage and 4D reconstruction**
+
+[![Handheld footage of a person at a table alongside GPT 6.2 Sol and EnRealWorld reconstructions, with close-ups of object contact](docs/assets/readme/handheld-reconstruction.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=149,162)
+
+<a id="reproduce-physical-interventions-no-api-key-required"></a>
+
+## 🧪 Reproduce Physical Interventions (No API Key Required)
 
 From the repository root with Blender 4.5 LTS on your PATH, run both conditions of the [studio bowl-drop test](examples/interventions/studio-bowl/README.md):
 
@@ -27,7 +46,9 @@ run_drop table && run_drop floor
 
 Each run releases the bowl and checks that it settles within 1 cm of the target surface. For a contact chain, [run the seven-rack MuJoCo example](examples/interventions/warehouse-domino/README.md) or [watch the warehouse showcase](https://zihanguo1024.github.io/EnRealWorld/assets/video/factory-rack-domino.mp4#t=43).
 
-## Install
+<a id="install"></a>
+
+## 📦 Install
 
 From the repository root:
 
@@ -47,7 +68,9 @@ The base runner supports Python 3.10+. For optional tools, choose a Python versi
 
 The paper used task-specific simulator environments including Blender 4.0.2 or 5.2.2 LTS, MuJoCo 3.11.0, SAPIEN 3.0.3 with ManiSkill 3.0.1, and Isaac Sim 5.1. Install the target simulator separately when generating worlds.
 
-## Quickstart
+<a id="quickstart"></a>
+
+## 🚀 Quickstart
 
 Choose a [quickstart input](examples/quickstart/README.md) for text, a painting, or a measured drawing. Open the repository root in your coding agent, attach the inputs, and adapt this prompt:
 
@@ -65,7 +88,9 @@ enrealworld examples/configs/codex_local.json
 
 The runner records the delivery status in `result.json` under your configured run directory. Candidate worlds are stored in `candidates/`. Role reports and test records are stored in `<role>/output/`.
 
-## Overview & Formulation
+<a id="overview--formulation"></a>
+
+## 🧭 Overview & Formulation
 
 ![World creation as a sequential decision process in a hybrid search space](docs/assets/fig/motivation-overview.webp)
 
@@ -79,7 +104,9 @@ World creation searches a hybrid space $\Omega$ of discrete structures and conti
 
 *Worlds generated from a one-sentence prompt, paintings, and measured architectural drawings. [Explore the interactive scenes](https://zihanguo1024.github.io/EnRealWorld/#worlds).*
 
-## Repository layout
+<a id="repository-layout"></a>
+
+## 🗂️ Repository layout
 
 ```text
 src/enrealworld/
@@ -93,11 +120,15 @@ src/enrealworld/
 examples/             Quickstart inputs, intervention replays and runner configs
 ```
 
-## License
+<a id="license"></a>
+
+## ⚖️ License
 
 EnRealWorld's code and documentation are available under the [MIT License](LICENSE). See the original sources for terms that apply to third-party reference materials. [Quickstart source credits](examples/quickstart/README.md#sources)
 
-## Citation
+<a id="citation"></a>
+
+## 📖 Citation
 
 ```bibtex
 @misc{guo2026enrealworld,

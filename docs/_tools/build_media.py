@@ -150,6 +150,19 @@ def video_job(res: Path, rel: str, name: str, max_w: int) -> dict:
     return {"name": name, **info, "bytes": out.stat().st_size}
 
 
+def build_video_pair(out: Path) -> None:
+    # Both curated encodes share frame count, frame rate and dimensions.
+    pair = out / "pair.mp4"
+    if fresh(pair):
+        tmp = pair.with_suffix(".tmp.mp4")
+        run(["ffmpeg", "-y", "-i", str(out / "src.mp4"), "-i", str(out / "ours.mp4"),
+             "-filter_complex", "[0:v][1:v]hstack=inputs=2", "-an", "-c:v", "libx264",
+             "-threads", "2", "-preset", "fast", "-crf", "22", "-pix_fmt", "yuv420p",
+             "-movflags", "+faststart", str(tmp)])
+        tmp.replace(pair)
+    frame(pair, out / "pair.jpg", 0, 1280)
+
+
 def v2w_job(res: Path, row: dict, wall: dict) -> dict:
     short, folder = MODEL_DIRS[row["model"]]
     case = row["case"]
@@ -157,6 +170,7 @@ def v2w_job(res: Path, row: dict, wall: dict) -> dict:
     out = ASSETS / "v2w" / short / case
     transcode(base / "source.mp4", out / "src.mp4", 640, 27)
     transcode(base / "result-display.mp4", out / "ours.mp4", 640, 27)
+    build_video_pair(out)
     si, oi = probe(out / "src.mp4"), probe(out / "ours.mp4")
     frame(out / "src.mp4", out / "src.jpg", 0.0, 640)
     frame(out / "ours.mp4", out / "ours.jpg", 0.0, 640)

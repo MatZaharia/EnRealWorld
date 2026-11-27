@@ -33,7 +33,7 @@ export function initRailroadGallery(getViewer) {
       viewer.renderer.domElement.focus({preventScroll:true});
     });
   }
-  const buttons=[...$('railroad-method').querySelectorAll('button')];
+  const buttons=[...document.querySelectorAll('#railroad-method button')];
   $('railroad-models').replaceChildren(...railroadModels.map(item=>{
     const button=document.createElement('button');button.dataset.railModel=item.id;button.textContent=item.name;
     button.setAttribute('aria-pressed',String(item===selected));

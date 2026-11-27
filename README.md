@@ -11,6 +11,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#install)
 
+[Results](https://zihanguo1024.github.io/EnRealWorld/#results) · [Method](https://zihanguo1024.github.io/EnRealWorld/#method) · [Resources](https://zihanguo1024.github.io/EnRealWorld/#resources)
+
 </div>
 
 EnRealWorld builds executable, interactive worlds from inputs such as task descriptions, images, and videos. The Manager turns the input into testable requirements, the Engineer builds and revises the world, and the Researcher independently probes how it responds to interventions. The team uses the diagnostic findings to decide what needs repair and what is ready to deliver.

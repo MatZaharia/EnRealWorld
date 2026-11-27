@@ -51,6 +51,10 @@ function modelPath() {
   return `assets/models/${name}.glb`;
 }
 function renderWorldCase() {
+  if(selectedCase.compare===false)method='ours';
+  const methodButtons=$('world-method');
+  methodButtons.querySelector('[data-method="base"]').hidden=selectedCase.compare===false;
+  pressed(methodButtons,methodButtons.querySelector(`[data-method="${method}"]`));
   $('world-title').textContent=selectedCase.title;
   $('world-description').textContent=selectedCase.description;
   $('world-meta').textContent=selectedCase.meta;

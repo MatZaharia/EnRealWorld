@@ -152,7 +152,7 @@ export class WorldViewer {
     this.camera.updateProjectionMatrix();
     this.needsRender=true;
   }
-  async load(url, onProgress, {walk=null, initialMode=walk?'walk':'orbit', sceneMetadata=null}={}) {
+  async load(url, onProgress, {walk=null, initialMode=walk?'walk':'orbit', sceneMetadata=null, walkFromOverview=false}={}) {
     const version=++this.version;
     const gltf=await this.loader.loadAsync(url, event => {
       if (version===this.version) onProgress?.(event.lengthComputable ? normalizedProgress(event.loaded,event.total) : null);
@@ -214,6 +214,7 @@ export class WorldViewer {
       const distance=Math.max(.5,overviewTarget.clone().sub(overviewPosition).dot(forward));
       overviewTarget.copy(overviewPosition).addScaledVector(forward,distance);
     }
+    if(walkFromOverview)this.walkHome={position:overviewPosition.clone(),lookAt:overviewTarget.clone()};
     this.camera.position.copy(overviewPosition);
     this.controls.target.copy(overviewTarget);
     this.controls.saveState();
@@ -241,7 +242,10 @@ export class WorldViewer {
       this.camera.updateProjectionMatrix();
     }
     this.renderer.domElement.dataset.navigation=mode;
-    this.renderer.domElement.setAttribute('aria-label',walking?'First-person world viewer. Click to focus; WASD move, drag to look, Q and E down and up, Shift faster, Home reset.':'World overview. Drag to orbit, right-drag to pan, scroll to zoom.');
+    const overviewLabel='World overview. Drag to orbit, right-drag to pan, scroll to zoom.';
+    const walkingLabel='First-person world viewer. Click to focus; WASD move, drag to look, Q and E down and up, Shift faster, Home reset.';
+    this.renderer.domElement.setAttribute('aria-label',walking?walkingLabel:
+      overviewLabel+(this.freeWalk?' Click to focus; WASD move, Q and E down and up.':''));
     this.reset();
   }
   reset() {

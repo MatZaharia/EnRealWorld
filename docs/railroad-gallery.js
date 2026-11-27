@@ -1,4 +1,5 @@
 import {loadingLabel} from './loading-progress.js';
+import {bindWalkPad} from './walk-pad.js';
 
 export const railroadModels=[
   {id:'claude-fable-5-2',name:'Claude Fable 5.2'},
@@ -10,6 +11,26 @@ export const railroadModels=[
 export function initRailroadGallery(getViewer) {
   const $=id=>document.getElementById(id);
   let viewer=null,entered=false,version=0,selected=railroadModels[0],method='ours';
+  let navigationMode='orbit';
+  const setWalkReady=bindWalkPad($('railroad-walk-help'),()=>viewer,'railroad-walk-speed');
+  const navigationButtons={orbit:$('railroad-orbit'),walk:$('railroad-walk')};
+  const autoButton=$('railroad-auto');
+  const updateNavigation=ready=>{
+    for(const [mode,button] of Object.entries(navigationButtons)){
+      button.disabled=!ready;
+      button.setAttribute('aria-pressed',String(mode===navigationMode));
+    }
+    autoButton.disabled=!ready||navigationMode==='walk';
+    autoButton.setAttribute('aria-pressed',String(viewer?.auto??false));
+    setWalkReady(ready);
+  };
+  for(const [mode,button] of Object.entries(navigationButtons)){
+    button.addEventListener('click',()=>{
+      if(navigationMode!==mode)viewer.setMode(mode);
+      navigationMode=mode;updateNavigation(true);
+      viewer.renderer.domElement.focus({preventScroll:true});
+    });
+  }
   const buttons=[...$('railroad-method').querySelectorAll('button')];
   $('railroad-models').replaceChildren(...railroadModels.map(item=>{
     const button=document.createElement('button');button.dataset.railModel=item.id;button.textContent=item.name;
@@ -27,7 +48,6 @@ export function initRailroadGallery(getViewer) {
     const img=render.querySelector('img');
     img.src=src;
     img.alt=`${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'} original render`;
-    $('railroad-download').href=path()+'?v=20261126-gallery2';$('railroad-download').download=path().split('/').pop();
     if(!entered)$('railroad-status').textContent='Choose a model, then enter the 3D comparison.';
   };
   const overlay=(message,retry=false)=>{
@@ -39,12 +59,13 @@ export function initRailroadGallery(getViewer) {
   };
   async function load(){
     entered=true;const request=++version,url=path();
+    updateNavigation(false);
     $('railroad-status').textContent=`Loading ${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'}…`;
     try{
       if(!viewer){
         const start=$('railroad-start');if(start){start.disabled=true;start.textContent='Opening viewer…';}
         const {WorldViewer}=await getViewer();if(request!==version)return;
-        viewer=new WorldViewer($('railroad-canvas'));
+        viewer=new WorldViewer($('railroad-canvas'),{freeWalk:true});
       }
       overlay('Loading geometry…');
       let sceneMetadata=null;
@@ -56,13 +77,14 @@ export function initRailroadGallery(getViewer) {
       }
       const complete=await viewer.load(url+'?v=20261126-gallery2',progress=>{
         if(request===version){const label=$('railroad-canvas').querySelector('.message-label');if(label)label.textContent=loadingLabel(progress);}
-      },{sceneMetadata});
+      },{sceneMetadata,initialMode:navigationMode,walkFromOverview:true});
       if(!complete||request!==version)return;
       $('railroad-canvas').querySelector('.viewer-message')?.remove();
-      $('railroad-status').textContent=`${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'} · ${viewer.stats.triangles.toLocaleString()} preview triangles · drag to orbit`;
+      updateNavigation(true);
+      $('railroad-status').textContent=`${selected.name} / ${method==='ours'?'EnRealWorld':'Base Agent'} · ${viewer.stats.triangles.toLocaleString()} preview triangles`;
     }catch(err){
       if(request!==version)return;
-      overlay('Preview unavailable. You can still download the GLB.',true);
+      overlay('Preview unavailable.',true);
       $('railroad-status').textContent='Could not load this model. Retry or choose another result.';
       console.warn('Railroad gallery:',err.message);
     }
@@ -71,11 +93,11 @@ export function initRailroadGallery(getViewer) {
   buttons.forEach(b=>b.addEventListener('click',()=>{method=b.dataset.railMethod;sync();if(entered)load();}));
   $('railroad-reset').addEventListener('click',()=>viewer?.reset());
   $('railroad-wire').addEventListener('click',e=>{if(viewer){viewer.setWire(!viewer.wire);e.currentTarget.setAttribute('aria-pressed',String(viewer.wire));}});
-  $('railroad-auto').addEventListener('click',e=>{if(viewer){viewer.auto=!viewer.auto;e.currentTarget.setAttribute('aria-pressed',String(viewer.auto));}});
+  autoButton.addEventListener('click',()=>{viewer.auto=!viewer.auto;updateNavigation(true);});
   $('railroad-full').addEventListener('click',async()=>{
     try{if(document.fullscreenElement)await document.exitFullscreen();else await $('railroad-panel').requestFullscreen();}
     catch{$('railroad-status').textContent='Fullscreen is unavailable in this browser.';}
   });
-  sync();
+  sync();updateNavigation(false);
   return {dispose(){++version;viewer?.dispose();},resume(){if(viewer)viewer.needsRender=true;}};
 }

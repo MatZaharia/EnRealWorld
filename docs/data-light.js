@@ -17,27 +17,28 @@ export const scores = {
 export const ablations = [
   ['Base Agent',46,26.8,64.5,46.7],['ERW-Prompts',51.46,39.7,67.6,47],['ERW-Utils',46.75,31.8,62.8,45.6],['ERW-NoCoord',50.67,38.8,65.8,47.4],['EnRealWorld',53.55,53.2,60.1,47.3]
 ];
+const threeWorldsPrompt = '“Construct a warehouse, a home, and a laboratory.”';
 export const worldCases = {
   blueprint:[
-    {id:'lighthouse',title:'Lighthouse',sub:'Measured drawings → MuJoCo',ref:'assets/img/habs/lighthouse/02_一层平面_北立面.jpg',thumb:'assets/figimg/fig3/048.jpg',description:'A measured architectural reference becomes a navigable tower with floor plans, stairs, and interior structure.',model:'lighthouse',meta:'SOURCE / HABS measured drawings\nPREVIEW / initial MuJoCo configuration'},
-    {id:'yates',title:'Jack Yates House',sub:'Measured drawings → MuJoCo',ref:'assets/img/habs/yates/01_一二层平面_南立面.jpg',thumb:'assets/figimg/fig3/062.jpg',description:'From elevations and floor plans to a multi-storey house with interior rooms and articulated doors.',model:'yates',meta:'SOURCE / HABS measured drawings\nPREVIEW / initial MuJoCo configuration'},
-    {id:'ranch',title:'Goodnight Ranch House',sub:'Measured drawings → MuJoCo',ref:'assets/img/habs/ranch/02_一层平面.jpg',thumb:'assets/figimg/fig3/049.jpg',description:'Explore the exterior, room layout, and layered construction. Move the cutaway slider to inspect the interior.',model:'ranch',meta:'SOURCE / HABS measured drawings\nPREVIEW / initial MuJoCo configuration'}
+    {id:'lighthouse',title:'Lighthouse',sub:'HABS drawings → MuJoCo',ref:'assets/img/habs/lighthouse/02_一层平面_北立面.jpg',thumb:'assets/figimg/fig3/048.jpg',model:'lighthouse'},
+    {id:'yates',title:'Jack Yates House',sub:'HABS drawings → MuJoCo',ref:'assets/img/habs/yates/01_一二层平面_南立面.jpg',thumb:'assets/figimg/fig3/062.jpg',model:'yates'},
+    {id:'ranch',title:'Goodnight Ranch House',sub:'HABS drawings → MuJoCo',ref:'assets/img/habs/ranch/02_一层平面.jpg',thumb:'assets/figimg/fig3/049.jpg',model:'ranch'}
   ],
   painting:[
-    {id:'railroad',title:'House by the Railroad',sub:'Painting → Blender · Claude Fable 5.2',ref:'assets/img/painting-railroad.jpg',thumb:'assets/video/railroad-component-flight.jpg',description:'A single painted view becomes a complete house. Orbit beyond the reference to inspect dormers, windows, roof, and porch.',model:'railroad',base:'railroad-base-claude-fable-5-2',ours:'railroad-ours-claude-fable-5-2',meta:'MODEL / Claude Fable 5.2\nPREVIEW / Blender scene geometry'},
-    {id:'studio',title:"Interior with the Artist’s Easel",sub:'Painting → Blender · GPT-6.1 Sol',ref:'assets/img/painting-studio.jpg',thumb:'assets/video/studio-daylight.jpg',description:'A quiet painted interior becomes a three-dimensional room with an easel, doorway, table, and bowl.',base:'studio-base-gpt61',ours:'studio-ours-gpt61',meta:'MODEL / GPT-6.1 Sol\nPREVIEW / Blender scene geometry'},
+    {id:'railroad',title:'House by the Railroad',sub:'Painting → Blender',ref:'assets/img/painting-railroad.jpg',thumb:'assets/video/railroad-component-flight.jpg',model:'railroad',base:'railroad-base-claude-fable-5-2',ours:'railroad-ours-claude-fable-5-2'},
+    {id:'studio',title:"Interior with the Artist’s Easel",sub:'Painting → Blender',ref:'assets/img/painting-studio.jpg',thumb:'assets/video/studio-daylight.jpg',base:'studio-base-gpt61',ours:'studio-ours-gpt61'},
   ],
   text:[
-    {id:'factory',title:'Factory',sub:'One sentence → an industrial world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/warehouse.jpg',description:'Production space, loaded racks, workstations, and pathways. This detailed frozen scene loads only when you enter the 3D view.',base:'world-base-factory',ours:'world-ours-factory',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~12 MB'},
-    {id:'home',title:'Home',sub:'One sentence → a domestic world',prompt:'“Construct a factory, a home, and a laboratory.”',thumb:'assets/video/home.jpg',description:'A living space with rooms, furniture, and everyday objects. Browser geometry is simplified; see recordings for scene interventions.',base:'world-base-home',ours:'world-ours-home',meta:'INPUT / a shared one-sentence prompt\nPREVIEW / simplified frozen scene · ~26 MB'},
-    {id:'warehouse',title:'WareHouse',sub:'One sentence → a laboratory world',prompt:'Construct a factory, a home, and a laboratory.',thumb:'assets/img/warehouse-preview.jpg',description:'Walk through the warehouse and inspect the equipment, shelving, and interior layout at eye level.',ours:'world-ours-warehouse',compare:false}
+    {id:'factory',title:'Warehouse',sub:'One-sentence prompt → Blender',prompt:threeWorldsPrompt,thumb:'assets/video/warehouse.jpg',base:'world-base-factory',ours:'world-ours-factory-warehouse'},
+    {id:'home',title:'Home',sub:'One-sentence prompt → Blender',prompt:threeWorldsPrompt,thumb:'assets/video/home.jpg',base:'world-base-home',ours:'world-ours-home-promo'},
+    {id:'laboratory',title:'Laboratory',sub:'One-sentence prompt → Blender',prompt:threeWorldsPrompt,thumb:'assets/img/warehouse-preview.jpg',ours:'world-ours-warehouse',compare:false}
   ]
 };
 export const walkthroughs = {
   studio:{ours:{position:[0,1.6,3],forward:[0,-.05,-1]},base:{position:[0,1.65,3.5],forward:[0,-.05,-1]}},
-  factory:{ours:{position:[-6,1.7,0],forward:[0,0,-1],speed:2.4},base:{position:[0,1.65,3],forward:[0,0,-1]}},
-  home:{ours:{position:[0,1.7,9],forward:[0,0,-1]},base:{position:[0,1.65,2.8],forward:[0,0,-1]}},
-  warehouse:{ours:{position:[-12,1.6,0],forward:[0,0,-1],speed:1.6}}
+  factory:{ours:{position:[6.18,.876,.57],forward:[-.943,-.094,.32]},base:{position:[0,1.65,3],forward:[0,0,-1]}},
+  home:{ours:{position:[12.362,.919,5.444],forward:[.289,-.094,-.953]},base:{position:[0,1.65,2.8],forward:[0,0,-1]}},
+  laboratory:{ours:{position:[-12,1.6,0],forward:[0,0,-1],speed:1.6}}
 };
 export const phases = [
   {routing:'Original input → parallel, isolated role contexts',outcome:'Independent specifications, construction, and probes',tasks:['Draft Must / Can / May requirements. Keep the draft private.','Build geometry, physics, and control. Run private self-tests.','Build an independent scene graph and intervention probes.']},

@@ -1,0 +1,36 @@
+{
+  "source": "Warehouse.blend",
+  "blender": "4.5.3 LTS",
+  "scene": "Warehouse | One Prompt, Three Worlds",
+  "frame": 1510,
+  "collections": [
+    "Animated factory",
+    "WAREHOUSE \u2022 Raised superstructure"
+  ],
+  "mesh_objects": 3754,
+  "camera": {
+    "position": [
+      6.18,
+      0.8761,
+      0.5697
+    ],
+    "forward": [
+      -0.9428,
+      -0.09397,
+      0.31984
+    ],
+    "up": [
+      -0.08898,
+      0.99558,
+      0.03019
+    ],
+    "fov_deg": 58.0,
+    "aspect": 1.77778,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    1920,
+    1080
+  ]
+}

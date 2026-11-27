@@ -30,6 +30,20 @@ MODEL_DIRS = {
     "Kimi-3.1 Pro": ("kimi", "k3.1-pro"),
 }
 
+CASE_ACTIONS = {
+    "02_dexycb-lift-bimanual": "Lift a box with both hands",
+    "11_inhouse-point-origin-pick-and-hold": "Pick up and hold a small object",
+    "17_inhouse-provider-cracker": "Lift a box of crackers",
+    "20_inhouse-wallet-initially-held-insert": "Put a wallet into a handbag",
+    "24_robodojo-task-x5-r1": "Stack blocks",
+    "30_cabinet-top": "Fit the cabinet top",
+    "31_chair-nut": "Fasten a chair nut",
+    "33_rope-route": "Route a rope around a guide",
+    "36_leg-insert": "Insert a table leg",
+    "37_hood-place": "Place the lamp shade",
+    "39_round-table-base": "Assemble the round table base",
+}
+
 # (source relative to Resources-for-website, output name, max width, keep audio)
 VIDEOS = [
     ("02-One-sentence-three-worlds/Media/Three-worlds-assembly.mp4", "three-worlds-assembly", 1600, False),
@@ -167,7 +181,7 @@ def v2w_job(res: Path, row: dict, wall: dict) -> dict:
         "source": source,
         "episode": row["episode"],
         "alignment": row["alignment"],
-        "action": wall.get(case, ""),
+        "action": wall.get(case) or CASE_ACTIONS.get(case, ""),
         "srcDuration": round(si["duration"], 2),
         "oursDuration": round(oi["duration"], 2),
         "aspect": round(si["w"] / si["h"], 4),

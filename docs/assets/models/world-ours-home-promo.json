@@ -1,0 +1,36 @@
+{
+  "source": "Home.blend",
+  "blender": "4.5.3 LTS",
+  "scene": "Home | One Prompt, Three Worlds",
+  "frame": 2280,
+  "collections": [
+    "Animated home",
+    "Living room upholstery"
+  ],
+  "mesh_objects": 363,
+  "camera": {
+    "position": [
+      12.3617,
+      0.9186,
+      5.4439
+    ],
+    "forward": [
+      0.28948,
+      -0.09395,
+      -0.95256
+    ],
+    "up": [
+      0.02732,
+      0.99558,
+      -0.08989
+    ],
+    "fov_deg": 59.178,
+    "aspect": 1.77778,
+    "type": "PERSP",
+    "ortho_scale": null
+  },
+  "render": [
+    1920,
+    1080
+  ]
+}

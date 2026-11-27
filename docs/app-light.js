@@ -1,15 +1,17 @@
-import {worldCases,walkthroughs,modelNames} from './data-light.js?v=20261126-lab';
-import {initCharts} from './charts-light.js?v=20261125-ui4';
+import {worldCases,walkthroughs,modelNames} from './data-light.js?v=20261127-warehouse-prompt';
+import {initCharts} from './charts-light.js?v=20261127-polish';
 import {initSelectControls} from './select-controls.js?v=20261125-ui4';
 import {loadingLabel} from './loading-progress.js';
-import {initRailroadGallery} from './railroad-gallery.js?v=20261126-gallery2';
+import {initRailroadGallery} from './railroad-gallery.js?v=20261127-walk-pad';
+import {bindWalkPad} from './walk-pad.js';
 const $=id=>document.getElementById(id);
 const motionReduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const esc=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pressed=(group,selected)=>group.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===selected)));
 let viewerModule;
-const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261126-walk3');
+const getViewer=()=>viewerModule??=import('./viewer-light.js?v=20261127-walk-pad');
 let heroViewer,worldViewer,category='blueprint',selectedCase=worldCases.blueprint[0],method='ours',worldEntered=false,loadVersion=0;
+const setWorldWalkReady=bindWalkPad($('walk-help'),()=>worldViewer,'walk-speed');
 let cases=[],model='gpt',dataset='all',query='',page=0,activeCase,playing=false,v2wReady=false;
 const PAGE_SIZE=12;
 const clips=[$('v2w-src'),$('v2w-ours')];
@@ -82,13 +84,10 @@ function modelPath() {
 function renderWorldCase() {
   if(selectedCase.compare===false)method='ours';
   const baseButton=$('world-method').querySelector('[data-method="base"]');
-  baseButton.disabled=selectedCase.compare===false;
-  baseButton.title=selectedCase.compare===false?'No matched Base Agent scene was supplied.':'';
+  baseButton.hidden=selectedCase.compare===false;
   pressed($('world-method'),$('world-method').querySelector(`[data-method="${method}"]`));
   $('world-title').textContent=selectedCase.title;
-  $('world-description').textContent=selectedCase.description;
-  $('world-meta').textContent=selectedCase.meta??'';
-  $('world-meta').hidden=!selectedCase.meta;
+  $('world-input').textContent=selectedCase.sub;
   const ref=$('world-reference');ref.replaceChildren();
   if(selectedCase.ref){
     const img=document.createElement('img');img.src=selectedCase.ref;img.alt=`Input reference for ${selectedCase.title}`;
@@ -96,8 +95,6 @@ function renderWorldCase() {
     img.tabIndex=0;img.setAttribute('role','button');img.setAttribute('aria-label',`Expand ${selectedCase.title} reference`);
     img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();img.click();}});ref.append(img);
   }else{const p=document.createElement('div');p.className='prompt';p.textContent=selectedCase.prompt;ref.append(p);}
-  $('world-download').href=modelPath();
-  $('world-download').setAttribute('download',modelPath().split('/').pop());
   $('cut-control').hidden=category==='painting';
   $('world-cases').innerHTML=worldCases[category].map(c=>`<button class="case-card" data-case="${c.id}" aria-pressed="${c.id===selectedCase.id}"><img src="${c.thumb}" alt="" loading="lazy"><div><strong>${esc(c.title)}</strong><small>${esc(c.sub)}</small></div></button>`).join('');
   $('world-cases').classList.toggle('two-cases',category==='painting');
@@ -138,7 +135,7 @@ async function loadWorld() {
   }catch(err){
     if(version!==loadVersion)return;
     showWorldMessage('3D preview could not load. Check WebGL support and serve this page over HTTP.',false);
-    $('world-status').textContent='Preview unavailable. Videos and downloadable GLB files remain available.';
+    $('world-status').textContent='Preview unavailable. Try again or choose another scene.';
     console.warn('World preview unavailable:',err.message);
   }
 }
@@ -148,10 +145,9 @@ function updateNavigation(mode=worldViewer.mode, ready=true){
     button.disabled=!ready;
     button.setAttribute('aria-pressed',String(mode===name));
   }
-  $('walk-help').hidden=!ready||mode!=='walk';
+  setWorldWalkReady(ready);
   if(!ready)return;
-  const hint=mode==='orbit'?' · Drag to orbit · WASD to move · Scroll or pinch to zoom':'';
-  $('world-status').textContent=`${method==='ours'?'EnRealWorld':'Base Agent'} · ${worldViewer.stats.triangles.toLocaleString()} preview triangles${hint}`;
+  $('world-status').textContent='Geometry preview · Physics runs in the source simulator';
 }
 function initWorlds() {
   $('start-world').addEventListener('click',loadWorld);
@@ -163,16 +159,6 @@ function initWorlds() {
   const zoom=delta=>{if(!worldViewer?.root)return;worldViewer.zoomBy(delta);};
   $('world-zoom-in').addEventListener('click',()=>zoom(-8));
   $('world-zoom-out').addEventListener('click',()=>zoom(8));
-  $('walk-speed').addEventListener('change',e=>{if(worldViewer)worldViewer.walk.multiplier=Number(e.target.value);});
-  document.querySelectorAll('[data-walk-key]').forEach(button=>{
-    button.addEventListener('pointerdown',e=>{
-      if(!worldViewer||worldViewer.mode!=='walk')return;
-      e.preventDefault();button.setPointerCapture(e.pointerId);
-      worldViewer.walk.buttons.add(button.dataset.walkKey);button.classList.add('held');
-    });
-    const release=()=>{worldViewer?.walk.buttons.delete(button.dataset.walkKey);button.classList.remove('held');};
-    button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
-  });
   $('world-tabs').addEventListener('click',e=>{
     const b=e.target.closest('[data-category]');if(!b)return;
     category=b.dataset.category;selectedCase=worldCases[category][0];
@@ -186,8 +172,7 @@ function initWorlds() {
   });
   $('world-method').addEventListener('click',e=>{
     const b=e.target.closest('[data-method]');if(!b)return;
-    method=b.dataset.method;pressed($('world-method'),b);$('world-download').href=modelPath();
-    $('world-download').setAttribute('download',modelPath().split('/').pop());
+    method=b.dataset.method;pressed($('world-method'),b);
     if(worldEntered)loadWorld();
   });
   $('world-reset').addEventListener('click',()=>worldViewer?.reset());
@@ -207,38 +192,13 @@ function initWorlds() {
     if(!heroViewer)return;
     heroViewer.auto=!heroViewer.auto;e.currentTarget.setAttribute('aria-pressed',String(heroViewer.auto));e.currentTarget.textContent=heroViewer.auto?'Pause rotation':'Start rotation';
   });
-  const reveal=value=>{
-    const p=Math.max(0,Math.min(100,Number(value)));
-    $('render-slider').value=p;
-    $('render-base-layer').style.clipPath=`inset(0 ${100-p}% 0 0)`;
-    $('render-divider').style.left=`${p}%`;
-  };
-  $('render-slider').addEventListener('input',e=>reveal(e.target.value));
   const comparison=$('render-reveal');
-  let pointer=null;
-  const drag=e=>{
-    if(e.pointerId!==pointer)return;
-    const box=comparison.getBoundingClientRect();
-    reveal((e.clientX-box.left)/box.width*100);
-  };
-  comparison.querySelectorAll('img').forEach(img=>{img.draggable=false;});
-  comparison.addEventListener('dragstart',e=>e.preventDefault());
-  comparison.addEventListener('pointerdown',e=>{
-    if(e.button!==0||pointer!==null)return;
-    e.preventDefault();
-    pointer=e.pointerId;
-    comparison.setPointerCapture(pointer);
-    drag(e);
+  const sliders=[$('render-track'),$('render-slider')];
+  for(const slider of sliders)slider.addEventListener('input',()=>{
+    const value=slider.value;
+    comparison.style.setProperty('--reveal',`${value}%`);
+    for(const input of sliders)input.value=value;
   });
-  comparison.addEventListener('pointermove',drag);
-  const end=e=>{
-    if(e.pointerId!==pointer)return;
-    pointer=null;
-    if(comparison.hasPointerCapture(e.pointerId))comparison.releasePointerCapture(e.pointerId);
-  };
-  comparison.addEventListener('pointerup',end);
-  comparison.addEventListener('pointercancel',end);
-  comparison.addEventListener('lostpointercapture',()=>{pointer=null;});
   renderWorldCase();initHero();
 }
 function filteredCases() {
@@ -249,6 +209,7 @@ function stopPair() {
 }
 function selectVideo(c) {
   stopPair();v2wReady=false;activeCase=c;
+  document.querySelector('.comparison-player').style.setProperty('--clip-aspect',c.aspect);
   clips.forEach((v,i)=>{
     v.src=`${c.path}/${i===0?'src':'ours'}.mp4`;v.poster=`${c.path}/${i===0?'src':'ours'}.jpg`;v.load();
   });
@@ -319,7 +280,7 @@ async function initVideo() {
   });
   $('v2w-prev').addEventListener('click',()=>{page--;renderCaseGrid();});$('v2w-next').addEventListener('click',()=>{page++;renderCaseGrid();});
   try{
-    const response=await fetch('assets/v2w/cases.json');if(!response.ok)throw new Error('Case index unavailable');
+    const response=await fetch('assets/v2w/cases.json?v=20261127-review');if(!response.ok)throw new Error('Case index unavailable');
     cases=await response.json();
     const sources=[...new Set(cases.map(c=>c.source))];
     sources.forEach(source=>{const option=document.createElement('option');option.value=source;option.textContent=source;$('v2w-dataset').append(option);});
@@ -327,12 +288,30 @@ async function initVideo() {
     if(initial)selectVideo(initial);
   }catch(err){$('v2w-title').textContent='Case index could not load';$('v2w-case-meta').textContent='Please serve the website over HTTP.';console.warn(err.message);}
 }
+function initNavigation() {
+  const toggle=document.querySelector('.nav-toggle'),links=$('nav-links'),nav=toggle.closest('nav');
+  const expanded=()=>toggle.getAttribute('aria-expanded')==='true';
+  const close=restoreFocus=>{
+    toggle.setAttribute('aria-expanded','false');
+    if(restoreFocus)toggle.focus({preventScroll:true});
+  };
+  toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(!expanded())));
+  links.addEventListener('click',e=>{
+    if(expanded()&&e.target.closest('a'))close(true);
+  });
+  nav.addEventListener('keydown',e=>{
+    if(expanded()&&e.key==='Escape')close(true);
+  });
+  document.addEventListener('click',e=>{
+    if(expanded()&&!nav.contains(e.target))close(false);
+  });
+}
 function initMotion() {
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
     if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}
   }),{threshold:.08});
   document.querySelectorAll('.section-heading,.method-principles').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
-  const navLinks=[...document.querySelectorAll('.nav-links a')];
+  const navLinks=[...document.querySelectorAll('.nav-links a[href^="#"]')];
   const activeObserver=new IntersectionObserver(entries=>{
     for(const entry of entries)if(entry.isIntersecting){navLinks.forEach(a=>{const active=a.hash===`#${entry.target.id}`;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
   },{rootMargin:'-20% 0px -65% 0px'});
@@ -364,7 +343,7 @@ function initCitation() {
     catch{$('copy-status').textContent='Select the citation text to copy manually.';}
   });
 }
-initFigures();initWorlds();initCharts();initVideo();initMotion();initCitation();
+initFigures();initWorlds();initCharts();initVideo();initNavigation();initMotion();initCitation();
 const railroadGallery=initRailroadGallery(getViewer);
 initSelectControls();
 addEventListener('pagehide',e=>{

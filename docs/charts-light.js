@@ -1,4 +1,4 @@
-import {families,modelNames,scores,ablations} from './data-light.js?v=20261125-ui3';
+import {families,modelNames,scores,ablations} from './data-light.js?v=20261127-polish';
 const $=id=>document.getElementById(id);
 const COLORS={base:'#9eabb9',ours:'#15776b',coral:'#c85e4d',cyan:'#426bce'};
 const metricNames=['Score S','Functionality F','Geometry G','Dynamics D'];
@@ -31,7 +31,7 @@ export function allBenchmarkCSV() {
   const rows=[['model','family','method','S','F','G','D','source_note']];
   Object.keys(scores).forEach(model=>families.forEach((family,i)=>['base','ours'].forEach(method=>rows.push([
     modelNames[model],family,method==='base'?'Base Agent':'EnRealWorld',...scores[model][method][i],
-    'Manuscript reported values; checked against current main.tex and sec/X_suppl.tex'
+    'Values as reported in the manuscript'
   ]))));
   return csv(rows).replace(/\r\n/g,'\n')+'\n';
 }
@@ -60,14 +60,14 @@ function groupedBars(labels,series,{max=100,height=345,decimals=2}={}) {
 function renderVideo() {
   const model=$('chart-model').value,m=Number($('chart-metric').value),data=scores[model];
   $('chart-title').textContent=`${modelNames[model]} · ${metricNames[m]}`;
-  $('chart-description').textContent='39 tasks · 100-point scale · higher is better. Overall is the reported task-level aggregate, not the unweighted average of the seven family bars.';
+  $('chart-description').textContent='39 tasks · 0–100 scale · higher is better';
   legend([['Base Agent',COLORS.base],['EnRealWorld',COLORS.ours]]);
   $('benchmark-chart').innerHTML=groupedBars(families,[{name:'Base Agent',color:COLORS.base,values:data.base.map(v=>v[m])},{name:'EnRealWorld',color:COLORS.ours,values:data.ours.map(v=>v[m])}],{decimals:metricDecimals[m]});
-  $('chart-note').textContent='Bars start at zero. Values were checked against the current main.tex and sec/X_suppl.tex. S and F/G/D retain the manuscript’s reported precision; S is not recomputed from rounded components.';
+  $('chart-note').textContent='Overall is the task-level aggregate across all 39 tasks. The chart uses the manuscript’s reported S, F, G, and D values.';
 }
 function renderAblation() {
   $('chart-title').textContent='What changes when coordination is removed?';
-  $('chart-description').textContent='GPT-6.1 Sol · 39 Video2World tasks · score S on a 100-point scale. Single-session variants separate role prompts, utilities, and coordination.';
+  $('chart-description').textContent='GPT-6.1 Sol · 39 tasks · 0–100 scale · higher is better';
   legend([['Shared-session variants',COLORS.base],['Full EnRealWorld',COLORS.ours]]);
   const series={name:'Execution score S',color:COLORS.cyan,values:ablations.map(r=>r[1])};
   $('benchmark-chart').innerHTML=groupedBars(ablations.map(r=>r[0]),[series]);
@@ -77,23 +77,16 @@ function renderAblation() {
 }
 function renderPhysics() {
   $('chart-title').textContent='Counterfactual physics, not just appearance.';
-  $('chart-description').textContent='GPT-6.1 Sol · medium reasoning · 43 counterfactual tasks. Visual and physics scores are on a 0–1 scale; failed candidates count as zero.';
+  $('chart-description').textContent='43 counterfactual tasks · 0–1 scale · higher is better';
   legend([['Base Agent',COLORS.base],['EnRealWorld',COLORS.ours]]);
   $('benchmark-chart').innerHTML=groupedBars(['Visual score ↑','Physics score ↑'],[{name:'Base Agent',color:COLORS.base,values:[.336,.321]},{name:'EnRealWorld',color:COLORS.ours,values:[.491,.416]}],{max:1,decimals:3,height:310})+`<div class="metric-cards"><div class="metric-card"><h4>FAILED CANDIDATES / LOWER IS BETTER</h4><strong>19 → 6</strong><p>Base Agent → EnRealWorld · out of 43</p></div><div class="metric-card"><h4>VISUAL SCORE GAIN</h4><strong>+0.155</strong><p>0.336 → 0.491</p></div><div class="metric-card"><h4>PHYSICS SCORE GAIN</h4><strong>+0.095</strong><p>0.321 → 0.416</p></div></div>`;
-  $('chart-note').textContent='These results concern the 43 counterfactual tasks, not the entire 156-task suite. All means include failed candidates as zero. Source: supplementary PhysCodeGym evaluation.';
-}
-function renderCost() {
-  $('chart-title').textContent='Better execution comes with additional work.';
-  $('chart-description').textContent='Reported extra time per task relative to the strongest comparison method. These are approximate overheads, not absolute runtimes or a cross-model efficiency ranking.';
-  legend([['Extra time / approximate minutes',COLORS.cyan]]);
-  $('benchmark-chart').innerHTML=groupedBars(['GPT-6.1 Sol','DeepSeek V4.1','Kimi-3.1 Pro'],[{name:'Extra time (minutes)',color:COLORS.cyan,values:[25,75,76],note:'Approximate per-task overhead'}],{max:100,decimals:0,height:300})+`<div class="metric-cards"><div class="metric-card"><h4>COMPUTE / PER TASK</h4><strong style="font-size:24px">RTX 4090</strong><p>16 CPU cores · 128 GB RAM</p></div><div class="metric-card"><h4>CACHED INPUT TOKEN SHARE</h4><strong>97.4–98.6%</strong><p>Reported range across models; not assigned per model.</p></div><div class="metric-card"><h4>NEW INPUT TOKEN SHARE</h4><strong>1.4–2.6%</strong><p>No absolute token counts or dollar cost inferred.</p></div></div>`;
-  $('chart-note').textContent='GPT compares 53.55 vs VIGA 51.21. DeepSeek reports +13.72 and Kimi +9.16 vs strongest comparisons. Cache statistics cover 38 GPT tasks and 39 tasks for each other model. Missing absolute runtimes, token totals, and dollar costs are not estimated.';
+  $('chart-note').textContent='GPT-6.1 Sol with medium reasoning on the 43-task counterfactual subset of the 156-task suite. Failed candidates count as zero in both mean scores.';
 }
 function render() {
   $('chart-tooltip').style.display='none';
   $('chart-model').parentElement.hidden=benchmark!=='video';
   $('chart-metric').parentElement.hidden=benchmark!=='video';
-  ({video:renderVideo,ablation:renderAblation,physics:renderPhysics,cost:renderCost})[benchmark]();
+  ({video:renderVideo,physics:renderPhysics,ablation:renderAblation})[benchmark]();
   bindTooltips($('benchmark-chart'));
 }
 function delta() {

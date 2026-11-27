@@ -137,7 +137,7 @@ export class WorldViewer {
       const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.15;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
       const terrain=triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
-      const sky=/sky|horizon|background/i.test(o.name);
+      const sky=/sky|horizon(?!tal)|background/i.test(o.name);
       if (broad || terrain || sky) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;
@@ -171,6 +171,12 @@ export class WorldViewer {
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
     this.stats={triangles:Math.round(triangles),meshes};
+    if (!this.hero && !this.element.querySelector(".preview-note")) {
+      const note = document.createElement('span');
+      note.className = 'preview-note';
+      note.textContent = 'Simplified web preview';
+      this.element.append(note);
+    }
     return true;
   }
   reset() {this.controls.reset();}

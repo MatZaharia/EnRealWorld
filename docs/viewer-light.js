@@ -160,6 +160,7 @@ export class WorldViewer {
     if (version!==this.version) {release(gltf.scene);return false;}
     if (this.root) {this.scene.remove(this.root);release(this.root);}
     const sourceCamera=sceneMetadata?.camera;
+    this.railroadSite=url.includes('railroad-ours-claude-fable-5-2');
     const raw=gltf.scene;
     raw.updateMatrixWorld(true);
     const box=new THREE.Box3(),focusBox=new THREE.Box3();
@@ -170,10 +171,9 @@ export class WorldViewer {
       const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.2;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
       const terrain=!walk && triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
-      const sky=/sky|horizon|background/i.test(o.name);
-      const detachedTie=url.includes('railroad-ours-claude-fable-5-2') && /^Loose_SpareTie_\d+$/.test(o.name);
+      const sky=/sky|horizon(?!tal)|background/i.test(o.name);
       const astraTerrain=url.includes('railroad-ours-gpt-6-astra.glb') && o.name==='mesh_65' && o.material?.name==='Dry ochre ballast';
-      if (!sourceCamera && (broad || terrain || sky || detachedTie || astraTerrain)) {o.visible=false;return;}
+      if (!sourceCamera && !this.railroadSite && (broad || terrain || sky || astraTerrain)) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;
       box.union(b);
@@ -190,6 +190,10 @@ export class WorldViewer {
       const [min,max]=sceneMetadata.architecture_bounds;
       box.min.fromArray(min);
       box.max.fromArray(max);
+    }else if(this.railroadSite){
+      // Frame the house and porch. The foreground railway extends beyond this box.
+      box.min.set(-16,-1,-11);
+      box.max.set(14,16.6,18);
     }else if(!focusBox.isEmpty()) box.copy(focusBox);
     const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
     const scale=5/Math.max(size.x,size.y,size.z);
@@ -223,6 +227,12 @@ export class WorldViewer {
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
     this.stats={triangles:Math.round(triangles),meshes};
+    if (!this.element.querySelector(".preview-note")) {
+      const note = document.createElement('span');
+      note.className = 'preview-note';
+      note.textContent = 'Simplified web preview';
+      this.element.append(note);
+    }
     return true;
   }
   setMode(mode) {
@@ -233,8 +243,8 @@ export class WorldViewer {
     this.walk.enabled=walking||this.freeWalk;
     this.walk.orbitTarget=walking?null:this.controls.target;
     this.controls.enabled=!walking;
-    this.stage.visible=!walking && !this.sourceCamera;
-    this.grid.visible=!walking && !this.sourceCamera;
+    this.stage.visible=!walking && !this.sourceCamera && !this.railroadSite;
+    this.grid.visible=!walking && !this.sourceCamera && !this.railroadSite;
     if(walking){this.auto=false;this.controls.autoRotate=false;}
     this.camera.near=walking?Math.max(.0001,this.sourceScale*.015):.01;
     if(!walking){

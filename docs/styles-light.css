@@ -627,3 +627,16 @@ dialog > p { font: 9px var(--mono); color: var(--muted); padding: 13px 21px; }
 @media (max-width: 760px) {
   #evidence .method-figure { width: 100%; }
 }
+
+.preview-note {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgb(245 247 244 / 92%);
+  color: #476260;
+  font: 11px/1.4 var(--mono);
+  pointer-events: none;
+}
+.hero-stage .preview-note { right: clamp(26px, 7cqw, 64px); }

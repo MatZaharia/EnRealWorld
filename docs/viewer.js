@@ -137,7 +137,7 @@ export class WorldViewer {
       const broad=Math.max(s.x,s.z)>180 && s.y<Math.max(s.x,s.z)*.15;
       const triangles=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;
       const terrain=triangles<=12 && Math.min(s.x,s.z)>15 && s.y<Math.max(s.x,s.z)*.08;
-      const sky=/sky|horizon|background/i.test(o.name);
+      const sky=/sky|horizon(?!tal)|background/i.test(o.name);
       if (broad || terrain || sky) {o.visible=false;return;}
       o.castShadow=true;
       o.receiveShadow=true;

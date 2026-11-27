@@ -22,3 +22,15 @@
 @media (max-width: 760px) {
   #evidence .method-figure { width: 100%; }
 }
+
+.preview-note {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgb(19 28 35 / 90%);
+  color: #d4e1e3;
+  font: 11px/1.4 var(--mono);
+  pointer-events: none;
+}

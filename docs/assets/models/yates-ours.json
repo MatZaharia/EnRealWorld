@@ -6,7 +6,7 @@
   "joints": 5,
   "actuators": 5,
   "meshes": 20,
-  "materials": 15,
+  "materials": 24,
   "triangles": 354200,
   "extent_m": [
     32.0,

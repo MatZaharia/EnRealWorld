@@ -18,6 +18,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 import trimesh
+from PIL import Image
 
 Z_UP_TO_Y_UP = np.array(
     [[1, 0, 0, 0], [0, 0, 1, 0], [0, -1, 0, 0], [0, 0, 0, 1]], dtype=float
@@ -60,12 +61,45 @@ def colour(model: mujoco.MjModel, gid: int) -> tuple[float, float, float, float]
     return tuple(round(float(c), 3) for c in rgba)
 
 
+def texture_image(model, texture_id):
+    width, height = model.tex_width[texture_id], model.tex_height[texture_id]
+    channels = model.tex_nchannel[texture_id]
+    start = model.tex_adr[texture_id]
+    pixels = model.tex_data[start:start + width * height * channels].reshape(height, width, channels)
+    image = Image.fromarray(np.flipud(pixels).squeeze()).convert("RGB")
+    image.thumbnail((768, 768), Image.Resampling.LANCZOS)
+    image.format = "JPEG"
+    return image
+
+
+def textured_geometry(model, gid, mesh, material):
+    # Split face corners so separate UV indices at seams survive the export.
+    corners = mesh.vertices[mesh.faces]
+    mid = model.geom_dataid[gid]
+    if mid >= 0 and model.mesh_texcoordadr[mid] >= 0:
+        first = model.mesh_faceadr[mid]
+        indices = model.mesh_facetexcoord[first:first + len(mesh.faces)]
+        uv = model.mesh_texcoord[model.mesh_texcoordadr[mid] + indices]
+    else:
+        # Box faces and unwrapped architectural surfaces use planar projection.
+        axes = np.array([[1, 2], [0, 2], [0, 1]])[np.abs(mesh.face_normals).argmax(axis=1)]
+        extent = np.maximum(mesh.extents, 1e-6)
+        normalized = (corners - mesh.bounds[0]) / extent
+        uv = np.take_along_axis(normalized, axes[:, None, :], axis=2)
+    coords = uv.reshape(-1, 2) * model.mat_texrepeat[model.geom_matid[gid]]
+    return trimesh.Trimesh(
+        vertices=corners.reshape(-1, 3), faces=np.arange(corners.size // 3).reshape(-1, 3),
+        visual=trimesh.visual.TextureVisuals(uv=coords, material=material), process=False,
+    )
+
+
 def convert(xml: Path, out: Path, max_group: int = 2) -> dict:
     model = mujoco.MjModel.from_xml_path(str(xml))
     data = mujoco.MjData(model)
     mujoco.mj_forward(model, data)
 
     buckets: dict[tuple, list[trimesh.Trimesh]] = defaultdict(list)
+    materials = {}
     used = skipped = 0
     for gid in range(model.ngeom):
         rgba = colour(model, gid)
@@ -79,27 +113,33 @@ def convert(xml: Path, out: Path, max_group: int = 2) -> dict:
         if mesh is None or len(mesh.faces) == 0:
             skipped += 1
             continue
+        mid = model.geom_matid[gid]
+        texture_id = model.mat_texid[mid, mujoco.mjtTextureRole.mjTEXROLE_RGB] if mid >= 0 else -1
+        key = (rgba, int(texture_id))
+        if key not in materials:
+            materials[key] = trimesh.visual.material.PBRMaterial(
+                baseColorFactor=[int(255 * c) for c in rgba],
+                baseColorTexture=texture_image(model, texture_id) if texture_id >= 0 else None,
+                metallicFactor=0.0, roughnessFactor=0.82,
+                alphaMode="BLEND" if rgba[3] < 0.99 else "OPAQUE", doubleSided=True,
+            )
+        if texture_id >= 0:
+            mesh = textured_geometry(model, gid, mesh, materials[key])
         T = np.eye(4)
         T[:3, :3] = data.geom_xmat[gid].reshape(3, 3)
         T[:3, 3] = data.geom_xpos[gid]
         mesh.apply_transform(Z_UP_TO_Y_UP @ T)
-        buckets[rgba].append(mesh)
+        buckets[key].append(mesh)
         used += 1
 
     scene = trimesh.Scene()
     tris = 0
-    for i, (rgba, parts) in enumerate(sorted(buckets.items())):
+    for i, (key, parts) in enumerate(sorted(buckets.items())):
         merged = trimesh.util.concatenate(parts)
+        uv = np.concatenate([part.visual.uv for part in parts]) if key[1] >= 0 else None
+        merged.visual = trimesh.visual.TextureVisuals(material=materials[key], uv=uv)
         merged.merge_vertices()
         tris += len(merged.faces)
-        material = trimesh.visual.material.PBRMaterial(
-            baseColorFactor=[int(255 * c) for c in rgba],
-            metallicFactor=0.0,
-            roughnessFactor=0.82,
-            alphaMode="BLEND" if rgba[3] < 0.99 else "OPAQUE",
-            doubleSided=True,
-        )
-        merged.visual = trimesh.visual.TextureVisuals(material=material)
         scene.add_geometry(merged, node_name=f"mat_{i:03d}", geom_name=f"mat_{i:03d}")
 
     out.parent.mkdir(parents=True, exist_ok=True)

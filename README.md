@@ -1,11 +1,13 @@
 <div align="center">
 
+<img src="docs/assets/favicon.svg" width="76" height="76" alt="">
+
 # EnRealWorld
 
 **4D World Creation as Agentic Engineering**
 
 <a href="https://zihanguo1024.github.io/EnRealWorld/"><img src="docs/assets/readme/website.svg" alt="Project Website"></a>
-<a href="https://zihanguo1024.github.io/EnRealWorld/#project-preview-video"><img src="docs/assets/readme/video.svg" alt="Play the full project video (2:53)"></a>
+<a href="https://zihanguo1024.github.io/EnRealWorld/#project-preview-video"><img src="docs/assets/readme/video.svg" alt="Play the full project video"></a>
 <img src="docs/assets/readme/arxiv.svg" alt="arXiv (forthcoming)">
 <a href="#quickstart"><img src="docs/assets/readme/quickstart.svg" alt="Quickstart"></a>
 
@@ -17,17 +19,40 @@ EnRealWorld builds executable, interactive worlds from inputs such as task descr
 
 > **Out-of-the-box with your coding agent:** EnRealWorld requires no extra video generation models, 3D Gaussian Splatting optimization, or external 3D generative checkpoints. Install the lightweight Python package and run directly with your coding agent (Codex, Claude Code, Antigravity) and standard physics simulators.
 
-## 🎬 Project video
+## 🎬 Demos
 
-| One prompt, three worlds | Warehouse rack domino |
-| :---: | :---: |
-| [![A laboratory, warehouse and home assemble from a single prompt](docs/assets/readme/world-assembly.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=4,12) | [![One rack tips into the next and the loaded rows fall in sequence](docs/assets/readme/rack-domino.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=32,39) |
-| **Measured drawings to 3D buildings** | **Video2World manipulation tasks** |
-| [![Floor plans and elevations become three assembled buildings](docs/assets/readme/blueprints.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=136,147) | [![Reference videos and simulated manipulation sequences play side by side](docs/assets/readme/video2world.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=163,169) |
-
-**Handheld phone footage and 4D reconstruction**
-
-[![Handheld footage of a person at a table alongside GPT 6.2 Sol and EnRealWorld reconstructions, with close-ups of object contact](docs/assets/readme/handheld-reconstruction.webp)](https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=149,162)
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=4,12"><img src="docs/assets/readme/world-assembly.webp" width="480" alt="A laboratory, warehouse and home assemble from a single prompt"></a><br>
+      <strong>One prompt, three worlds</strong>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=32,39"><img src="docs/assets/readme/rack-domino.webp" width="480" alt="One rack tips into the next and the loaded rows fall in sequence"></a><br>
+      <strong>Warehouse rack domino</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=77.75,135.5"><img src="docs/assets/readme/railroad-house.webp" width="480" alt="Agents reconstruct the painted house, test its porch and deliver the finished world"></a><br>
+      <strong>House by the Railroad</strong>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=136,147"><img src="docs/assets/readme/blueprints.webp" width="480" alt="Floor plans and elevations become three assembled buildings"></a><br>
+      <strong>Measured drawings to 3D buildings</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=149,162"><img src="docs/assets/readme/handheld-reconstruction.webp" width="480" alt="Handheld phone footage alongside two reconstructions of the same interaction"></a><br>
+      <strong>Handheld video to 4D reconstruction</strong>
+    </td>
+    <td align="center" valign="top" width="50%">
+      <a href="https://zihanguo1024.github.io/EnRealWorld/assets/video/enrealworld-full-preview-v41.mp4#t=163,169"><img src="docs/assets/readme/video2world.webp" width="480" alt="Reference videos and simulated manipulation sequences play side by side"></a><br>
+      <strong>Video2World manipulation tasks</strong>
+    </td>
+  </tr>
+</table>
 
 <a id="reproduce-physical-interventions-no-api-key-required"></a>
 

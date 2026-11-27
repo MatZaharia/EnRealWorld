@@ -8,6 +8,8 @@
 
 EnRealWorld builds executable, interactive worlds from inputs such as task descriptions, images, and videos. The Manager turns the input into testable requirements, the Engineer builds and revises the world, and the Researcher independently probes how it responds to interventions. The team uses the diagnostic findings to decide what needs repair and what is ready to deliver.
 
+> **Out-of-the-box with your coding agent:** EnRealWorld requires no extra video generation models, 3D Gaussian Splatting optimization, or external 3D generative checkpoints. Install the lightweight Python package and run directly with your coding agent (Codex, Claude Code, Antigravity) and standard physics simulators.
+
 [![Play the EnRealWorld project video](docs/assets/video/enrealworld-full-preview-v41-title.jpg)](https://zihanguo1024.github.io/EnRealWorld/#project-preview-video)
 
 ## Reproduce Physical Interventions (No API Key Required)

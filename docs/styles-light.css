@@ -71,6 +71,9 @@ h3 { font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -.025e
 .paper-authors sup { margin-left: 3px; font-size: 8px; font-weight: 600; line-height: 0; color: var(--accent); }
 .paper-authors sup a { padding: 2px; border-radius: 2px; }
 .paper-authors sup a:hover { background: #15776b12; }
+.summary-intro { padding-top: 12px; }
+.deployment-pill { width: fit-content; max-width: 100%; margin: 0 0 2px; padding: 6px 15px; border: 1px solid #bbd4c9; border-radius: 20px; background: #eef5f0; color: #34574c; font-size: 12px; line-height: 1.5; }
+.deployment-pill strong { color: var(--accent); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 31px; }
 .hero-world { height: 520px; min-width: 0; position: relative; margin-left: -15px; }
 .hero-stage { --control-center: 22px; position: absolute; inset: -32px -65px -22px; container-type: inline-size; }
@@ -355,6 +358,7 @@ td.negative { color: var(--coral); }
 .resource-grid h3 { font-size: 21px; margin: 23px 0 14px; }
 .resource-grid p { color: var(--muted); font-size: 11px; line-height: 1.9; }
 .citation { display: grid; grid-template-columns: 1fr minmax(0, 1.2fr); align-items: start; gap: 48px; }
+.deployment-copy { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .resource-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 20px; }
 .citation pre { white-space: pre; overflow: auto; background: #f0f5ed; border: 1px solid #d4dfd0; border-radius: 9px; font: 10px/1.9 var(--mono); color: #476c58; padding: 23px; margin: 0; }
 #copy-status { margin-left: 12px; color: var(--accent); font: 9px var(--mono); }

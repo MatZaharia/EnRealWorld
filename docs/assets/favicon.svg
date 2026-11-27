@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#080c12"/><path d="m32 10 22 13v24L32 59 10 47V23Zm0 0v25m22-12L32 35 10 23m22 12v24" fill="none" stroke="#a9f6d8" stroke-width="3" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">EnRealWorld</title>
+  <rect width="64" height="64" rx="13" fill="#102c30"/>
+  <g stroke-linejoin="round">
+    <!-- Three floors of an isometric E, built from the ground up. -->
+    <path fill="#4bb89c" d="m9 38 20-10 26 13-20 10z"/>
+    <path fill="#268a7b" d="m35 51 20-10v7L35 58z"/>
+    <path fill="#4bb89c" d="m9 28 20-10 21 10.5-20 10z"/>
+    <path fill="#268a7b" d="m30 38.5 20-10v6l-20 10z"/>
+    <path fill="#d5f6df" d="m9 18 20-10 26 13-20 10z"/>
+    <path fill="#268a7b" d="m35 31 20-10v6l-20 10z"/>
+    <path fill="#81ddc1" d="m9 18 26 13v6l-19-9.5v4l14 7v6l-14-7v4l19 9.5v7L9 45z"/>
+  </g>
+</svg>

@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="docs/assets/favicon.svg" width="76" height="76" alt="">
-
 # EnRealWorld
 
 **4D World Creation as Agentic Engineering**

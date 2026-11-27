@@ -22,6 +22,8 @@ export function initRailroadGallery(getViewer) {
     }
     autoButton.disabled=!ready||navigationMode==='walk';
     autoButton.setAttribute('aria-pressed',String(viewer?.auto??false));
+    $('railroad-reset').parentElement.hidden=!ready;
+    $('railroad-wire').disabled=!ready;
     setWalkReady(ready);
   };
   for(const [mode,button] of Object.entries(navigationButtons)){
@@ -91,6 +93,8 @@ export function initRailroadGallery(getViewer) {
   }
   $('railroad-start').addEventListener('click',load);
   buttons.forEach(b=>b.addEventListener('click',()=>{method=b.dataset.railMethod;sync();if(entered)load();}));
+  $('railroad-zoom-in').addEventListener('click',()=>viewer?.zoomBy(-8));
+  $('railroad-zoom-out').addEventListener('click',()=>viewer?.zoomBy(8));
   $('railroad-reset').addEventListener('click',()=>viewer?.reset());
   $('railroad-wire').addEventListener('click',e=>{if(viewer){viewer.setWire(!viewer.wire);e.currentTarget.setAttribute('aria-pressed',String(viewer.wire));}});
   autoButton.addEventListener('click',()=>{viewer.auto=!viewer.auto;updateNavigation(true);});

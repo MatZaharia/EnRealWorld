@@ -75,6 +75,10 @@ h3 { font-size: 22px; font-weight: 500; line-height: 1.3; letter-spacing: -.025e
 .hero-world { height: 520px; min-width: 0; position: relative; margin-left: -15px; }
 .hero-stage { --control-center: 22px; position: absolute; inset: -32px -65px -22px; container-type: inline-size; }
 .hero-canvas { position: absolute; inset: 0; }
+@media (min-width: 761px) {
+  /* Fade the terrain only where the oversized canvas crosses the text column. */
+  .hero-canvas { mask-image: linear-gradient(to right, transparent 80px, black 158px); }
+}
 .hero-canvas canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
 .hero-hud { display: flex; align-items: center; position: absolute; left: 10px; right: 0; font: 8px var(--mono); letter-spacing: .08em; color: #496c67; pointer-events: none; }
 .hud-bottom { bottom: var(--control-center); transform: translateY(50%); left: auto; right: 12px; flex-direction: column; align-items: flex-end; gap: 4px; }
@@ -404,12 +408,12 @@ dialog > p { font: 9px var(--mono); color: var(--muted); padding: 13px 21px; }
   .railroad-explorer .world-canvas { height: 320px; }
   .railroad-start .button { padding: 12px; font-size: 10px; }
 }
-.render-reveal { --reveal: 50%; position: relative; justify-self: end; width: min(100%, 412.5px); aspect-ratio: 1.25; max-height: 330px; overflow: hidden; border-radius: 8px; }
+.render-reveal { touch-action: pan-y; cursor: ew-resize; user-select: none; --reveal: 50%; position: relative; justify-self: end; width: min(100%, 412.5px); aspect-ratio: 1.25; max-height: 330px; overflow: hidden; border-radius: 8px; }
 .render-reveal:has(.render-slider:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; }
 .render-reveal > img, .render-base-layer > img { position: absolute; width: 100%; height: 100%; object-fit: cover; inset: 0; pointer-events: none; -webkit-user-drag: none; }
 .render-base-layer { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--reveal)) 0 0); }
 .render-divider { position: absolute; top: 0; bottom: 0; left: var(--reveal); width: 2px; background: var(--accent); pointer-events: none; }
-.render-slider { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+.render-slider { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; pointer-events: none; }
 .render-divider::after { content: '↔'; position: absolute; top: 48%; left: -16px; width: 33px; height: 33px; border-radius: 50%; background: white; border: 2px solid var(--accent); color: var(--accent); display: grid; place-items: center; font-size: 16px; box-shadow: 0 3px 10px #23543a22; }
 .render-label { position: absolute; bottom: 13px; font: 8px var(--mono); padding: 6px 10px; background: #fffffff0; border-radius: 4px; pointer-events: none; }
 .label-base { left: 13px; color: #435e59; }
@@ -628,15 +632,36 @@ dialog > p { font: 9px var(--mono); color: var(--muted); padding: 13px 21px; }
   #evidence .method-figure { width: 100%; }
 }
 
-.preview-note {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgb(245 247 244 / 92%);
-  color: #476260;
-  font: 11px/1.4 var(--mono);
-  pointer-events: none;
+.viewport-shell { position: relative; min-height: 0; }
+.camera-tools { position: absolute; top: 12px; right: 12px; display: flex; padding: 3px; border: 1px solid #cbd8d1; border-radius: 9px; background: #fffffff2; box-shadow: 0 2px 10px #18292224; }
+.camera-tools button { width: 36px; height: 36px; padding: 0; background: transparent; border: 0; border-radius: 6px; color: #24483e; font: 20px/1 var(--body); }
+.camera-tools button:hover, .camera-tools button:focus-visible { background: #e6efea; }
+.viewer-toolbar > .navigation-modes { gap: 0; padding: 2px; border-radius: 7px; background: #edf2ef; }
+.viewer-toolbar .navigation-modes button { font-size: 11px; border: 0; background: transparent; }
+.viewer-toolbar .navigation-modes [aria-pressed=true] { color: white; background: var(--accent); }
+.viewer-toolbar > .display-tools { margin-right: auto; }
+.viewer-toolbar .display-tools button { font-size: 11px; background: white; }
+.viewer-toolbar .display-tools [aria-pressed=true] { background: #dceee5; }
+.world-panel:fullscreen .viewport-shell { flex: 1; }
+.world-panel:fullscreen .viewport-shell .world-canvas { position: absolute; inset: 0; height: 100%; }
+.render-base-layer, .render-reveal { background: #f3f4ef; }
+.render-reveal > img, .render-base-layer > img { object-fit: contain; }
+.railroad-heading { align-items: center; flex-wrap: wrap; gap: 14px; }
+.railroad-heading .chips { margin: 0; }
+.railroad-explorer > aside { justify-content: center; gap: 20px; }
+.railroad-explorer aside figure { width: 100%; min-width: 0; margin: 0; }
+.railroad-explorer aside figcaption { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+.railroad-explorer aside img { display: block; }
+.gallery-movement { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 18px; row-gap: 5px; padding: 12px 20px; border-bottom: 0; }
+.gallery-movement > .micro { display: none; }
+.gallery-movement .walk-pad { grid-column: 1; grid-row: 1 / 3; grid-template-columns: repeat(3,32px); gap: 3px; margin: 0; }
+.gallery-movement .walk-pad button { min-height: 28px; }
+.gallery-movement p { align-self: end; margin: 0; font-size: 11px; color: var(--muted); }
+.gallery-movement label { align-self: start; }
+.protocol-note { margin: 0; padding: 14px 20px; border-top: 1px solid var(--line); background: #eef5f0; color: #294e43; font-size: 14px; line-height: 1.55; }
+@media (max-width: 700px) {
+  .railroad-heading .chips { margin-top: 14px; }
+  .railroad-explorer > aside { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 12px; }
+  .railroad-explorer aside figure img { height: clamp(80px,18vw,125px); object-fit: contain; background: #edf2ed; }
+  .protocol-note { padding: 12px 14px; }
 }
-.hero-stage .preview-note { right: clamp(26px, 7cqw, 64px); }

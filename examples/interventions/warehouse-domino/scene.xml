@@ -1,0 +1,152 @@
+<mujoco model="warehouse-domino">
+  <compiler angle="degree" />
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="Euler" cone="elliptic" iterations="60" />
+  <visual>
+    <global offwidth="960" offheight="540" />
+    <headlight ambient=".38 .40 .44" diffuse="0.65 0.65 0.65" />
+  </visual>
+  <asset>
+    <include file="appearance.xml" />
+  </asset>
+  <default>
+    <geom type="box" friction="0.85 0.01 0.001" />
+    <default class="upright">
+      <geom size="0.022 0.025 0.97" mass="2.6" rgba="0 0 0 0" />
+    </default>
+    <default class="shelf">
+      <geom size="0.23 0.65 0.025" mass="6.8" rgba="0 0 0 0" />
+    </default>
+    <default class="cargo">
+      <geom size="0.163 0.41 0.125" mass="10" friction="0.6 0.01 0.001" rgba="0 0 0 0" />
+    </default>
+    <default class="appearance">
+      <geom mass="0" contype="0" conaffinity="0" group="2" />
+    </default>
+  </default>
+  <worldbody>
+    <light pos="-2 -4 5" dir=".3 .55 -1" directional="true" diffuse=".72 .77 .85" specular=".12 .12 .12" />
+    <camera name="overview" pos="-2.0 -6.7 4.25" xyaxes="0.8078857 -0.5893391 0.0000000 0.2218833 0.3041650 0.9264186" fovy="46" />
+    <geom name="floor" type="plane" size="14 14 0.1" rgba="0 0 0 0" />
+    <replicate count="7" offset="0.85 0 0" sep="-">
+      <body name="rack" pos="0 0 0.002">
+        <freejoint />
+        <site name="push" pos="-0.23 0 1.68" size="0.01" rgba="0 0 0 0" />
+        <geom class="upright" pos="-0.165 -2.58 0.97" mass="1.04" />
+        <geom class="upright" pos="-0.165 -1.29 0.97" mass="1.04" />
+        <geom class="upright" pos="-0.165 0 0.97" mass="1.04" />
+        <geom class="upright" pos="-0.165 1.29 0.97" mass="1.04" />
+        <geom class="upright" pos="-0.165 2.58 0.97" mass="1.04" />
+        <geom class="upright" pos="0.165 -2.58 0.97" mass="1.04" />
+        <geom class="upright" pos="0.165 -1.29 0.97" mass="1.04" />
+        <geom class="upright" pos="0.165 0 0.97" mass="1.04" />
+        <geom class="upright" pos="0.165 1.29 0.97" mass="1.04" />
+        <geom class="upright" pos="0.165 2.58 0.97" mass="1.04" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -1.9440 0.39920" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -0.6480 0.39920" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 0.6480 0.39920" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 1.9440 0.39920" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -1.9440 0.88520" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -0.6480 0.88520" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 0.6480 0.88520" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 1.9440 0.88520" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -1.9440 1.30640" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 -0.6480 1.30640" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 0.6480 1.30640" />
+        <geom class="shelf" size=".174 .647 .022" mass="1.7" pos="0 1.9440 1.37062" />
+        <geom type="mesh" mesh="rack-mi-rackseta-01" material="mi-rackseta-01" class="appearance" />
+        <geom type="mesh" mesh="rack-mi-racksetb-01" material="mi-racksetb-01" class="appearance" />
+        <geom type="mesh" mesh="rack-mi-racksetc-03" material="mi-racksetc-03" class="appearance" />
+        <geom type="mesh" mesh="rack-mi-racksetd-05" material="mi-racksetd-05" class="appearance" />
+        <geom type="mesh" mesh="rack-mi-rackshield-01" material="mi-rackshield-01" class="appearance" />
+        <geom type="mesh" mesh="rack-mi-signc" material="mi-signc" class="appearance" />
+      </body>
+      <body name="load-0-0" pos="0 -1.9440 0.42520">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet0-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet0-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-0-1" pos="0 -0.6480 0.42520">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet1-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet1-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet1-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-0-2" pos="0 0.6480 0.42520">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet2-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet2-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-5222" material="materialinstancedynamic-5222" class="appearance" />
+      </body>
+      <body name="load-0-3" pos="0 1.9440 0.42520">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet0-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet0-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-1-0" pos="0 -1.9440 0.91120">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet1-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet1-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet1-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-1-1" pos="0 -0.6480 0.91120">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet2-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet2-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-5222" material="materialinstancedynamic-5222" class="appearance" />
+      </body>
+      <body name="load-1-2" pos="0 0.6480 0.91120">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet0-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet0-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-1-3" pos="0 1.9440 0.91120">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet1-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet1-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet1-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-2-0" pos="0 -1.9440 1.33240">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet2-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet2-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-5222" material="materialinstancedynamic-5222" class="appearance" />
+      </body>
+      <body name="load-2-1" pos="0 -0.6480 1.33240">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet0-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet0-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-2-2" pos="0 0.6480 1.33240">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet1-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet1-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet1-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+      </body>
+      <body name="load-2-3" pos="0 1.9440 1.39662">
+        <freejoint />
+        <geom class="cargo" size=".145 .61 .125" pos="0 0 .125" mass="2.5" />
+        <geom type="mesh" mesh="pallet2-mi-cardboxc" material="mi-cardboxc" class="appearance" />
+        <geom type="mesh" mesh="pallet2-mi-palettesmalla-01" material="mi-palettesmalla-01" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-10285" material="materialinstancedynamic-10285" class="appearance" />
+        <geom type="mesh" mesh="pallet2-materialinstancedynamic-5222" material="materialinstancedynamic-5222" class="appearance" />
+      </body>
+    </replicate>
+    <include file="building.xml" />
+    <light pos="6 1.8 4.7" dir="-.55 -.45 -1" directional="true" castshadow="false" diffuse=".29 .27 .24" specular=".05 .05 .05" />
+  </worldbody>
+  <statistic center="2.7 0 1" extent="5.7" />
+</mujoco>

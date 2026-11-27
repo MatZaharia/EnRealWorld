@@ -102,8 +102,13 @@ function renderWorldCase() {
   const pair=pairs[selectedCase.id];
   document.querySelector('.render-comparison').hidden=!pair;
   if(pair){
-    $('render-base').src=`assets/figimg/${pair[0]}/${pair[1]}.jpg`;
-    $('render-ours').src=`assets/figimg/${pair[0]}/${pair[2]}.jpg`;
+    $('render-base').src=selectedCase.ref;
+    $('render-base').alt=`Original reference for ${selectedCase.title}`;
+    const agent=method==='ours'?'EnRealWorld':'Base Agent';
+    $('render-ours').alt=`${selectedCase.title} · ${agent} 3D render`;
+    $('render-ours').src=selectedCase.id==='railroad'
+      ? `assets/img/railroad-${method}-claude-fable-5-2-preview.jpg`
+      : `assets/figimg/${pair[0]}/${pair[method==='ours'?2:1]}.jpg`;
   }
   if(worldEntered)loadWorld();
 }
@@ -145,6 +150,9 @@ function updateNavigation(mode=worldViewer.mode, ready=true){
     button.disabled=!ready;
     button.setAttribute('aria-pressed',String(mode===name));
   }
+  $('world-reset').parentElement.hidden=!ready;
+  $('world-wire').disabled=!ready;
+  $('world-cut').disabled=!ready;
   setWorldWalkReady(ready);
   if(!ready)return;
   $('world-status').textContent='Geometry preview · Physics runs in the source simulator';
@@ -173,7 +181,7 @@ function initWorlds() {
   $('world-method').addEventListener('click',e=>{
     const b=e.target.closest('[data-method]');if(!b)return;
     method=b.dataset.method;pressed($('world-method'),b);
-    if(worldEntered)loadWorld();
+    renderWorldCase();
   });
   $('world-reset').addEventListener('click',()=>worldViewer?.reset());
   $('world-wire').addEventListener('click',e=>{
@@ -184,7 +192,7 @@ function initWorlds() {
     worldViewer?.setCut(e.target.value);$('cut-value').textContent=Number(e.target.value)===100?'Full':`${e.target.value}%`;
   });
   $('world-full').addEventListener('click',async()=>{
-    const panel=$('world-canvas').parentElement;
+    const panel=$('world-canvas').closest('.world-panel');
     try{if(document.fullscreenElement)await document.exitFullscreen();else if(panel.requestFullscreen)await panel.requestFullscreen();else $('world-status').textContent='Fullscreen is not supported by this browser.';}
     catch{$('world-status').textContent='Fullscreen is unavailable in this browser context.';}
   });
@@ -193,13 +201,30 @@ function initWorlds() {
     heroViewer.auto=!heroViewer.auto;e.currentTarget.setAttribute('aria-pressed',String(heroViewer.auto));e.currentTarget.textContent=heroViewer.auto?'Pause rotation':'Start rotation';
   });
   const comparison=$('render-reveal');
-  const sliders=[$('render-track'),$('render-slider')];
-  for(const slider of sliders)slider.addEventListener('input',()=>{
-    const value=slider.value;
-    comparison.style.setProperty('--reveal',`${value}%`);
-    for(const input of sliders)input.value=value;
+  const track=$('render-track'), imageSlider=$('render-slider');
+  function setReveal(value){
+    imageSlider.value=value; // The range clamps and rounds to its configured step.
+    track.value=imageSlider.value;
+    comparison.style.setProperty('--reveal',imageSlider.value+'%');
+  }
+  for(const slider of [track,imageSlider]){
+    slider.addEventListener('input',()=>setReveal(slider.value));
+  }
+  function revealAtPointer(event){
+    const box=comparison.getBoundingClientRect();
+    setReveal(100*(event.clientX-box.left)/box.width);
+  }
+  comparison.addEventListener('pointerdown',event=>{
+    if(!event.isPrimary || event.button!==0)return;
+    event.preventDefault();
+    imageSlider.focus({preventScroll:true});
+    comparison.setPointerCapture(event.pointerId);
+    revealAtPointer(event);
   });
-  renderWorldCase();initHero();
+  comparison.addEventListener('pointermove',event=>{
+    if(comparison.hasPointerCapture(event.pointerId))revealAtPointer(event);
+  });
+  updateNavigation('orbit',false);renderWorldCase();initHero();
 }
 function filteredCases() {
   return cases.filter(c=>c.modelKey===model&&(dataset==='all'||c.source===dataset)&&`${c.task} ${c.action} ${c.episode}`.toLowerCase().includes(query));

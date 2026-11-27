@@ -36,7 +36,7 @@
       </div>
       <div class="hero-world">
         <div id="hero-canvas" class="hero-canvas" aria-label="Interactive 3D preview of a generated house"></div>
-        <div class="hero-hud hud-top"><span class="status-dot"></span> WORLD / 001 <span>Simplified web preview</span></div>
+        <div class="hero-hud hud-top"><span class="status-dot"></span> WORLD / 001</div>
         <div class="hero-hud hud-bottom"><span>DRAG TO ORBIT · LIVE 3D PREVIEW</span><button id="hero-motion" aria-pressed="true">Pause rotation</button></div>
         <div class="floating-tag tag-a"><span>01</span> Agent-built geometry</div><div class="floating-tag tag-b"><span>02</span> Executable world source</div>
       </div>
@@ -51,7 +51,7 @@
       <div class="tabs" id="world-tabs" role="group" aria-label="World input type"><button data-category="blueprint" aria-pressed="true">01 <span>Blueprint → World</span></button><button data-category="painting" aria-pressed="false">02 <span>Painting → World</span></button><button data-category="text" aria-pressed="false">03 <span>Text → World</span></button></div>
       <div class="explorer">
         <aside class="reference-panel"><div class="micro">INPUT / REFERENCE</div><div id="world-reference"></div><h3 id="world-title"></h3><p id="world-description"></p><div class="reference-meta" id="world-meta"></div></aside>
-        <div class="world-panel"><div class="viewer-header"><span class="micro"><span class="status-dot"></span> INTERACTIVE 3D PREVIEW</span><div class="segmented" id="world-method"><button data-method="ours" aria-pressed="true">EnRealWorld</button><button data-method="base" aria-pressed="false">Base Agent</button></div></div>
+        <div class="world-panel"><div class="viewer-header"><span class="micro"><span class="status-dot"></span> Simplified web preview</span><div class="segmented" id="world-method"><button data-method="ours" aria-pressed="true">EnRealWorld</button><button data-method="base" aria-pressed="false">Base Agent</button></div></div>
           <div id="world-canvas" class="world-canvas" aria-label="Generated world 3D viewer"><div class="viewer-start"><button class="button primary" id="start-world">Enter the 3D world ↗</button><span>Exported 3D geometry · Static web preview</span></div></div>
           <div class="viewer-toolbar"><div><button id="world-reset">Reset view</button><button id="world-auto" aria-pressed="false">Auto orbit</button><button id="world-wire" aria-pressed="false">Wireframe</button><button id="world-full">Fullscreen ↗</button></div><label id="cut-control">Cutaway <input id="world-cut" type="range" min="0" max="100" value="100" aria-label="Building cutaway height"><output id="cut-value">Full</output></label></div>
           <div class="viewer-bottom"><span id="world-status" role="status" aria-live="polite">Select a case, then enter the 3D world.</span><a id="world-download" href="assets/models/lighthouse-ours.glb" download>Download preview GLB ↓</a></div>

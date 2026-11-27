@@ -1,0 +1,17 @@
+{
+  "root": "../enrealworld-runs/claude-studio-01",
+  "public": "examples/quickstart/studio/public",
+  "task": "Build an editable Blender reconstruction of the studio in /public/reference.png. Test a bowl release over the table and beyond its edge.",
+  "wall_seconds": 3600,
+  "runtime": "local",
+  "agent": {
+    "command": [
+      "python",
+      "-m",
+      "enrealworld.team.adapters.claude"
+    ],
+    "config": {
+      "permission_mode": "acceptEdits"
+    }
+  }
+}

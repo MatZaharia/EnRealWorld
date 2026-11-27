@@ -1,0 +1,20 @@
+{
+  "root": "../enrealworld-runs/codex-studio-01",
+  "public": "examples/quickstart/studio/public",
+  "task": "Build an editable Blender reconstruction of the studio in /public/reference.png. Test a bowl release over the table and beyond its edge.",
+  "wall_seconds": 3600,
+  "runtime": "local",
+  "agent": {
+    "command": [
+      "python",
+      "-m",
+      "enrealworld.team.adapters.codex"
+    ],
+    "config": {
+      "model": "gpt-6.2-sol",
+      "reasoning_effort": "medium",
+      "auth_file": "/absolute/path/to/.codex/auth.json",
+      "config_file": "/absolute/path/to/.codex/config.toml"
+    }
+  }
+}

@@ -171,12 +171,6 @@ export class WorldViewer {
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
     this.stats={triangles:Math.round(triangles),meshes};
-    if (!this.hero && !this.element.querySelector(".preview-note")) {
-      const note = document.createElement('span');
-      note.className = 'preview-note';
-      note.textContent = 'Simplified web preview';
-      this.element.append(note);
-    }
     return true;
   }
   reset() {this.controls.reset();}

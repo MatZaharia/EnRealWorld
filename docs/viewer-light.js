@@ -205,7 +205,8 @@ export class WorldViewer {
     this.height=size.y*scale;
     this.sourceScale=scale;
     const overviewTarget=new THREE.Vector3(0,this.height*.43,0);
-    const overviewPosition=new THREE.Vector3(5.2,this.height*.55+3.4,6.6);
+    const cameraHeight=this.hero ? overviewTarget.y+.45 : this.height*.55+3.4;
+    const overviewPosition=new THREE.Vector3(5.2,cameraHeight,6.6);
     const insidePosition=walk?.position
       ? new THREE.Vector3(...walk.position).add(raw.position).multiplyScalar(scale)
       : new THREE.Vector3(0,Math.min(this.height*.4,1.65*scale),0);
@@ -227,12 +228,6 @@ export class WorldViewer {
     let triangles=0,meshes=0;
     raw.traverse(o => {if(o.isMesh && o.visible){meshes++;triangles+=(o.geometry.index?.count || o.geometry.attributes.position.count)/3;}});
     this.stats={triangles:Math.round(triangles),meshes};
-    if (!this.element.querySelector(".preview-note")) {
-      const note = document.createElement('span');
-      note.className = 'preview-note';
-      note.textContent = 'Simplified web preview';
-      this.element.append(note);
-    }
     return true;
   }
   setMode(mode) {

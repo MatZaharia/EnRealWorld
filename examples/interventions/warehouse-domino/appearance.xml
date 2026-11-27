@@ -1,0 +1,56 @@
+<mujocoinclude>
+  <texture name="mi-beamsa-05" type="2d" file="assets/mi-beamsa-05.png" />
+  <material name="mi-beamsa-05" specular="0.16" shininess="0.18" texture="mi-beamsa-05" />
+  <texture name="mi-cardboxc" type="2d" file="assets/mi-cardboxc.png" />
+  <material name="mi-cardboxc" specular="0.16" shininess="0.18" texture="mi-cardboxc" />
+  <texture name="mi-ceilinga-06b-072" type="2d" file="assets/mi-ceilinga-06b-072.png" />
+  <material name="mi-ceilinga-06b-072" specular="0.16" shininess="0.18" texture="mi-ceilinga-06b-072" />
+  <texture name="mi-floor-02b" type="2d" file="assets/mi-floor-02b.png" />
+  <material name="mi-floor-02b" specular="0.16" shininess="0.18" texture="mi-floor-02b" />
+  <texture name="mi-lampceilinga" type="2d" file="assets/mi-lampceilinga.png" />
+  <material name="mi-lampceilinga" specular="0.16" shininess="0.18" texture="mi-lampceilinga" />
+  <texture name="mi-palettesmalla-01" type="2d" file="assets/mi-palettesmalla-01.png" />
+  <material name="mi-palettesmalla-01" specular="0.16" shininess="0.18" texture="mi-palettesmalla-01" />
+  <texture name="mi-rackseta-01" type="2d" file="assets/mi-rackseta-01.png" />
+  <material name="mi-rackseta-01" specular="0.16" shininess="0.18" texture="mi-rackseta-01" />
+  <texture name="mi-racksetb-01" type="2d" file="assets/mi-racksetb-01.png" />
+  <material name="mi-racksetb-01" specular="0.16" shininess="0.18" texture="mi-racksetb-01" />
+  <texture name="mi-racksetc-03" type="2d" file="assets/mi-racksetc-03.png" />
+  <material name="mi-racksetc-03" specular="0.16" shininess="0.18" texture="mi-racksetc-03" />
+  <texture name="mi-racksetd-05" type="2d" file="assets/mi-racksetd-05.png" />
+  <material name="mi-racksetd-05" specular="0.16" shininess="0.18" texture="mi-racksetd-05" />
+  <texture name="mi-rackshield-01" type="2d" file="assets/mi-rackshield-01.png" />
+  <material name="mi-rackshield-01" specular="0.16" shininess="0.18" texture="mi-rackshield-01" />
+  <texture name="mi-signc" type="2d" file="assets/mi-signc.png" />
+  <material name="mi-signc" specular="0.16" shininess="0.18" texture="mi-signc" />
+  <texture name="mi-walla-03b" type="2d" file="assets/mi-walla-03b.png" />
+  <material name="mi-walla-03b" specular="0.16" shininess="0.18" texture="mi-walla-03b" />
+  <texture name="m-floorstripes-01" type="2d" file="assets/m-floorstripes-01.png" />
+  <material name="m-floorstripes-01" specular="0.16" shininess="0.18" texture="m-floorstripes-01" />
+  <texture name="materialinstancedynamic-10285" type="2d" file="assets/materialinstancedynamic-10285.png" />
+  <material name="materialinstancedynamic-10285" specular="0.16" shininess="0.18" texture="materialinstancedynamic-10285" />
+  <texture name="materialinstancedynamic-5222" type="2d" file="assets/materialinstancedynamic-5222.png" />
+  <material name="materialinstancedynamic-5222" specular="0.16" shininess="0.18" texture="materialinstancedynamic-5222" />
+  <mesh name="pallet0-mi-palettesmalla-01" file="assets/pallet0-mi-palettesmalla-01.msh" inertia="shell" />
+  <mesh name="pallet0-materialinstancedynamic-10285" file="assets/pallet0-materialinstancedynamic-10285.msh" inertia="shell" />
+  <mesh name="pallet1-mi-cardboxc" file="assets/pallet1-mi-cardboxc.msh" inertia="shell" />
+  <mesh name="pallet1-mi-palettesmalla-01" file="assets/pallet1-mi-palettesmalla-01.msh" inertia="shell" />
+  <mesh name="pallet1-materialinstancedynamic-10285" file="assets/pallet1-materialinstancedynamic-10285.msh" inertia="shell" />
+  <mesh name="pallet2-mi-cardboxc" file="assets/pallet2-mi-cardboxc.msh" inertia="shell" />
+  <mesh name="pallet2-mi-palettesmalla-01" file="assets/pallet2-mi-palettesmalla-01.msh" inertia="shell" />
+  <mesh name="pallet2-materialinstancedynamic-10285" file="assets/pallet2-materialinstancedynamic-10285.msh" inertia="shell" />
+  <mesh name="pallet2-materialinstancedynamic-5222" file="assets/pallet2-materialinstancedynamic-5222.msh" inertia="shell" />
+  <mesh name="rack-mi-rackseta-01" file="assets/rack-mi-rackseta-01.msh" inertia="shell" />
+  <mesh name="rack-mi-racksetb-01" file="assets/rack-mi-racksetb-01.msh" inertia="shell" />
+  <mesh name="rack-mi-racksetc-03" file="assets/rack-mi-racksetc-03.msh" inertia="shell" />
+  <mesh name="rack-mi-racksetd-05" file="assets/rack-mi-racksetd-05.msh" inertia="shell" />
+  <mesh name="rack-mi-rackshield-01" file="assets/rack-mi-rackshield-01.msh" inertia="shell" />
+  <mesh name="rack-mi-signc" file="assets/rack-mi-signc.msh" inertia="shell" />
+  <mesh name="room-mi-beamsa-05" file="assets/room-mi-beamsa-05.msh" inertia="shell" />
+  <mesh name="room-mi-ceilinga-06b-072" file="assets/room-mi-ceilinga-06b-072.msh" inertia="shell" />
+  <mesh name="room-mi-floor-02b" file="assets/room-mi-floor-02b.msh" inertia="shell" />
+  <mesh name="room-mi-lampceilinga" file="assets/room-mi-lampceilinga.msh" inertia="shell" />
+  <mesh name="room-mi-walla-03b" file="assets/room-mi-walla-03b.msh" inertia="shell" />
+  <mesh name="room-m-floorstripes-01" file="assets/room-m-floorstripes-01.msh" inertia="shell" />
+  <material name="lamp-diffuser" rgba=".87 .94 1 1" emission=".75" />
+</mujocoinclude>

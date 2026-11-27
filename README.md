@@ -1,8 +1,6 @@
 <div align="center">
 
-# EnRealWorld
-
-**4D World Creation as Agentic Engineering**
+# EnRealWorld：**4D World Creation as Agentic Engineering**
 
 <a href="https://zihanguo1024.github.io/EnRealWorld/"><img src="docs/assets/readme/website.svg" alt="Project Website"></a>
 <a href="https://zihanguo1024.github.io/EnRealWorld/#project-preview-video"><img src="docs/assets/readme/video.svg" alt="Play the full project video"></a>
@@ -15,7 +13,7 @@
 
 </div>
 
-EnRealWorld builds executable, interactive worlds from inputs such as task descriptions, images, and videos. The Manager turns the input into testable requirements, the Engineer builds and revises the world, and the Researcher independently probes how it responds to interventions. The team uses the diagnostic findings to decide what needs repair and what is ready to deliver.
+We cast 4D world creation as a sequential decision process over a hybrid discrete–continuous search space. Multi-role agentic engineering turns multimodal observations into executable, physically verified 4D worlds.
 
 > **Out-of-the-box with your coding agent:** EnRealWorld requires no extra video generation models, 3D Gaussian Splatting optimization, or external 3D generative checkpoints. Install the lightweight Python package and run directly with your coding agent (Codex, Claude Code, Antigravity) and standard physics simulators.
 

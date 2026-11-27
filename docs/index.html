@@ -38,8 +38,14 @@ h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase}
 .institution-logos img.shlab-mark{max-width:24%}
 .author-note{font-size:12px;color:var(--gray)}
 .actions{gap:10px;flex-wrap:wrap;margin:23px auto 0}
-.actions .btn{padding:10px 16px;border:1px solid var(--ink);border-radius:24px;background:var(--ink);color:white}
-.actions .btn:hover{background:#303847;border-color:#303847}
+.actions .btn{padding:10px 16px;border:1px solid var(--action-border,var(--ink));border-radius:24px;background:var(--action-bg,var(--ink));color:var(--action-fg,white)}
+.actions a.btn:hover{background:var(--action-hover,#303847)}
+.action-paper{--action-bg:#fff4ed;--action-border:#e5c8b6;--action-fg:#844023;cursor:default}
+.action-worlds{--action-bg:#244dda;--action-border:#244dda;--action-hover:#173bb8}
+.action-cite{--action-bg:#f2effa;--action-border:#d8cfe7;--action-fg:#584182;--action-hover:#e7e0f3}
+.paper-action{position:relative;display:inline-flex}
+.paper-tip{position:absolute;z-index:2;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);padding:6px 10px;border-radius:6px;background:var(--ink);color:white;font-size:12px;white-space:nowrap;visibility:hidden}
+.paper-action:hover .paper-tip,.action-paper:focus + .paper-tip{visibility:visible}
 .chapter-inner,.film,.notes{margin-inline:var(--page-inset)}
 .notes{margin-top:24px;text-align:center}
 .deployment-pill{display:inline-block;font-size:12px;line-height:1.55;color:#42506b;background:#f2f5fc;border-radius:15px;padding:4px 12px}
@@ -320,7 +326,7 @@ input[type=range] { accent-color: var(--accent); cursor: pointer; height: 3px; m
 .icon-library{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 .ui-icon{display:inline-block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round;vertical-align:middle;pointer-events:none}
 .brand .ui-icon{width:25px;height:25px;color:var(--blue);stroke-width:1.9}
-nav .code,.actions a,.resource-actions .button,.pager button,.transport button,.site-end a,#paper-figure button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+nav .code,.actions .btn,.resource-actions .button,.pager button,.transport button,.site-end a,#paper-figure button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
 nav .code .ui-icon,.resource-actions a .ui-icon{width:14px;height:14px}
 nav a[aria-current=location]{color:#2048c6;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}
 .actions .btn,.resource-actions .button{font:600 13px/1.2 Arial,sans-serif}
@@ -393,6 +399,8 @@ button:disabled{cursor:default}
 #handheld-time{white-space:nowrap}.handheld-error:empty{display:none}
 @media(max-width:520px){.handheld-clips figcaption{padding:8px 5px;font-size:11px;line-height:1.3}.handheld .transport{flex-wrap:nowrap}.handheld-head{gap:8px}}
 </style></head><body id="top"><svg class="icon-library" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="ui-paper" viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5z M14 3v6h5 M8 13h8 M8 17h6"/></symbol>
+<symbol id="ui-code" viewBox="0 0 24 24"><path d="m7 7-5 5 5 5 M17 7l5 5-5 5 M14 4l-4 16"/></symbol>
 <symbol id="ui-world" viewBox="0 0 24 24"><path d="M12 2.5 21 7.5v9L12 22l-9-5.5v-9z M3 7.5l9 5 9-5 M12 12.5V22"/></symbol>
 <symbol id="ui-plan" viewBox="0 0 24 24"><path d="M3 3h18v18H3z M3 11h8V3 M11 11v4 M16 11h5 M11 19v2"/></symbol>
 <symbol id="ui-image" viewBox="0 0 24 24"><path d="M3 4h18v16H3z M3 17l6-6 5 5 3-3 4 4 M15.5 8h.01"/></symbol>
@@ -448,7 +456,15 @@ button:disabled{cursor:default}
           </div>
         </div>
         <div class="author-note"><span>*</span> Equal contribution</div>
-<div class="actions"><a class="btn" href="#worlds"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-world"></use></svg> Explore worlds</a><a class="btn" href="#film"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-play"></use></svg> Watch video</a><a class="btn" href="#project-citation"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#ui-cite"></use></svg> Cite</a></div>
+<div class="actions">
+  <span class="paper-action">
+    <button class="btn action-paper" type="button" aria-disabled="true" aria-describedby="paper-status"><svg class="ui-icon" aria-hidden="true"><use href="#ui-paper"></use></svg> Paper</button>
+    <span class="paper-tip" id="paper-status" role="tooltip">Coming soon</span>
+  </span>
+  <a class="btn" href="https://github.com/ZihanGuo1024/EnRealWorld"><svg class="ui-icon" aria-hidden="true"><use href="#ui-code"></use></svg> Code</a>
+  <a class="btn action-worlds" href="#worlds"><svg class="ui-icon" aria-hidden="true"><use href="#ui-world"></use></svg> Explore worlds</a>
+  <a class="btn action-cite" href="#project-citation"><svg class="ui-icon" aria-hidden="true"><use href="#ui-cite"></use></svg> Cite</a>
+</div>
 </section>
 <div class="notes"><p class="deployment-pill"><strong>Agent-Native &amp; Out-of-the-Box</strong> · No video diffusion models, 3DGS training, or extra neural checkpoints.</p>
       <aside class="hero-summary" aria-labelledby="summary-label">

@@ -50,9 +50,9 @@ h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase}
 .chapter-inner,.film,.notes{margin-inline:var(--page-inset)}
 .notes{margin-top:24px;text-align:center}
 .deployment-pill{display:inline-block;font-size:12px;line-height:1.55;color:#42506b;background:#f2f5fc;border-radius:15px;padding:4px 12px}
-.hero-summary{max-width:80ch;margin:14px auto 0;color:var(--gray);font-size:clamp(15px,1.2vw,18px);line-height:1.55;text-wrap:balance}
+.hero-summary{margin:14px auto 0;color:var(--gray);font-size:clamp(15px,1.2vw,18px);line-height:1.55;text-wrap:balance}
 .hero-summary strong{font:600 .78em var(--mono);letter-spacing:.04em;color:var(--ink);margin-right:.5em}
-.hero-summary p{display:inline}
+.hero-summary p{margin:0}
 .horizon{height:clamp(45px,5.5vw,92px);position:relative;overflow:hidden;isolation:isolate}.horizon:before{content:'';position:absolute;inset:35% -12% auto;height:230px;border-radius:50%;border-top:2px solid #789aff;box-shadow:0 -6px 15px -3px #2f63ff83,0 -18px 32px -13px #7b9fff70;transform:translateY(var(--lift,0px));mask-image:linear-gradient(90deg,transparent,#000 26%,#000 74%,transparent)}
 .film{padding-block:12px clamp(34px,4vw,72px)}.film video{width:100%;aspect-ratio:16/9;display:block;background:#091722}.film figcaption,.gallery small{font:11px var(--mono);color:var(--gray);margin-top:10px;display:block}h2{font-size:clamp(46px,5vw,88px);line-height:1;letter-spacing:-.025em}.results h3{font-size:18px;margin:10px 0 18px}.stats{margin:0}.stats div{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--hair);padding:8px 0}.stats dd{font:clamp(36px,4vw,66px)/1.1 Anton,Impact,sans-serif;color:var(--blue);margin:0}.results p{color:var(--gray);font-size:13px;margin:12px 0}
 .gallery{background:#101114;color:white;padding:clamp(32px,4vw,65px) var(--pad)}.gallery-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:26px}.gallery-head a{font:12px var(--mono)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{min-width:0}.card img{width:100%;aspect-ratio:1.85;display:block;object-fit:cover;background:#e8eaf0}.card:first-child img{object-fit:contain;background:#fafafa}.card strong{display:block;font-size:18px;margin:10px 0 2px}.card small{margin:0;color:#a8adbb}.card:hover strong{color:#92aaff}.gallery footer{margin-top:36px;border-top:1px solid #41454c;padding-top:12px;font:11px var(--mono);color:#bac0cc}
@@ -125,7 +125,7 @@ h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase}
 .heat-grid{display:grid;grid-template-columns:repeat(9,minmax(80px,1fr));gap:4px;min-width:620px;margin-top:15px}.heat-cell,.heat-label{padding:7px;text-align:center}.chart-tooltip{position:fixed;display:none;z-index:8;background:var(--ink);color:white;padding:8px 10px;border-radius:4px;font:12px/1.4 var(--mono);white-space:pre-line;pointer-events:none}
 .metric-cards,.experience-layout,.citation{display:grid;gap:clamp(18px,3vw,42px)}.metric-cards{grid-template-columns:repeat(3,1fr)}.experience-layout,.citation{grid-template-columns:1.25fr 1fr;align-items:center}.experience-layout+.experience-layout{margin-top:24px}
 .figure-wide{cursor:zoom-in;border:1px solid var(--hair);background:white;padding:8px}.figure-wide img{width:100%;display:block}.score-comparison strong{display:block;color:var(--blue);font:clamp(38px,4vw,64px)/1.2 Anton,Impact,sans-serif}.score-comparison small{color:var(--gray)}.experience-copy p,.resource-actions,.deployment-copy{margin-top:14px}
-.citation pre{min-width:0;overflow:auto;background:#f4f5f8;padding:18px;font-size:13px}.eyebrow{margin-bottom:10px;color:var(--gray)}#copy-status{font-size:12px}
+.citation pre{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f5f8;padding:18px;font-size:13px}.eyebrow{margin-bottom:10px;color:var(--gray)}#copy-status{font-size:12px}
 @media(max-width:780px){.experience-layout,.citation,.metric-cards{grid-template-columns:1fr}.heat-label{font-size:10px}.chapter-header h2{overflow-wrap:anywhere}}
 
 #worlds {
@@ -374,10 +374,9 @@ button:disabled{cursor:default}
   background:linear-gradient(90deg,#de6049,#309567 52%,var(--blue));
 }
 .abstract-copy {
-  max-width:80ch;
-  margin-inline:auto;
   font:400 clamp(16px,1.45vw,20px)/1.72 system-ui,sans-serif;
-  text-align:left;
+  text-align:justify;
+  hyphens:auto;
 }
 .result-section{padding-block:clamp(30px,4vw,64px)}
 #results>.result-section:first-of-type{padding-top:0}
@@ -469,8 +468,8 @@ button:disabled{cursor:default}
 </section>
 <div class="notes"><p class="deployment-pill"><strong>Agent-Native &amp; Out-of-the-Box</strong> · No video diffusion models, 3DGS training, or extra neural checkpoints.</p>
       <aside class="hero-summary" aria-labelledby="summary-label">
-        <strong id="summary-label">TL;DR</strong>
-        <p>We cast 4D world creation as a sequential decision process over a hybrid discrete–continuous search space. Multi-role agentic engineering turns multimodal observations into executable, physically verified 4D worlds.</p>
+        <p><strong id="summary-label">TL;DR</strong> We cast 4D world creation as a sequential decision process over a hybrid discrete–continuous search space.<br>
+          Multi-role agentic engineering turns multimodal observations into executable, physically verified 4D worlds.</p>
       </aside></div><div class="horizon" aria-hidden="true"></div>
 <figure id="film" class="film"><video id="project-preview-video" controls playsinline preload="metadata" poster="assets/video/enrealworld-full-preview-v41-title.jpg" src="assets/video/enrealworld-full-preview-v41.mp4" aria-label="EnRealWorld project video"></video><figcaption>Project video · 2:53</figcaption></figure>
 <section id="abstract" class="chapter" aria-labelledby="abstract-heading">
@@ -623,20 +622,7 @@ button:disabled{cursor:default}
         </div>
         <pre><code id="citation">@misc{guo2026enrealworld,
   title  = {{EnRealWorld}: 4D World Creation as Agentic Engineering},
-  author = {Guo, Zihan and
-            Song, Yuanyi and
-            Yuan, Yuan and
-            Cui, Zicai and
-            Zeng, Chenxi and
-            Shao, Shuai and
-            Li, Haoyuan and
-            Cao, Qihang and
-            Xu, Zunnan and
-            Zhou, Dongzhan and
-            Zhou, Ming and
-            Lin, Jianghao and
-            Li, Yang and
-            Zhang, Weinan},
+  author = {Guo, Zihan and Song, Yuanyi and Yuan, Yuan and Cui, Zicai and Zeng, Chenxi and Shao, Shuai and Li, Haoyuan and Cao, Qihang and Xu, Zunnan and Zhou, Dongzhan and Zhou, Ming and Lin, Jianghao and Li, Yang and Zhang, Weinan},
   year   = {2026},
   url    = {https://zihanguo1024.github.io/EnRealWorld/}
 }</code></pre></div>
